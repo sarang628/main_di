@@ -3,8 +3,9 @@ package com.sryang.torang.di.main_di
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import com.sarang.alarm.compose.AlarmScreen
-import com.sryang.main.BuildConfig
-import com.sryang.screenfindingtest.di.finding.Finding
+import com.sarang.torang.BuildConfig
+import com.sarang.torang.di.torang.ProvideProfileScreen
+import com.sryang.findinglinkmodules.di.finding.Finding
 import com.sryang.torang.compose.MainScreen
 import com.sryang.torang.compose.bottomsheet.comment.CommentBottomSheetDialog
 import com.sryang.torang.compose.bottomsheet.feed.FeedMenuBottomSheetDialog
@@ -41,6 +42,7 @@ fun ProvideMainScreen(navController: NavHostController) {
             )
         },
         myProfileScreen = {
+            ProvideProfileScreen(navController = navController)
         },
         alarm = { AlarmScreen(profileServerUrl = profileImageServerUrl) },
         commentDialog = { onClose ->
