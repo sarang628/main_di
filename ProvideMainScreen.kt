@@ -10,7 +10,7 @@ import com.sryang.torang.compose.bottomsheet.comment.CommentBottomSheetDialog
 import com.sryang.torang.compose.bottomsheet.feed.FeedMenuBottomSheetDialog
 import com.sryang.torang.compose.bottomsheet.share.ShareBottomSheetDialog
 import com.sryang.torang.compose.report.ReportModal
-import com.sryang.torang.di.feed_di.FeedScreen
+import com.sryang.torang.di.feed.FeedScreen
 
 private val profileImageServerUrl = BuildConfig.PROFILE_IMAGE_SERVER_URL
 private val imageServerUrl = "http://sarang628.iptime.org:89/review_images/"
