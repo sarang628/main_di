@@ -6,7 +6,7 @@ import com.sarang.alarm.compose.AlarmScreen
 import com.sryang.main.BuildConfig
 import com.sryang.screenfindingtest.di.finding.Finding
 import com.sryang.torang.compose.MainScreen
-import com.sryang.torang.compose.bottomsheet.comment.CommentBottomSheetDialog
+import com.sryang.torang.compose.bottomsheet.CommentBottomSheetDialog
 import com.sryang.torang.compose.bottomsheet.feed.FeedMenuBottomSheetDialog
 import com.sryang.torang.compose.bottomsheet.share.ShareBottomSheetDialog
 import com.sryang.torang.compose.report.ReportModal
@@ -43,25 +43,21 @@ fun ProvideMainScreen(navController: NavHostController) {
         myProfileScreen = {
         },
         alarm = { AlarmScreen(profileServerUrl = profileImageServerUrl) },
-        commentDialog = { onClose ->
+        commentDialog = { reviewId, onClose ->
             CommentBottomSheetDialog(
-                profileImageServerUrl = "",
-                profileImageUrl = "",
-                list = listOf(),
                 isExpand = true,
-                onSelect = {},
                 onClose = onClose,
-                onSend = {},
-                name = "name"
+                commentList = {}
             )
         },
-        menuDialog = { reviewId, onClose, onReport ->
+        menuDialog = { reviewId, onClose, onReport, onDelete, onEdit ->
             FeedMenuBottomSheetDialog(
                 isExpand = true,
-                isMine = false,
+                reviewId = reviewId,
                 onReport = { onReport.invoke(reviewId) },
-                onDelete = { /*TODO*/ },
-                onEdit = { /*TODO*/ }, onClose = onClose
+                onDelete = { onDelete.invoke(reviewId) },
+                onEdit = { onEdit.invoke(reviewId) },
+                onClose = onClose
             )
         },
         shareDialog = { onClose ->
@@ -78,6 +74,8 @@ fun ProvideMainScreen(navController: NavHostController) {
                 profileServerUrl = profileImageServerUrl,
                 onReported = onReported
             )
-        }
+        },
+        onDelete = { navController.navigate("modReview/${it}") },
+        onEdit = {}
     )
 }
