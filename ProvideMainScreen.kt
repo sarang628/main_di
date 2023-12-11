@@ -1,9 +1,12 @@
 package com.sryang.torang.di.main_di
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.sryang.findinglinkmodules.di.finding.Finding
 import com.sarang.torang.BuildConfig
+import com.sarang.torang.di.torang.ProvideProfileScreen
+import com.sryang.torang.comments.CommentsModal
 import com.sryang.torang.compose.AlarmScreen
 import com.sryang.torang.compose.MainScreen
 import com.sryang.torang.compose.bottomsheet.CommentBottomSheetDialog
@@ -13,8 +16,6 @@ import com.sryang.torang.compose.feed.FeedScreen
 import com.sryang.torang.compose.feed.Feeds
 import com.sryang.torang.compose.report.ReportModal
 import com.sryang.torang.di.feed_di.review
-
-private val imageServerUrl = "http://sarang628.iptime.org:89/review_images/"
 
 @Composable
 fun ProvideMainScreen(navController: NavHostController) {
@@ -49,14 +50,19 @@ fun ProvideMainScreen(navController: NavHostController) {
             )
         },
         myProfileScreen = {
-            //ProvideProfileScreen(navController = navController)
+            ProvideProfileScreen(navController = navController)
         },
         alarm = { AlarmScreen() },
         commentDialog = { reviewId, onClose ->
-            CommentBottomSheetDialog(
+            /*CommentBottomSheetDialog(
                 isExpand = true,
                 onClose = onClose,
                 commentList = {}
+            )*/
+            CommentsModal(
+                profileImageServerUrl = BuildConfig.PROFILE_IMAGE_SERVER_URL,
+                reviewId = reviewId,
+                onDismissRequest = onClose
             )
         },
         menuDialog = { reviewId, onClose, onReport, onDelete, onEdit ->
