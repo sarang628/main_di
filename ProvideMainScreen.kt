@@ -2,18 +2,19 @@ package com.sryang.torang.di.main_di
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import com.sarang.alarm.compose.AlarmScreen
 import com.sarang.torang.BuildConfig
 import com.sarang.torang.di.torang.ProvideProfileScreen
 import com.sryang.findinglinkmodules.di.finding.Finding
+import com.sryang.torang.compose.AlarmScreen
 import com.sryang.torang.compose.MainScreen
 import com.sryang.torang.compose.bottomsheet.CommentBottomSheetDialog
 import com.sryang.torang.compose.bottomsheet.feed.FeedMenuBottomSheetDialog
 import com.sryang.torang.compose.bottomsheet.share.ShareBottomSheetDialog
+import com.sryang.torang.compose.feed.FeedScreen
+import com.sryang.torang.compose.feed.Feeds
 import com.sryang.torang.compose.report.ReportModal
-import com.sryang.torang.di.feed_di.FeedScreen
+import com.sryang.torang.di.feed_di.review
 
-private val profileImageServerUrl = BuildConfig.PROFILE_IMAGE_SERVER_URL
 private val imageServerUrl = "http://sarang628.iptime.org:89/review_images/"
 
 @Composable
@@ -21,19 +22,26 @@ fun ProvideMainScreen(navController: NavHostController) {
     MainScreen(
         feedScreen = { onComment, onMenu, onShare, onReport, onReported ->
             FeedScreen(
-                onProfile = { navController.navigate("profile/$it") },
-                onRestaurant = { navController.navigate("restaurant/$it") },
-                onImage = {},
-                onName = {},
                 clickAddReview = { navController.navigate("addReview") },
-                profileImageServerUrl = profileImageServerUrl,
-                imageServerUrl = imageServerUrl,
-                ratingBar = {},
-                onComment = onComment,
-                onMenu = onMenu,
-                onShare = onShare,
-                onReport = onReport,
-                onReported = onReported
+                feeds = { list, onLike, onFavorite, onRefresh, onBottom, isRefreshing, isEmpty ->
+                    Feeds(
+                        list = list.map { it.review() },
+                        onProfile = { navController.navigate("profile/$it") },
+                        onLike = onLike,
+                        onComment = onComment,
+                        onShare = onShare,
+                        onFavorite = onFavorite,
+                        onMenu = onMenu,
+                        onName = {},
+                        onRestaurant = { navController.navigate("restaurant/$it") },
+                        onImage = {},
+                        onRefresh = onRefresh,
+                        onBottom = onBottom,
+                        isRefreshing = isRefreshing,
+                        isEmpty = isEmpty,
+                        ratingBar = {}
+                    )
+                },
             )
         },
         findingScreen = {
@@ -44,7 +52,7 @@ fun ProvideMainScreen(navController: NavHostController) {
         myProfileScreen = {
             ProvideProfileScreen(navController = navController)
         },
-        alarm = { AlarmScreen(profileServerUrl = profileImageServerUrl) },
+        alarm = { AlarmScreen() },
         commentDialog = { reviewId, onClose ->
             CommentBottomSheetDialog(
                 isExpand = true,
@@ -64,7 +72,7 @@ fun ProvideMainScreen(navController: NavHostController) {
         },
         shareDialog = { onClose ->
             ShareBottomSheetDialog(
-                profileServerUrl = profileImageServerUrl,
+                profileServerUrl = BuildConfig.PROFILE_IMAGE_SERVER_URL,
                 isExpand = true,
                 onSelect = {},
                 onClose = onClose
@@ -73,11 +81,11 @@ fun ProvideMainScreen(navController: NavHostController) {
         reportDialog = { it, onReported ->
             ReportModal(
                 reviewId = it,
-                profileServerUrl = profileImageServerUrl,
+                profileServerUrl = BuildConfig.PROFILE_IMAGE_SERVER_URL,
                 onReported = onReported
             )
         },
-        onDelete = { navController.navigate("modReview/${it}") },
-        onEdit = {}
+        onDelete = {  },
+        onEdit = { navController.navigate("modReview/${it}") }
     )
 }
