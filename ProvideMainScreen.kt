@@ -2,8 +2,8 @@ package com.sryang.torang.di.main_di
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import com.sryang.torang.BuildConfig
-import com.sryang.screenfindingtest.di.finding.Finding
+import com.sryang.findinglinkmodules.di.finding.Finding
+import com.sarang.torang.BuildConfig
 import com.sryang.torang.compose.AlarmScreen
 import com.sryang.torang.compose.MainScreen
 import com.sryang.torang.compose.bottomsheet.CommentBottomSheetDialog
