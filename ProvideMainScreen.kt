@@ -54,11 +54,6 @@ fun ProvideMainScreen(navController: NavHostController) {
         },
         alarm = { AlarmScreen() },
         commentDialog = { reviewId, onClose ->
-            /*CommentBottomSheetDialog(
-                isExpand = true,
-                onClose = onClose,
-                commentList = {}
-            )*/
             CommentsModal(
                 profileImageServerUrl = BuildConfig.PROFILE_IMAGE_SERVER_URL,
                 reviewId = reviewId,
