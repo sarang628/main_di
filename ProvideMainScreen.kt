@@ -2,7 +2,7 @@ package com.sryang.torang.di.main_di
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import com.sryang.main.BuildConfig
+import com.sryang.torang.BuildConfig
 import com.sryang.screenfindingtest.di.finding.Finding
 import com.sryang.torang.compose.AlarmScreen
 import com.sryang.torang.compose.MainScreen
@@ -84,7 +84,6 @@ fun ProvideMainScreen(navController: NavHostController) {
                 onReported = onReported
             )
         },
-        onDelete = {  },
         onEdit = { navController.navigate("modReview/${it}") }
     )
 }
