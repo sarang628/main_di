@@ -23,7 +23,7 @@ fun ProvideMainScreen(navController: NavHostController) {
         feedScreen = { onComment, onMenu, onShare, onReport, onReported ->
             FeedScreen(
                 clickAddReview = { navController.navigate("addReview") },
-                feeds = { list, onLike, onFavorite, onRefresh, onBottom, isRefreshing, isEmpty ->
+                feeds = { list, onLike, onFavorite, onRefresh, onBottom, isRefreshing, isEmpty, isLoading ->
                     Feeds(
                         list = list.map { it.review() },
                         onProfile = { navController.navigate("profile/$it") },
@@ -39,7 +39,8 @@ fun ProvideMainScreen(navController: NavHostController) {
                         onBottom = onBottom,
                         isRefreshing = isRefreshing,
                         isEmpty = isEmpty,
-                        ratingBar = {}
+                        ratingBar = {},
+                        isLoading = isLoading
                     )
                 },
             )
@@ -52,7 +53,9 @@ fun ProvideMainScreen(navController: NavHostController) {
         myProfileScreen = {
             ProvideProfileScreen(navController = navController)
         },
-        alarm = { AlarmScreen() },
+        alarm = { AlarmScreen(onEmailLogin = {
+            navController.navigate("emailLogin")
+        }) },
         commentDialog = { reviewId, onClose ->
             CommentsModal(
                 profileImageServerUrl = BuildConfig.PROFILE_IMAGE_SERVER_URL,
