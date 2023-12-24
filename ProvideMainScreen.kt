@@ -3,6 +3,7 @@ package com.sryang.torang.di.main_di
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import com.example.commonwidgets.torangcomposepack.AndroidViewRatingBar
 import com.sryang.findinglinkmodules.di.finding.Finding
 import com.sarang.torang.BuildConfig
 import com.sarang.torang.di.torang.ProvideProfileScreen
@@ -39,7 +40,13 @@ fun ProvideMainScreen(navController: NavHostController) {
                         onBottom = onBottom,
                         isRefreshing = isRefreshing,
                         isEmpty = isEmpty,
-                        ratingBar = {},
+                        ratingBar = {
+                            AndroidViewRatingBar(
+                                rating = it,
+                                isSmall = true,
+                                changable = false
+                            )
+                        },
                         isLoading = isLoading
                     )
                 },
@@ -53,9 +60,11 @@ fun ProvideMainScreen(navController: NavHostController) {
         myProfileScreen = {
             ProvideProfileScreen(navController = navController)
         },
-        alarm = { AlarmScreen(onEmailLogin = {
-            navController.navigate("emailLogin")
-        }) },
+        alarm = {
+            AlarmScreen(onEmailLogin = {
+                navController.navigate("emailLogin")
+            })
+        },
         commentDialog = { reviewId, onClose ->
             CommentsModal(
                 profileImageServerUrl = BuildConfig.PROFILE_IMAGE_SERVER_URL,
