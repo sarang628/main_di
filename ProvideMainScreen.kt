@@ -17,37 +17,36 @@ import com.sryang.torang.compose.feed.FeedScreen
 import com.sryang.torang.compose.feed.Feeds
 import com.sryang.torang.compose.report.ReportModal
 import com.sryang.torang.di.feed_di.review
+import com.sryang.torang.uistate.FeedsUiState
 
 @Composable
 fun ProvideMainScreen(navController: NavHostController) {
     MainScreen(
         feedScreen = { onComment, onMenu, onShare, onReport, onReported ->
             FeedScreen(
-                clickAddReview = { navController.navigate("addReview") },
-                feeds = { list, onLike, onFavorite, onRefresh, onBottom, isRefreshing, isEmpty, isLoading ->
+                onAddReview = { navController.navigate("addReview") },
+                feeds = { list, onRefresh, onBottom, isRefreshing ->
                     Feeds(
-                        list = list.map { it.review() },
-                        onProfile = { navController.navigate("profile/$it") },
-                        onLike = onLike,
-                        onComment = onComment,
-                        onShare = onShare,
-                        onFavorite = onFavorite,
-                        onMenu = onMenu,
-                        onName = {},
-                        onRestaurant = { navController.navigate("restaurant/$it") },
-                        onImage = {},
                         onRefresh = onRefresh,
                         onBottom = onBottom,
                         isRefreshing = isRefreshing,
-                        isEmpty = isEmpty,
-                        ratingBar = {
+                        ratingBar = { _, rating ->
                             AndroidViewRatingBar(
-                                rating = it,
+                                rating = rating,
                                 isSmall = true,
                                 changable = false
                             )
                         },
-                        isLoading = isLoading
+                        feedsUiState = FeedsUiState.Success(list.map {
+                            it.review(
+                                onProfile = { navController.navigate("profile/$it") },
+                                onName = { navController.navigate("profile/$it") },
+                                onMenu = { onMenu.invoke(it.reviewId) },
+                                onShare = { onShare.invoke(it.reviewId) },
+                                onComment = { onComment.invoke(it.reviewId) },
+                                onRestaurant = { navController.navigate("restaurant/$it") }
+                            )
+                        })
                     )
                 },
             )
