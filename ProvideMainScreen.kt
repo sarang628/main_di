@@ -57,7 +57,7 @@ fun ProvideMainScreen(navController: NavHostController) {
             /*ProvideProfileScreen(navController = navController)*/
         },
         alarm = {
-            AlarmScreen()
+            AlarmScreen(onEmailLogin = {})
         },
         commentDialog = { reviewId, onClose ->
             /*CommentsModal(
