@@ -27,8 +27,9 @@ fun ProvideMainScreen(navController: NavHostController) {
                         onRefresh = onRefresh,
                         onBottom = onBottom,
                         isRefreshing = isRefreshing,
-                        ratingBar = { _, rating ->
+                        ratingBar = { modifier, rating ->
                             AndroidViewRatingBar(
+                                modifier = modifier,
                                 rating = rating,
                                 isSmall = true,
                                 changable = false
