@@ -9,7 +9,7 @@ import com.sarang.torang.di.feed_di.review
 import com.sryang.torang.compose.AlarmScreen
 import com.sryang.torang.compose.bottomsheet.feed.FeedMenuBottomSheetDialog
 import com.sryang.torang.compose.bottomsheet.share.ShareBottomSheetDialog
-import com.sryang.torang.compose.feed.FeedScreen
+import com.sarang.torang.compose.feed.FeedScreen
 import com.sryang.torang.compose.feed.Feeds
 import com.sryang.torang.compose.report.ReportModal
 import com.sryang.torang.uistate.FeedsUiState
