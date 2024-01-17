@@ -1,6 +1,5 @@
-package com.sryang.torang.di.main_di
+package com.sarang.torang.di.main_di
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import com.example.commonwidgets.torangcomposepack.AndroidViewRatingBar

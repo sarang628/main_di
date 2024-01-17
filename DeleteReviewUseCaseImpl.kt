@@ -1,4 +1,4 @@
-package com.sryang.torang.di.main_di
+package com.sarang.torang.di.main_di
 
 import com.sarang.torang.usecase.DeleteReviewUseCase
 import com.sryang.torang_repository.repository.FeedRepository
