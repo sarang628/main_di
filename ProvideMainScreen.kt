@@ -15,7 +15,11 @@ import com.sryang.torang.compose.report.ReportModal
 import com.sryang.torang.uistate.FeedsUiState
 
 @Composable
-fun ProvideMainScreen(navController: NavHostController) {
+fun ProvideMainScreen(
+    navController: NavHostController,
+    findingScreen: @Composable (() -> Unit)? = null,
+    myProfileScreen: @Composable (() -> Unit)? = null
+) {
     val tag = "_ProvideMainScreen"
     MainScreen(
         feedScreen = { onComment, onMenu, onShare, onReport, onReported ->
@@ -49,12 +53,10 @@ fun ProvideMainScreen(navController: NavHostController) {
             )
         },
         findingScreen = {
-            /*Finding(
-                navController = navController
-            )*/
+            findingScreen?.invoke()
         },
         myProfileScreen = {
-            /*ProvideProfileScreen(navController = navController)*/
+            myProfileScreen?.invoke()
         },
         alarm = {
             AlarmScreen(onEmailLogin = {})
