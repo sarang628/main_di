@@ -1,5 +1,6 @@
 package com.sryang.torang.di.main_di
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import com.example.commonwidgets.torangcomposepack.AndroidViewRatingBar
@@ -16,6 +17,7 @@ import com.sryang.torang.uistate.FeedsUiState
 
 @Composable
 fun ProvideMainScreen(navController: NavHostController) {
+    val tag = "_ProvideMainScreen"
     MainScreen(
         feedScreen = { onComment, onMenu, onShare, onReport, onReported ->
             FeedScreen(
@@ -34,12 +36,12 @@ fun ProvideMainScreen(navController: NavHostController) {
                         },
                         feedsUiState = FeedsUiState.Success(list.map {
                             it.review(
-                                onProfile = { navController.navigate("profile/$it") },
-                                onName = { navController.navigate("profile/$it") },
+                                onProfile = { navController.navigate("profile/${it.userId}") },
+                                onName = { navController.navigate("profile/${it.userId}") },
                                 onMenu = { onMenu.invoke(it.reviewId) },
                                 onShare = { onShare.invoke(it.reviewId) },
                                 onComment = { onComment.invoke(it.reviewId) },
-                                onRestaurant = { navController.navigate("restaurant/$it") }
+                                onRestaurant = { navController.navigate("restaurant/${it.restaurantId}") }
                             )
                         })
                     )
