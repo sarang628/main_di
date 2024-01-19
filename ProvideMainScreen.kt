@@ -10,9 +10,9 @@ import com.sryang.torang.compose.AlarmScreen
 import com.sryang.torang.compose.bottomsheet.feed.FeedMenuBottomSheetDialog
 import com.sryang.torang.compose.bottomsheet.share.ShareBottomSheetDialog
 import com.sarang.torang.compose.feed.FeedScreen
-import com.sryang.torang.compose.feed.Feeds
+import com.sarang.torang.compose.feed.Feeds
+import com.sarang.torang.uistate.FeedsUiState
 import com.sryang.torang.compose.report.ReportModal
-import com.sryang.torang.uistate.FeedsUiState
 
 @Composable
 fun ProvideMainScreen(
