@@ -30,14 +30,6 @@ fun ProvideMainScreen(
                         onRefresh = onRefresh,
                         onBottom = onBottom,
                         isRefreshing = isRefreshing,
-                        ratingBar = { modifier, rating ->
-                            AndroidViewRatingBar(
-                                modifier = modifier,
-                                rating = rating,
-                                isSmall = true,
-                                changable = false
-                            )
-                        },
                         feedsUiState = FeedsUiState.Success(list.map {
                             it.review(
                                 onProfile = { navController.navigate("profile/${it.userId}") },
