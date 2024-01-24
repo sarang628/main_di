@@ -2,16 +2,16 @@ package com.sarang.torang.di.main_di
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import com.example.commonwidgets.torangcomposepack.AndroidViewRatingBar
 import com.sarang.torang.BuildConfig
 import com.sarang.torang.compose.MainScreen
+import com.sarang.torang.compose.feed.FeedScreen
+import com.sarang.torang.compose.feed.Feeds
 import com.sarang.torang.di.feed_di.review
+import com.sarang.torang.uistate.FeedsUiState
+import com.sryang.torang.comments.CommentsModal
 import com.sryang.torang.compose.AlarmScreen
 import com.sryang.torang.compose.bottomsheet.feed.FeedMenuBottomSheetDialog
 import com.sryang.torang.compose.bottomsheet.share.ShareBottomSheetDialog
-import com.sarang.torang.compose.feed.FeedScreen
-import com.sarang.torang.compose.feed.Feeds
-import com.sarang.torang.uistate.FeedsUiState
 import com.sryang.torang.compose.report.ReportModal
 
 @Composable
@@ -54,11 +54,11 @@ fun ProvideMainScreen(
             AlarmScreen(onEmailLogin = {})
         },
         commentDialog = { reviewId, onClose ->
-            /*CommentsModal(
+            CommentsModal(
                 profileImageServerUrl = BuildConfig.PROFILE_IMAGE_SERVER_URL,
                 reviewId = reviewId,
                 onDismissRequest = onClose
-            )*/
+            )
         },
         menuDialog = { reviewId, onClose, onReport, onDelete, onEdit ->
             FeedMenuBottomSheetDialog(
