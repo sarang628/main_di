@@ -20,7 +20,6 @@ import com.sryang.torang.compose.report.ReportModal
 fun ProvideMainScreen(
     navController: NavHostController
 ) {
-    val tag = "_ProvideMainScreen"
     MainScreen(
         feedScreen = { onComment, onMenu, onShare, onReport, onReported ->
             FeedScreen(
