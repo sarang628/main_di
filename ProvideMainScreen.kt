@@ -8,6 +8,8 @@ import com.sarang.torang.compose.feed.FeedScreen
 import com.sarang.torang.compose.feed.Feeds
 import com.sarang.torang.di.feed_di.review
 import com.sarang.torang.uistate.FeedsUiState
+import com.sryang.findinglinkmodules.di.finding_di.Finding
+import com.sryang.myapplication.di.profile_di.ProfileScreen
 import com.sryang.torang.comments.CommentsModal
 import com.sryang.torang.compose.AlarmScreen
 import com.sryang.torang.compose.bottomsheet.feed.FeedMenuBottomSheetDialog
@@ -45,10 +47,12 @@ fun ProvideMainScreen(
             )
         },
         findingScreen = {
-            findingScreen?.invoke()
+            Finding(navController = navController)
         },
         myProfileScreen = {
-            myProfileScreen?.invoke()
+            ProfileScreen(onSetting = { /*TODO*/ }, navBackStackEntry = null) {
+
+            }
         },
         alarm = {
             AlarmScreen(onEmailLogin = {})
