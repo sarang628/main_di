@@ -18,9 +18,7 @@ import com.sryang.torang.compose.report.ReportModal
 
 @Composable
 fun ProvideMainScreen(
-    navController: NavHostController,
-    findingScreen: @Composable (() -> Unit)? = null,
-    myProfileScreen: @Composable (() -> Unit)? = null
+    navController: NavHostController
 ) {
     val tag = "_ProvideMainScreen"
     MainScreen(
@@ -50,9 +48,12 @@ fun ProvideMainScreen(
             Finding(navController = navController)
         },
         myProfileScreen = {
-            ProfileScreen(onSetting = { /*TODO*/ }, navBackStackEntry = null) {
-
-            }
+            ProfileScreen(
+                onSetting = { navController.navigate("settings") },
+                navBackStackEntry = null,
+                onClose = { navController.popBackStack() },
+                onEmailLogin = {navController.navigate("emailLogin")}
+            )
         },
         alarm = {
             AlarmScreen(onEmailLogin = {})
