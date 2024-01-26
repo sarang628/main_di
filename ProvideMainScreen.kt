@@ -7,6 +7,7 @@ import com.sarang.torang.compose.MainScreen
 import com.sarang.torang.compose.feed.FeedScreen
 import com.sarang.torang.compose.feed.Feeds
 import com.sarang.torang.di.feed_di.review
+import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.uistate.FeedsUiState
 import com.sryang.findinglinkmodules.di.finding_di.Finding
 import com.sryang.myapplication.di.profile_di.ProfileScreen
@@ -24,22 +25,42 @@ fun ProvideMainScreen(
         feedScreen = { onComment, onMenu, onShare, onReport, onReported ->
             FeedScreen(
                 onAddReview = { navController.navigate("addReview") },
-                feeds = { list, onRefresh, onBottom, isRefreshing ->
-                    Feeds(
-                        onRefresh = onRefresh,
-                        onBottom = onBottom,
-                        isRefreshing = isRefreshing,
-                        feedsUiState = FeedsUiState.Success(list.map {
-                            it.review(
-                                onProfile = { navController.navigate("profile/${it.userId}") },
-                                onName = { navController.navigate("profile/${it.userId}") },
-                                onMenu = { onMenu.invoke(it.reviewId) },
-                                onShare = { onShare.invoke(it.reviewId) },
-                                onComment = { onComment.invoke(it.reviewId) },
-                                onRestaurant = { navController.navigate("restaurant/${it.restaurantId}") }
+                feeds = { uiState, onRefresh, onBottom, isRefreshing ->
+                    when (uiState) {
+                        is FeedUiState.Success -> {
+                            Feeds(
+                                onRefresh = onRefresh,
+                                onBottom = onBottom,
+                                isRefreshing = isRefreshing,
+                                feedsUiState = FeedsUiState.Success(uiState.list.map {
+                                    it.review(
+                                        onProfile = { navController.navigate("profile/${it.userId}") },
+                                        onName = { navController.navigate("profile/${it.userId}") },
+                                        onMenu = { onMenu.invoke(it.reviewId) },
+                                        onShare = { onShare.invoke(it.reviewId) },
+                                        onComment = { onComment.invoke(it.reviewId) },
+                                        onRestaurant = { navController.navigate("restaurant/${it.restaurantId}") }
+                                    )
+                                })
                             )
-                        })
-                    )
+                        }
+
+                        is FeedUiState.Loading -> {
+                            Feeds(
+                                onRefresh = onRefresh,
+                                onBottom = onBottom,
+                                isRefreshing = isRefreshing,
+                                feedsUiState = FeedsUiState.Loading
+                            )
+                        }
+
+                        is FeedUiState.Error -> {
+
+                        }
+                    }
+                    if (uiState is FeedUiState.Success) {
+
+                    }
                 },
             )
         },
@@ -51,7 +72,7 @@ fun ProvideMainScreen(
                 onSetting = { navController.navigate("settings") },
                 navBackStackEntry = null,
                 onClose = { navController.popBackStack() },
-                onEmailLogin = {navController.navigate("emailLogin")}
+                onEmailLogin = { navController.navigate("emailLogin") }
             )
         },
         alarm = {
