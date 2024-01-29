@@ -11,7 +11,7 @@ import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.uistate.FeedsUiState
 import com.sryang.findinglinkmodules.di.finding_di.Finding
 import com.sryang.myapplication.di.profile_di.ProfileScreen
-import com.sryang.torang.comments.CommentsModal
+import com.sarang.torang.comments.CommentsModal
 import com.sryang.torang.compose.AlarmScreen
 import com.sryang.torang.compose.bottomsheet.feed.FeedMenuBottomSheetDialog
 import com.sryang.torang.compose.bottomsheet.share.ShareBottomSheetDialog
@@ -80,7 +80,6 @@ fun ProvideMainScreen(
         },
         commentDialog = { reviewId, onClose ->
             CommentsModal(
-                profileImageServerUrl = BuildConfig.PROFILE_IMAGE_SERVER_URL,
                 reviewId = reviewId,
                 onDismissRequest = onClose
             )
