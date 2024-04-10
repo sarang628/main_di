@@ -1,9 +1,11 @@
 package com.sarang.torang.di.main_di
 
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import com.sarang.torang.BuildConfig
 import com.sarang.torang.compose.MainScreen
+import com.sarang.torang.compose.comments.CommentBottomSheet
 import com.sarang.torang.compose.feed.FeedScreen
 import com.sarang.torang.compose.feed.Feeds
 import com.sarang.torang.di.feed_di.review
@@ -11,15 +13,16 @@ import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.uistate.FeedsUiState
 import com.sryang.findinglinkmodules.di.finding_di.Finding
 import com.sryang.myapplication.di.profile_di.ProfileScreen
-import com.sarang.torang.comments.CommentsModal
 import com.sryang.torang.compose.AlarmScreen
 import com.sryang.torang.compose.bottomsheet.feed.FeedMenuBottomSheetDialog
 import com.sryang.torang.compose.bottomsheet.share.ShareBottomSheetDialog
 import com.sryang.torang.compose.report.ReportModal
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProvideMainScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    onBackPressed: (() -> Unit)? = null
 ) {
     MainScreen(
         feedScreen = { onComment, onMenu, onShare, onReport, onReported ->
@@ -78,10 +81,13 @@ fun ProvideMainScreen(
         alarm = {
             AlarmScreen(onEmailLogin = {})
         },
-        commentDialog = { reviewId, onClose ->
-            CommentsModal(
+        commentBottomSheet = { reviewId, onDismissRequest, sheetState, onBackPressed, content ->
+            CommentBottomSheet(
                 reviewId = reviewId,
-                onDismissRequest = onClose
+                sheetState = sheetState,
+                onDismissRequest = onDismissRequest,
+                onBackPressed = onBackPressed,
+                content = content
             )
         },
         menuDialog = { reviewId, onClose, onReport, onDelete, onEdit ->
@@ -109,6 +115,7 @@ fun ProvideMainScreen(
                 onReported = onReported
             )
         },
-        onEdit = { navController.navigate("modReview/${it}") }
+        onEdit = { navController.navigate("modReview/${it}") },
+        onBackPressed = onBackPressed
     )
 }

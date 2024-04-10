@@ -1,7 +1,7 @@
 package com.sarang.torang.di.main_di
 
-import com.sarang.torang.usecase.DeleteReviewUseCase
 import com.sarang.torang.repository.FeedRepository
+import com.sarang.torang.usecase.DeleteReviewUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
