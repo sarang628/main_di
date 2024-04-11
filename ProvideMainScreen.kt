@@ -2,6 +2,10 @@ package com.sarang.torang.di.main_di
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import com.sarang.torang.BuildConfig
 import com.sarang.torang.compose.MainScreen
@@ -24,6 +28,7 @@ fun ProvideMainScreen(
     navController: NavHostController,
     onBackPressed: (() -> Unit)? = null
 ) {
+    var init by remember { mutableStateOf(true) }
     MainScreen(
         feedScreen = { onComment, onMenu, onShare, onReport, onReported ->
             FeedScreen(
@@ -41,7 +46,10 @@ fun ProvideMainScreen(
                                         onName = { navController.navigate("profile/${it.userId}") },
                                         onMenu = { onMenu.invoke(it.reviewId) },
                                         onShare = { onShare.invoke(it.reviewId) },
-                                        onComment = { onComment.invoke(it.reviewId) },
+                                        onComment = {
+                                            init = false
+                                            onComment.invoke(it.reviewId)
+                                        },
                                         onRestaurant = { navController.navigate("restaurant/${it.restaurantId}") }
                                     )
                                 })
@@ -87,6 +95,7 @@ fun ProvideMainScreen(
                 sheetState = sheetState,
                 onDismissRequest = onDismissRequest,
                 onBackPressed = onBackPressed,
+                init = init,
                 content = content
             )
         },
