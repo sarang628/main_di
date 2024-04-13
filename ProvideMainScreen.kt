@@ -96,6 +96,9 @@ fun ProvideMainScreen(
                 onDismissRequest = onDismissRequest,
                 onBackPressed = onBackPressed,
                 init = init,
+                onHidden = {
+                    init = true
+                },
                 content = content
             )
         },
