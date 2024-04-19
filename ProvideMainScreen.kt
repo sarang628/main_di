@@ -9,14 +9,14 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import com.sarang.torang.BuildConfig
 import com.sarang.torang.compose.MainScreen
-import com.sarang.torang.compose.comments.CommentBottomSheet
 import com.sarang.torang.compose.feed.FeedScreen
 import com.sarang.torang.compose.feed.Feeds
+import com.sarang.torang.di.comment_di.CommentBottomSheet
 import com.sarang.torang.di.feed_di.review
+import com.sarang.torang.di.profile_di.ProfileScreen
 import com.sarang.torang.uistate.FeedUiState
 import com.sarang.torang.uistate.FeedsUiState
 import com.sryang.findinglinkmodules.di.finding_di.Finding
-import com.sryang.myapplication.di.profile_di.ProfileScreen
 import com.sryang.torang.compose.AlarmScreen
 import com.sryang.torang.compose.bottomsheet.feed.FeedMenuBottomSheetDialog
 import com.sryang.torang.compose.bottomsheet.share.ShareBottomSheetDialog
