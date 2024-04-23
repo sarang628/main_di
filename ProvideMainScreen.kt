@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import com.sarang.torang.BuildConfig
 import com.sarang.torang.compose.MainScreen
@@ -52,7 +53,8 @@ fun ProvideMainScreen(
                                         },
                                         onRestaurant = { navController.navigate("restaurant/${it.restaurantId}") }
                                     )
-                                })
+                                }),
+                                progressTintColor = Color(0xffe6cc00)
                             )
                         }
 
