@@ -35,16 +35,6 @@ fun ProvideMainScreen(
     var show by remember { mutableStateOf(false) }
     val coroutine = rememberCoroutineScope()
 
-    BackHandler {
-        coroutine.launch {
-            if (show) {
-                show = false
-            } else {
-                onBackPressed?.invoke()
-            }
-        }
-    }
-
     MainScreen(
         feedScreen = { onComment, onMenu, onShare, onReport, onReported ->
             FeedScreen(
