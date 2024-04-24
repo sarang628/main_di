@@ -1,10 +1,12 @@
 package com.sarang.torang.di.main_di
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
@@ -22,6 +24,7 @@ import com.sryang.torang.compose.AlarmScreen
 import com.sryang.torang.compose.bottomsheet.feed.FeedMenuBottomSheetDialog
 import com.sryang.torang.compose.bottomsheet.share.ShareBottomSheetDialog
 import com.sryang.torang.compose.report.ReportModal
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,6 +33,18 @@ fun ProvideMainScreen(
     onBackPressed: (() -> Unit)? = null
 ) {
     var show by remember { mutableStateOf(false) }
+    val coroutine = rememberCoroutineScope()
+
+    BackHandler {
+        coroutine.launch {
+            if (show) {
+                show = false
+            } else {
+                onBackPressed?.invoke()
+            }
+        }
+    }
+
     MainScreen(
         feedScreen = { onComment, onMenu, onShare, onReport, onReported ->
             FeedScreen(
@@ -95,7 +110,6 @@ fun ProvideMainScreen(
             CommentBottomSheet(
                 reviewId = reviewId,
                 onDismissRequest = onDismissRequest,
-                onBackPressed = onBackPressed,
                 show = show,
                 onHidden = {
                     show = false
