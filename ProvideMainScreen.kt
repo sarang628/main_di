@@ -29,7 +29,7 @@ fun ProvideMainScreen(
     navController: NavHostController,
     onBackPressed: (() -> Unit)? = null
 ) {
-    var init by remember { mutableStateOf(true) }
+    var show by remember { mutableStateOf(false) }
     MainScreen(
         feedScreen = { onComment, onMenu, onShare, onReport, onReported ->
             FeedScreen(
@@ -48,7 +48,7 @@ fun ProvideMainScreen(
                                         onMenu = { onMenu.invoke(it.reviewId) },
                                         onShare = { onShare.invoke(it.reviewId) },
                                         onComment = {
-                                            init = false
+                                            show = true
                                             onComment.invoke(it.reviewId)
                                         },
                                         onRestaurant = { navController.navigate("restaurant/${it.restaurantId}") }
@@ -94,12 +94,11 @@ fun ProvideMainScreen(
         commentBottomSheet = { reviewId, onDismissRequest, sheetState, onBackPressed, content ->
             CommentBottomSheet(
                 reviewId = reviewId,
-                sheetState = sheetState,
                 onDismissRequest = onDismissRequest,
                 onBackPressed = onBackPressed,
-                init = init,
+                show = show,
                 onHidden = {
-                    init = true
+                    show = false
                 },
                 content = content
             )
