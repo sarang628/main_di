@@ -1,6 +1,5 @@
 package com.sarang.torang.di.main_di
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,7 +23,6 @@ import com.sryang.torang.compose.AlarmScreen
 import com.sryang.torang.compose.bottomsheet.feed.FeedMenuBottomSheetDialog
 import com.sryang.torang.compose.bottomsheet.share.ShareBottomSheetDialog
 import com.sryang.torang.compose.report.ReportModal
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -83,14 +81,17 @@ fun ProvideMainScreen(
             )
         },
         findingScreen = {
-            Finding(navController = navController)
+            Finding(
+                navController = navController
+            )
         },
         myProfileScreen = {
             ProfileScreen(
                 onSetting = { navController.navigate("settings") },
                 navBackStackEntry = null,
                 onClose = { navController.popBackStack() },
-                onEmailLogin = { navController.navigate("emailLogin") }
+                onEmailLogin = { navController.navigate("emailLogin") },
+                onReview = { navController.navigate("myFeed/${it}") }
             )
         },
         alarm = {
