@@ -12,9 +12,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import com.sarang.torang.BuildConfig
 import com.sarang.torang.compose.MainScreen
-import com.sarang.torang.compose.feed.FeedScreen
 import com.sarang.torang.compose.feed.Feeds
 import com.sarang.torang.di.comment_di.CommentBottomSheet
+import com.sarang.torang.di.feed_di.ProvideFeedScreen
+import com.sarang.torang.di.feed_di.ProvideMyFeedScreen
 import com.sarang.torang.di.feed_di.review
 import com.sarang.torang.di.profile_di.ProfileScreen
 import com.sarang.torang.uistate.FeedUiState
@@ -25,61 +26,25 @@ import com.sryang.torang.compose.bottomsheet.feed.FeedMenuBottomSheetDialog
 import com.sryang.torang.compose.bottomsheet.share.ShareBottomSheetDialog
 import com.sryang.torang.compose.report.ReportModal
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProvideMainScreen(
     navController: NavHostController,
     onBackPressed: (() -> Unit)? = null
 ) {
     var show by remember { mutableStateOf(false) }
-    val coroutine = rememberCoroutineScope()
 
     MainScreen(
-        feedScreen = { onComment, onMenu, onShare, onReport, onReported ->
-            FeedScreen(
-                onAddReview = { navController.navigate("addReview") },
-                feeds = { uiState, onRefresh, onBottom, isRefreshing ->
-                    when (uiState) {
-                        is FeedUiState.Success -> {
-                            Feeds(
-                                onRefresh = onRefresh,
-                                onBottom = onBottom,
-                                isRefreshing = isRefreshing,
-                                feedsUiState = FeedsUiState.Success(uiState.list.map {
-                                    it.review(
-                                        onProfile = { navController.navigate("profile/${it.userId}") },
-                                        onName = { navController.navigate("profile/${it.userId}") },
-                                        onMenu = { onMenu.invoke(it.reviewId) },
-                                        onShare = { onShare.invoke(it.reviewId) },
-                                        onComment = {
-                                            show = true
-                                            onComment.invoke(it.reviewId)
-                                        },
-                                        onRestaurant = { navController.navigate("restaurant/${it.restaurantId}") }
-                                    )
-                                }),
-                                progressTintColor = Color(0xffe6cc00)
-                            )
-                        }
-
-                        is FeedUiState.Loading -> {
-                            Feeds(
-                                onRefresh = onRefresh,
-                                onBottom = onBottom,
-                                isRefreshing = isRefreshing,
-                                feedsUiState = FeedsUiState.Loading
-                            )
-                        }
-
-                        is FeedUiState.Error -> {
-
-                        }
-                    }
-                    if (uiState is FeedUiState.Success) {
-
-                    }
+        feedScreen = { onComment, onMenu, onShare ->
+            ProvideFeedScreen(onAddReview = { navController.navigate("addReview") },
+                onProfile = { userId -> navController.navigate("profile/${userId}") },
+                onName = { userId -> navController.navigate("profile/${userId}") },
+                onMenu = { reviewId -> onMenu.invoke(reviewId) },
+                onShare = { reviewId -> onShare.invoke(reviewId) },
+                onComment = { reviewId ->
+                    show = true
+                    onComment.invoke(reviewId)
                 },
-            )
+                onRestaurant = { restaurantId -> navController.navigate("restaurant/${restaurantId}") })
         },
         findingScreen = {
             Finding(
@@ -101,7 +66,7 @@ fun ProvideMainScreen(
         alarm = {
             AlarmScreen(onEmailLogin = {})
         },
-        commentBottomSheet = { reviewId, onDismissRequest, sheetState, onBackPressed, content ->
+        commentBottomSheet = { reviewId, onDismissRequest, onBackPressed, content ->
             CommentBottomSheet(
                 reviewId = reviewId,
                 onDismissRequest = onDismissRequest,
