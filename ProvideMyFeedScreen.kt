@@ -16,16 +16,19 @@ import com.sryang.torangbottomsheet.di.bottomsheet.provideShareBottomSheetDialog
 @Composable
 fun ProvideMyFeedScreen(
     navController: NavHostController,
-    reviewId : Int
+    reviewId : Int,
+    onEdit : (Int) -> Unit,
+    onProfile : ((Int) -> Unit)? = null,
+    onBack: (() -> Unit)? = null
 ) {
     var show by remember { mutableStateOf(false) }
 
     MainMyFeedScreen(
-        myFeedScreen = provideMyFeedScreen(navController = navController, reviewId = reviewId, onShowComment = {show = true }),
+        myFeedScreen = provideMyFeedScreen(navController = navController, reviewId = reviewId, onShowComment = {show = true }, onProfile = onProfile, onBack = onBack),
         commentBottomSheet = provideCommentBottomDialogSheet(show) { show = false },
         menuDialog = provideFeedMenuBottomSheetDialog(),
         shareDialog = provideShareBottomSheetDialog(),
         reportDialog = provideReportModal(),
-        onEdit = { navController.navigate("modReview/${it}") }
+        onEdit = onEdit
     )
 }
