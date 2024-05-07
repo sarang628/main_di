@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import com.sarang.torang.compose.MainMyFeedScreen
 import com.sarang.torang.di.bottomsheet.provideFeedMenuBottomSheetDialog
@@ -19,12 +20,13 @@ fun ProvideMyFeedScreen(
     reviewId : Int,
     onEdit : (Int) -> Unit,
     onProfile : ((Int) -> Unit)? = null,
-    onBack: (() -> Unit)? = null
+    onBack: (() -> Unit)? = null,
+    progressTintColor : Color? = Color(0xffe6cc00)
 ) {
     var show by remember { mutableStateOf(false) }
 
     MainMyFeedScreen(
-        myFeedScreen = provideMyFeedScreen(navController = navController, reviewId = reviewId, onShowComment = {show = true }, onProfile = onProfile, onBack = onBack),
+        myFeedScreen = provideMyFeedScreen(navController = navController, reviewId = reviewId, onShowComment = {show = true }, onProfile = onProfile, onBack = onBack, progressTintColor = progressTintColor),
         commentBottomSheet = provideCommentBottomDialogSheet(show) { show = false },
         menuDialog = provideFeedMenuBottomSheetDialog(),
         shareDialog = provideShareBottomSheetDialog(),
