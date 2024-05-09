@@ -86,9 +86,11 @@ fun provideFeedScreen(
                             reviewId = it.arguments?.getString("reviewId")?.toInt() ?: 0,
                             onEdit = { navController.navigate("modReview/${it}") },
                             onProfile = { mainNavHostController.navigate("profile/${it}") },
-                            onBack = { mainNavHostController.popBackStack() }
+                            onBack = { mainNavHostController.popBackStack() },
                         )
-                    })
+                    },
+                    image = provideTorangAsyncImage()
+                )
             }
             composable("myFeed/{reviewId}") {
                 ProvideMyFeedScreen(/*provideFeedScreen*/
