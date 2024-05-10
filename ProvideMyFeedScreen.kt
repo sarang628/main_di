@@ -1,5 +1,6 @@
 package com.sarang.torang.di.main_di
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,16 +18,29 @@ import com.sryang.torangbottomsheet.di.bottomsheet.provideShareBottomSheetDialog
 @Composable
 fun ProvideMyFeedScreen(
     navController: NavHostController,
-    reviewId : Int,
-    onEdit : (Int) -> Unit,
-    onProfile : ((Int) -> Unit)? = null,
+    reviewId: Int,
+    onEdit: (Int) -> Unit,
+    onProfile: ((Int) -> Unit)? = null,
     onBack: (() -> Unit)? = null,
-    progressTintColor : Color? = Color(0xffe6cc00)
+    onRestaurant: ((Int) -> Unit)? = null,
+    progressTintColor: Color? = Color(0xffe6cc00),
 ) {
     var show by remember { mutableStateOf(false) }
 
     MainMyFeedScreen(
-        myFeedScreen = provideMyFeedScreen(navController = navController, reviewId = reviewId, onShowComment = {show = true }, onProfile = onProfile, onBack = onBack, progressTintColor = progressTintColor),
+        myFeedScreen = provideMyFeedScreen(
+            navController = navController,
+            reviewId = reviewId,
+            onShowComment = { show = true },
+            onProfile = onProfile,
+            onBack = onBack,
+            progressTintColor = progressTintColor,
+            onRestaurant = {
+                if (onRestaurant == null)
+                    Log.w("__ProvideMyFeedScreen", "onRestaurantListener is null")
+                onRestaurant?.invoke(it)
+            }
+        ),
         commentBottomSheet = provideCommentBottomDialogSheet(show) { show = false },
         menuDialog = provideFeedMenuBottomSheetDialog(),
         shareDialog = provideShareBottomSheetDialog(),
