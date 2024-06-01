@@ -1,5 +1,6 @@
 package com.sarang.torang.di.main_di
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
@@ -18,15 +19,14 @@ fun provideFeed(
 ): @Composable (Feed, (Int) -> Unit, (Int) -> Unit) -> Unit = { feed, onLike, onFavirite ->
     Feed(
         review = feed.toReview(),
-        isZooming = { /*scrollEnabled = !it*/ },
-        progressTintColor = Color(0xFF000000),
+        isZooming = { Log.w("_provideFeed", "isZooming  is nothing") /*scrollEnabled = !it*/ },
         image = provideTorangAsyncImage(),
         onComment = { onComment.invoke(feed.reviewId) },
         onShare = { onShare.invoke(feed.reviewId) },
         onMenu = { onMenu.invoke(feed.reviewId) },
         onName = { navController.navigate("profile/${feed.userId}") },
         onRestaurant = { rootNavController.restaurant(feed.restaurantId) },
-        onImage = { },
+        onImage = { rootNavController.imagePager(feed.reviewId, it) },
         onProfile = { navController.navigate("profile/${feed.userId}") },
         onLike = { onLike.invoke(feed.reviewId) },
         onFavorite = { onFavirite.invoke(feed.reviewId) }

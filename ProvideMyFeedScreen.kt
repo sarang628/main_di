@@ -28,21 +28,20 @@ fun ProvideMyFeedScreen(
             reviewId = navBackStackEntry.arguments?.getString("reviewId")?.toInt()
                 ?: 0,
             listState = rememberLazyListState(),
-            feed = { it, onLike, onFavorite ->
+            feed = { feed, onLike, onFavorite ->
                 Feed(
-                    review = it.toReview(),
+                    review = feed.toReview(),
                     isZooming = { /*scrollEnabled = !it*/ },
-                    progressTintColor = Color(0xFF000000),
                     image = provideTorangAsyncImage(),
-                    onComment = { dialogsViewModel.onComment(it.reviewId) },
-                    onShare = { dialogsViewModel.onShare(it.reviewId) },
-                    onMenu = { dialogsViewModel.onMenu(it.reviewId) },
-                    onName = { navController.navigate("profile/${it.userId}") },
-                    onRestaurant = { rootNavController.restaurant(it.restaurantId) },
-                    onImage = { rootNavController.imagePager(it, 0) },
-                    onProfile = { navController.navigate("profile/${it.userId}") },
-                    onLike = { onLike.invoke(it.reviewId) },
-                    onFavorite = { onFavorite.invoke(it.reviewId) }
+                    onComment = { dialogsViewModel.onComment(feed.reviewId) },
+                    onShare = { dialogsViewModel.onShare(feed.reviewId) },
+                    onMenu = { dialogsViewModel.onMenu(feed.reviewId) },
+                    onName = { navController.navigate("profile/${feed.userId}") },
+                    onRestaurant = { rootNavController.restaurant(feed.restaurantId) },
+                    onImage = { rootNavController.imagePager(feed.reviewId, 0) },
+                    onProfile = { navController.navigate("profile/${feed.userId}") },
+                    onLike = { onLike.invoke(feed.reviewId) },
+                    onFavorite = { onFavorite.invoke(feed.reviewId) }
                 )
             },
             onBack = { navController.popBackStack() }
