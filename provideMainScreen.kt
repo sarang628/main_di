@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainScreen
@@ -26,7 +25,7 @@ fun provideMainScreen(
 
     ProvideMainDialog(
         dialogsViewModel = dialogsViewModel,
-        navController = rootNavController
+        rootNavController = rootNavController
     ) {
         MainScreen(
             feedScreen = {

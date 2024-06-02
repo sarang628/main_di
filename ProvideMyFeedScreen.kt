@@ -2,7 +2,6 @@ package com.sarang.torang.di.main_di
 
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
@@ -22,7 +21,7 @@ fun ProvideMyFeedScreen(
 ) {
     ProvideMainDialog(
         dialogsViewModel = dialogsViewModel,
-        navController = rootNavController
+        rootNavController = rootNavController
     ) {
         MyFeedScreen(
             reviewId = navBackStackEntry.arguments?.getString("reviewId")?.toInt()
