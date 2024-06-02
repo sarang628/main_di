@@ -41,7 +41,8 @@ fun ProvideMyFeedScreen(
                     onImage = { rootNavController.imagePager(feed.reviewId, 0) },
                     onProfile = { navController.navigate("profile/${feed.userId}") },
                     onLike = { onLike.invoke(feed.reviewId) },
-                    onFavorite = { onFavorite.invoke(feed.reviewId) }
+                    onFavorite = { onFavorite.invoke(feed.reviewId) },
+                    onLikes = { rootNavController.like(feed.reviewId) }
                 )
             },
             onBack = { navController.popBackStack() }

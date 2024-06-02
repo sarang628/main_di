@@ -29,6 +29,7 @@ fun provideFeed(
         onImage = { rootNavController.imagePager(feed.reviewId, it) },
         onProfile = { navController.navigate("profile/${feed.userId}") },
         onLike = { onLike.invoke(feed.reviewId) },
-        onFavorite = { onFavirite.invoke(feed.reviewId) }
+        onFavorite = { onFavirite.invoke(feed.reviewId) },
+        onLikes = { rootNavController.like(feed.reviewId) }
     )
 }
