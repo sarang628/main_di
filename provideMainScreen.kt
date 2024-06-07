@@ -72,7 +72,12 @@ fun provideMainScreen(
                     }
                 )
             },
-            alarm = { AlarmScreen(onEmailLogin = {}) },
+            alarm = {
+                AlarmScreen(
+                    onEmailLogin = {},
+                    onContents = { rootNavController.review(it) },
+                    onProfile = { rootNavController.profile(it) })
+            },
         )
     }
 }
