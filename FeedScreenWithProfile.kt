@@ -34,10 +34,12 @@ fun FeedScreenWithProfile(
         }
         composable(
             "profile/{id}",
-            content = provideProfileScreen(
-                rootNavController = rootNavController,
-                navController = feedNavController
-            )
+            content = {
+                provideProfileScreen(
+                    rootNavController = rootNavController,
+                    navController = feedNavController
+                ).invoke(it)
+            }
         )
     }
 }
