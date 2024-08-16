@@ -2,7 +2,6 @@ package com.sarang.torang.di.main_di
 
 import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.Feed
