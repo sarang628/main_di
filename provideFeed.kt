@@ -19,7 +19,7 @@ fun provideFeed(
     Feed(
         review = feed.toReview(),
         isZooming = { Log.w("_provideFeed", "isZooming  is nothing") /*scrollEnabled = !it*/ },
-        image = provideTorangAsyncImage(),
+        imageLoadCompose = provideTorangAsyncImage(),
         onComment = { onComment.invoke(feed.reviewId) },
         onShare = { onShare.invoke(feed.reviewId) },
         onMenu = { onMenu.invoke(feed.reviewId) },

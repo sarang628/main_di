@@ -31,7 +31,7 @@ fun ProvideMyFeedScreen(
                 Feed(
                     review = feed.toReview(),
                     isZooming = { /*scrollEnabled = !it*/ },
-                    image = provideTorangAsyncImage(),
+                    imageLoadCompose = provideTorangAsyncImage(),
                     onComment = { dialogsViewModel.onComment(feed.reviewId) },
                     onShare = { dialogsViewModel.onShare(feed.reviewId) },
                     onMenu = { dialogsViewModel.onMenu(feed.reviewId) },
