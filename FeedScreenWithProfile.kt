@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedScreenForMain
+import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
 
 @Composable
@@ -28,6 +29,7 @@ fun FeedScreenWithProfile(
                     navController = feedNavController,
                     rootNavController = rootNavController
                 ),
+                shimmerBrush = { it -> shimmerBrush(it) },
                 consumeOnTop = consumeOnTop,
                 onTop = onTop
             )

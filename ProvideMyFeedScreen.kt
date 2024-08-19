@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.Feed
 import com.sarang.torang.compose.feed.MyFeedScreen
+import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.di.image.provideTorangAsyncImage
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
@@ -27,6 +28,7 @@ fun ProvideMyFeedScreen(
             reviewId = navBackStackEntry.arguments?.getString("reviewId")?.toInt()
                 ?: 0,
             listState = rememberLazyListState(),
+            shimmerBrush = { it -> shimmerBrush(it) },
             feed = { feed, onLike, onFavorite ->
                 Feed(
                     review = feed.toReview(),
