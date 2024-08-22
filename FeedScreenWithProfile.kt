@@ -9,6 +9,9 @@ import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedScreenForMain
 import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
+import com.sryang.library.pullrefresh.PullToRefreshLayout
+import com.sryang.library.pullrefresh.RefreshIndicatorState
+import com.sryang.library.pullrefresh.rememberPullToRefreshState
 
 @Composable
 fun FeedScreenWithProfile(
@@ -18,6 +21,7 @@ fun FeedScreenWithProfile(
     onTop: Boolean,
     consumeOnTop: () -> Unit,
 ) {
+    val state = rememberPullToRefreshState()
     NavHost(navController = feedNavController, startDestination = "feed") {
         composable("feed") {
             FeedScreenForMain(
@@ -31,7 +35,24 @@ fun FeedScreenWithProfile(
                 ),
                 shimmerBrush = { it -> shimmerBrush(it) },
                 consumeOnTop = consumeOnTop,
-                onTop = onTop
+                onTop = onTop,
+                pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
+
+                    if (isRefreshing) {
+                        state.updateState(RefreshIndicatorState.Refreshing)
+                    } else {
+                        state.updateState(RefreshIndicatorState.Default)
+                    }
+
+                    PullToRefreshLayout(
+                        pullRefreshLayoutState = state,
+                        refreshThreshold = 80,
+                        onRefresh = onRefresh
+                    ) {
+                        contents.invoke()
+                    }
+                }
+
             )
         }
         composable(

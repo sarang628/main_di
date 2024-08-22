@@ -13,7 +13,7 @@ import com.sarang.torang.compose.MainScreen
 import com.sarang.torang.di.profile_di.MyProfileScreenNavHost
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
 import com.sryang.findinglinkmodules.di.finding_di.Finding
-import com.sryang.torang.compose.AlarmScreen
+import com.sarang.torang.compose.AlarmScreen
 
 fun provideMainScreen(
     rootNavController: RootNavController,
