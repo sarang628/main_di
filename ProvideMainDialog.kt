@@ -20,7 +20,7 @@ fun ProvideMainDialog(
     val uiState by dialogsViewModel.uiState.collectAsState()
     MainDialogs(
         uiState = uiState,
-        commentBottomSheet = { /*provideCommentBottomDialogSheet(rootNavController).invoke(it) { dialogsViewModel.closeComment() }*/ },
+        commentBottomSheet = { provideCommentBottomDialogSheet(rootNavController).invoke(it) { dialogsViewModel.closeComment() } },
         menuDialog = provideFeedMenuBottomSheetDialog(),
         shareDialog = provideShareBottomSheetDialog(),
         reportDialog = provideReportModal(),
