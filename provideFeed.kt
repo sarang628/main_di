@@ -8,6 +8,8 @@ import com.sarang.torang.compose.feed.Feed
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.di.image.provideTorangAsyncImage
+import com.sarang.torang.di.torang.provideExpandableText
+import com.sryang.library.ExpandableText
 
 fun provideFeed(
     onComment: ((Int) -> Unit),
@@ -29,6 +31,7 @@ fun provideFeed(
         onProfile = { navController.navigate("profile/${feed.userId}") },
         onLike = { onLike.invoke(feed.reviewId) },
         onFavorite = { onFavirite.invoke(feed.reviewId) },
-        onLikes = { rootNavController.like(feed.reviewId) }
+        onLikes = { rootNavController.like(feed.reviewId) },
+        expandableText = provideExpandableText()
     )
 }
