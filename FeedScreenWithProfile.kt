@@ -33,7 +33,7 @@ fun FeedScreenWithProfile(
                     navController = feedNavController,
                     rootNavController = rootNavController
                 ),
-                shimmerBrush = { it -> shimmerBrush(it) },
+                shimmerBrush = { shimmerBrush(it) },
                 consumeOnTop = consumeOnTop,
                 onTop = onTop,
                 pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
@@ -52,7 +52,6 @@ fun FeedScreenWithProfile(
                         contents.invoke()
                     }
                 }
-
             )
         }
         composable(

@@ -17,21 +17,23 @@ fun provideFeed(
     onShare: ((Int) -> Unit),
     navController: NavHostController,
     rootNavController: RootNavController,
-): @Composable (Feed, (Int) -> Unit, (Int) -> Unit) -> Unit = { feed, onLike, onFavirite ->
-    Feed(
-        review = feed.toReview(),
-        isZooming = { Log.w("_provideFeed", "isZooming  is nothing") /*scrollEnabled = !it*/ },
-        imageLoadCompose = provideTorangAsyncImage(),
-        onComment = { onComment.invoke(feed.reviewId) },
-        onShare = { onShare.invoke(feed.reviewId) },
-        onMenu = { onMenu.invoke(feed.reviewId) },
-        onName = { navController.navigate("profile/${feed.userId}") },
-        onRestaurant = { rootNavController.restaurant(feed.restaurantId) },
-        onImage = { rootNavController.imagePager(feed.reviewId, it) },
-        onProfile = { navController.navigate("profile/${feed.userId}") },
-        onLike = { onLike.invoke(feed.reviewId) },
-        onFavorite = { onFavirite.invoke(feed.reviewId) },
-        onLikes = { rootNavController.like(feed.reviewId) },
-        expandableText = provideExpandableText()
-    )
-}
+): @Composable (Feed, (Int) -> Unit, (Int) -> Unit, Boolean) -> Unit =
+    { feed, onLike, onFavirite, isLogin ->
+        Feed(
+            review = feed.toReview(),
+            isZooming = { Log.w("_provideFeed", "isZooming  is nothing") /*scrollEnabled = !it*/ },
+            imageLoadCompose = provideTorangAsyncImage(),
+            onComment = { onComment.invoke(feed.reviewId) },
+            onShare = { if (isLogin) onShare.invoke(feed.reviewId) else rootNavController.emailLogin() },
+            onMenu = { onMenu.invoke(feed.reviewId) },
+            onName = { navController.navigate("profile/${feed.userId}") },
+            onRestaurant = { rootNavController.restaurant(feed.restaurantId) },
+            onImage = { rootNavController.imagePager(feed.reviewId, it) },
+            onProfile = { navController.navigate("profile/${feed.userId}") },
+            onLike = { if(isLogin) onLike.invoke(feed.reviewId) else rootNavController.emailLogin() },
+            onFavorite = { if(isLogin) onFavirite.invoke(feed.reviewId) else rootNavController.emailLogin() },
+            onLikes = { rootNavController.like(feed.reviewId) },
+            expandableText = provideExpandableText(),
+            isLogin = isLogin
+        )
+    }

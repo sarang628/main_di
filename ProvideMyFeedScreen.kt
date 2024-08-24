@@ -42,13 +42,13 @@ fun ProvideMyFeedScreen(
             reviewId = reviewId,
             listState = rememberLazyListState(),
             shimmerBrush = { it -> shimmerBrush(it) },
-            feed = { feed, onLike, onFavorite ->
+            feed = { feed, onLike, onFavorite, isLogin ->
                 Feed(
                     review = feed.toReview(),
                     isZooming = { /*scrollEnabled = !it*/ },
                     imageLoadCompose = provideTorangAsyncImage(),
                     onComment = { dialogsViewModel.onComment(feed.reviewId) },
-                    onShare = { dialogsViewModel.onShare(feed.reviewId) },
+                    onShare = { if (isLogin) dialogsViewModel.onShare(feed.reviewId) },
                     onMenu = { dialogsViewModel.onMenu(feed.reviewId) },
                     onName = { navController.navigate("profile/${feed.userId}") },
                     onRestaurant = { rootNavController.restaurant(feed.restaurantId) },
