@@ -1,5 +1,6 @@
 package com.sarang.torang.di.main_di
 
+import android.util.Log
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -14,6 +15,9 @@ import com.sarang.torang.di.image.provideTorangAsyncImage
 import com.sarang.torang.di.torang.provideExpandableText
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
 import com.sryang.library.ExpandableText
+import com.sryang.library.pullrefresh.PullToRefreshLayout
+import com.sryang.library.pullrefresh.RefreshIndicatorState
+import com.sryang.library.pullrefresh.rememberPullToRefreshState
 
 @Composable
 fun ProvideMyFeedScreen(
@@ -22,13 +26,20 @@ fun ProvideMyFeedScreen(
     rootNavController: RootNavController,
     navBackStackEntry: NavBackStackEntry,
 ) {
+    val reviewId: Int? = navBackStackEntry.arguments?.getString("reviewId")?.toInt()
+    val state = rememberPullToRefreshState()
+
+    if (reviewId == null) {
+        Log.e("__ProvideMyFeedScreen", "reviewId is null. can't load FeedScreen")
+        return
+    }
+
     ProvideMainDialog(
         dialogsViewModel = dialogsViewModel,
         rootNavController = rootNavController
     ) {
         MyFeedScreen(
-            reviewId = navBackStackEntry.arguments?.getString("reviewId")?.toInt()
-                ?: 0,
+            reviewId = reviewId,
             listState = rememberLazyListState(),
             shimmerBrush = { it -> shimmerBrush(it) },
             feed = { feed, onLike, onFavorite ->
@@ -49,7 +60,23 @@ fun ProvideMyFeedScreen(
                     expandableText = provideExpandableText()
                 )
             },
-            onBack = { navController.popBackStack() }
+            onBack = { navController.popBackStack() },
+            pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
+
+                if (isRefreshing) {
+                    state.updateState(RefreshIndicatorState.Refreshing)
+                } else {
+                    state.updateState(RefreshIndicatorState.Default)
+                }
+
+                PullToRefreshLayout(
+                    pullRefreshLayoutState = state,
+                    refreshThreshold = 80,
+                    onRefresh = onRefresh
+                ) {
+                    contents.invoke()
+                }
+            }
         )
     }
 }
