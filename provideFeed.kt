@@ -16,8 +16,14 @@ fun provideFeed(
     onShare: ((Int) -> Unit),
     navController: NavHostController,
     rootNavController: RootNavController,
-): @Composable (Feed, (Int) -> Unit, (Int) -> Unit, Boolean) -> Unit =
-    { feed, onLike, onFavirite, isLogin ->
+): @Composable ((
+    feed: Feed,
+    onLike: (Int) -> Unit,
+    onFavorite: (Int) -> Unit,
+    isLogin: Boolean,
+    onVideoClick: () -> Unit,
+) -> Unit) =
+    { feed, onLike, onFavirite, isLogin, onVideoClick ->
         Feed(
             review = feed.toReview(),
             isZooming = { Log.w("_provideFeed", "isZooming  is nothing") /*scrollEnabled = !it*/ },
@@ -29,11 +35,11 @@ fun provideFeed(
             onRestaurant = { rootNavController.restaurant(feed.restaurantId) },
             onImage = { rootNavController.imagePager(feed.reviewId, it) },
             onProfile = { navController.navigate("profile/${feed.userId}") },
-            onLike = { if(isLogin) onLike.invoke(feed.reviewId) else rootNavController.emailLogin() },
-            onFavorite = { if(isLogin) onFavirite.invoke(feed.reviewId) else rootNavController.emailLogin() },
+            onLike = { if (isLogin) onLike.invoke(feed.reviewId) else rootNavController.emailLogin() },
+            onFavorite = { if (isLogin) onFavirite.invoke(feed.reviewId) else rootNavController.emailLogin() },
             onLikes = { rootNavController.like(feed.reviewId) },
             expandableText = provideExpandableText(),
             isLogin = isLogin,
-            videoPlayer = { VideoPlayerScreen(videoUrl = it) }
+            videoPlayer = { VideoPlayerScreen(videoUrl = it, feed.isPlaying, onVideoClick, {}) }
         )
     }

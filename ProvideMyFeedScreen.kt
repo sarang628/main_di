@@ -42,7 +42,7 @@ fun ProvideMyFeedScreen(
             reviewId = reviewId,
             listState = rememberLazyListState(),
             shimmerBrush = { it -> shimmerBrush(it) },
-            feed = { feed, onLike, onFavorite, isLogin ->
+            feed = { feed, onLike, onFavorite, isLogin, onVideoClick ->
                 Feed(
                     review = feed.toReview(),
                     isZooming = { /*scrollEnabled = !it*/ },
@@ -58,7 +58,7 @@ fun ProvideMyFeedScreen(
                     onFavorite = { onFavorite.invoke(feed.reviewId) },
                     onLikes = { rootNavController.like(feed.reviewId) },
                     expandableText = provideExpandableText(),
-                    videoPlayer = { VideoPlayerScreen(videoUrl = it) }
+                    videoPlayer = { VideoPlayerScreen(videoUrl = it, feed.isPlaying, onClick = onVideoClick, onPlay = {}) }
                 )
             },
             onBack = { navController.popBackStack() },
