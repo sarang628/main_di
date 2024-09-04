@@ -14,13 +14,14 @@ import com.sarang.torang.di.profile_di.MyProfileScreenNavHost
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
 import com.sryang.findinglinkmodules.di.finding_di.Finding
 import com.sarang.torang.compose.AlarmScreen
+import com.sarang.torang.compose.main.Feed
 
 fun provideMainScreen(
     rootNavController: RootNavController,
 ): @Composable () -> Unit = {
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
     val feedNavController = rememberNavController() // 메인 하단 홈버튼 클릭시 처리를 위해 여기에 설정
-    var latestDestination by remember { mutableStateOf("feed") }
+    var latestDestination: Any by remember { mutableStateOf(Feed) }
     var onTop by remember { mutableStateOf(false) }
 
     ProvideMainDialog(
