@@ -12,6 +12,7 @@ import com.sarang.torang.compose.feed.MyFeedScreen
 import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.di.image.provideTorangAsyncImage
+import com.sarang.torang.di.torang.VideoPlayerScreen
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
 import com.sryang.library.ExpandableText
 import com.sryang.library.pullrefresh.PullToRefreshLayout
@@ -41,7 +42,7 @@ fun ProvideMyFeedScreen(
             reviewId = reviewId,
             listState = rememberLazyListState(),
             shimmerBrush = { it -> shimmerBrush(it) },
-            feed = { feed, onLike, onFavorite, isLogin ->
+            feed = { feed, onLike, onFavorite, isLogin, onVideoClick ->
                 Feed(
                     review = feed.toReview(),
                     isZooming = { /*scrollEnabled = !it*/ },
@@ -56,7 +57,8 @@ fun ProvideMyFeedScreen(
                     onLike = { onLike.invoke(feed.reviewId) },
                     onFavorite = { onFavorite.invoke(feed.reviewId) },
                     onLikes = { rootNavController.like(feed.reviewId) },
-                    expandableText = provideExpandableText()
+                    expandableText = provideExpandableText(),
+                    videoPlayer = { VideoPlayerScreen(videoUrl = it, feed.isPlaying, onClick = onVideoClick, onPlay = {}) }
                 )
             },
             onBack = { navController.popBackStack() },
