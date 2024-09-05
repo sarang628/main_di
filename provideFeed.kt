@@ -9,7 +9,6 @@ import com.sarang.torang.compose.feed.Feed
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.di.image.provideTorangAsyncImage
-import com.sarang.torang.di.torang.VideoPlayerScreen
 
 fun provideFeed(
     onComment: ((Int) -> Unit),

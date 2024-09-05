@@ -21,12 +21,13 @@ fun FeedScreenWithProfile(
     onTop: Boolean,
     consumeOnTop: () -> Unit,
     videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit,
+    onAddReview: (() -> Unit),
 ) {
     val state = rememberPullToRefreshState()
     NavHost(navController = feedNavController, startDestination = "feed") {
         composable("feed") {
             FeedScreenForMain(
-                onAddReview = { rootNavController.addReview() },
+                onAddReview = onAddReview,
                 feed = provideFeed(
                     { dialogsViewModel.onComment(it) },
                     { dialogsViewModel.onMenu(it) },
