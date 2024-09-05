@@ -20,6 +20,7 @@ fun FeedScreenWithProfile(
     dialogsViewModel: FeedDialogsViewModel,
     onTop: Boolean,
     consumeOnTop: () -> Unit,
+    videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit,
 ) {
     val state = rememberPullToRefreshState()
     NavHost(navController = feedNavController, startDestination = "feed") {
@@ -31,7 +32,8 @@ fun FeedScreenWithProfile(
                     { dialogsViewModel.onMenu(it) },
                     { dialogsViewModel.onShare(it) },
                     navController = feedNavController,
-                    rootNavController = rootNavController
+                    rootNavController = rootNavController,
+                    videoPlayer = videoPlayer
                 ),
                 shimmerBrush = { shimmerBrush(it) },
                 consumeOnTop = consumeOnTop,
@@ -59,7 +61,8 @@ fun FeedScreenWithProfile(
             content = {
                 provideProfileScreen(
                     rootNavController = rootNavController,
-                    navController = feedNavController
+                    navController = feedNavController,
+                    videoPlayer = videoPlayer
                 ).invoke(it)
             }
         )

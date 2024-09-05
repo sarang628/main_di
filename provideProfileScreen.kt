@@ -11,7 +11,8 @@ import com.sarang.torang.di.image.provideTorangAsyncImage
 
 internal fun provideProfileScreen(
     rootNavController: RootNavController,
-    navController: NavHostController
+    navController: NavHostController,
+    videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit,
 ): @Composable (NavBackStackEntry) -> Unit =
     {
         val profileNavController = rememberNavController() // 상위에 선언하면 앱 죽음
@@ -27,7 +28,8 @@ internal fun provideProfileScreen(
                     ProvideMyFeedScreen(
                         navBackStackEntry = it,
                         rootNavController = rootNavController,
-                        navController = profileNavController
+                        navController = profileNavController,
+                        videoPlayer = videoPlayer
                     )
                 },
                 image = provideTorangAsyncImage()

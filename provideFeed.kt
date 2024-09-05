@@ -2,6 +2,7 @@ package com.sarang.torang.di.main_di
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.Feed
@@ -16,14 +17,16 @@ fun provideFeed(
     onShare: ((Int) -> Unit),
     navController: NavHostController,
     rootNavController: RootNavController,
+    videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit,
 ): @Composable ((
     feed: Feed,
     onLike: (Int) -> Unit,
     onFavorite: (Int) -> Unit,
     isLogin: Boolean,
     onVideoClick: () -> Unit,
+    imageHeight: Int,
 ) -> Unit) =
-    { feed, onLike, onFavirite, isLogin, onVideoClick ->
+    { feed, onLike, onFavirite, isLogin, onVideoClick, imageHeight ->
         Feed(
             review = feed.toReview(),
             isZooming = { Log.w("_provideFeed", "isZooming  is nothing") /*scrollEnabled = !it*/ },
@@ -40,6 +43,7 @@ fun provideFeed(
             onLikes = { rootNavController.like(feed.reviewId) },
             expandableText = provideExpandableText(),
             isLogin = isLogin,
-            videoPlayer = { VideoPlayerScreen(videoUrl = it, feed.isPlaying, onVideoClick, {}) }
+            videoPlayer = { videoPlayer.invoke(it, feed.isPlaying, onVideoClick) },
+            imageHeight = if (imageHeight > 0) imageHeight.dp else 600.dp
         )
     }

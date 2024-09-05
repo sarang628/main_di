@@ -23,6 +23,7 @@ import com.sarang.torang.compose.AlarmScreen
 
 fun provideMainScreen(
     rootNavController: RootNavController,
+    videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit,
 ): @Composable () -> Unit = {
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
     val feedNavController = rememberNavController() // 메인 하단 홈버튼 클릭시 처리를 위해 여기에 설정
@@ -40,7 +41,8 @@ fun provideMainScreen(
                     feedNavController = feedNavController,
                     dialogsViewModel = dialogsViewModel,
                     onTop = onTop,
-                    consumeOnTop = { onTop = false }
+                    consumeOnTop = { onTop = false },
+                    videoPlayer = videoPlayer
                 )
             },
             onBottomMenu = {
@@ -73,7 +75,8 @@ fun provideMainScreen(
                         ProvideMyFeedScreen(
                             rootNavController = rootNavController,
                             navController = profileNavController,
-                            navBackStackEntry = it
+                            navBackStackEntry = it,
+                            videoPlayer = videoPlayer
                         )
                     }
                 )

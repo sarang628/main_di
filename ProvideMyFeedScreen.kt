@@ -3,6 +3,7 @@ package com.sarang.torang.di.main_di
 import android.util.Log
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
@@ -14,7 +15,6 @@ import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.di.image.provideTorangAsyncImage
 import com.sarang.torang.di.torang.VideoPlayerScreen
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
-import com.sryang.library.ExpandableText
 import com.sryang.library.pullrefresh.PullToRefreshLayout
 import com.sryang.library.pullrefresh.RefreshIndicatorState
 import com.sryang.library.pullrefresh.rememberPullToRefreshState
@@ -25,6 +25,7 @@ fun ProvideMyFeedScreen(
     navController: NavHostController,
     rootNavController: RootNavController,
     navBackStackEntry: NavBackStackEntry,
+    videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit,
 ) {
     val reviewId: Int? = navBackStackEntry.arguments?.getString("reviewId")?.toInt()
     val state = rememberPullToRefreshState()
@@ -42,7 +43,7 @@ fun ProvideMyFeedScreen(
             reviewId = reviewId,
             listState = rememberLazyListState(),
             shimmerBrush = { it -> shimmerBrush(it) },
-            feed = { feed, onLike, onFavorite, isLogin, onVideoClick ->
+            feed = { feed, onLike, onFavorite, isLogin, onVideoClick, imageHeight ->
                 Feed(
                     review = feed.toReview(),
                     isZooming = { /*scrollEnabled = !it*/ },
@@ -58,7 +59,8 @@ fun ProvideMyFeedScreen(
                     onFavorite = { onFavorite.invoke(feed.reviewId) },
                     onLikes = { rootNavController.like(feed.reviewId) },
                     expandableText = provideExpandableText(),
-                    videoPlayer = { VideoPlayerScreen(videoUrl = it, feed.isPlaying, onClick = onVideoClick, onPlay = {}) }
+                    videoPlayer = { videoPlayer.invoke(it, feed.isPlaying, onVideoClick) },
+                    imageHeight = if (imageHeight > 0) imageHeight.dp else 600.dp
                 )
             },
             onBack = { navController.popBackStack() },
