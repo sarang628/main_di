@@ -84,7 +84,8 @@ fun provideMainScreen(
                     onProfile = { rootNavController.profile(it) })
             },
             addReview = {},
-            chat = {}
+            chat = {},
+            onCloseReview = {}
         )
     }
 }
