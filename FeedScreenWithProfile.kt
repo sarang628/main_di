@@ -37,8 +37,8 @@ fun FeedScreenWithProfile(
                     videoPlayer = videoPlayer
                 ),
                 shimmerBrush = { shimmerBrush(it) },
-                consumeOnTop = consumeOnTop,
-                onTop = onTop,
+                onScrollToTop = consumeOnTop,
+                scrollToTop = onTop,
                 pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
 
                     if (isRefreshing) {

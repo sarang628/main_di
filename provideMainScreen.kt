@@ -19,6 +19,9 @@ import com.sryang.findinglinkmodules.di.finding_di.Finding
 fun provideMainScreen(
     rootNavController: RootNavController,
     videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit,
+    addReviewScreen: @Composable (onClose: () -> Unit) -> Unit,
+    chat: @Composable () -> Unit,
+    onCloseReview: (() -> Unit),
 ): @Composable () -> Unit = {
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
     val feedNavController = rememberNavController() // 메인 하단 홈버튼 클릭시 처리를 위해 여기에 설정
@@ -83,9 +86,8 @@ fun provideMainScreen(
                     onContents = { rootNavController.review(it) },
                     onProfile = { rootNavController.profile(it) })
             },
-            addReview = {},
-            chat = {},
-            onCloseReview = {}
+            addReview = addReviewScreen,
+            chat = chat
         )
     }
 }
