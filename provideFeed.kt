@@ -17,6 +17,8 @@ fun provideFeed(
     navController: NavHostController,
     rootNavController: RootNavController,
     videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit,
+    onPressed: () -> Unit = {},
+    onReleased: () -> Unit = {},
 ): @Composable ((
     feed: Feed,
     onLike: (Int) -> Unit,
@@ -43,6 +45,8 @@ fun provideFeed(
             expandableText = provideExpandableText(),
             isLogin = isLogin,
             videoPlayer = { videoPlayer.invoke(it, feed.isPlaying, onVideoClick) },
-            imageHeight = if (imageHeight > 0) imageHeight.dp else 600.dp
+            imageHeight = if (imageHeight > 0) imageHeight.dp else 600.dp,
+            onPressed = onPressed,
+            onReleased = onReleased
         )
     }

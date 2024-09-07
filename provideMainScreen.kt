@@ -24,6 +24,7 @@ fun provideMainScreen(
     val feedNavController = rememberNavController() // 메인 하단 홈버튼 클릭시 처리를 위해 여기에 설정
     var latestDestination: Any by remember { mutableStateOf(Feed) }
     var onTop by remember { mutableStateOf(false) }
+    var swipeAblePager by remember { mutableStateOf(true) }
 
     ProvideMainDialog(
         dialogsViewModel = dialogsViewModel,
@@ -38,7 +39,9 @@ fun provideMainScreen(
                     onTop = onTop,
                     consumeOnTop = { onTop = false },
                     videoPlayer = videoPlayer,
-                    onAddReview = onAddReview
+                    onAddReview = onAddReview,
+                    onPressed = { swipeAblePager = false },
+                    onReleased = { swipeAblePager = true }
                 )
             },
             onBottomMenu = {
@@ -84,7 +87,8 @@ fun provideMainScreen(
                     onProfile = { rootNavController.profile(it) })
             },
             addReview = {},
-            chat = {}
+            chat = {},
+            swipeAblePager = swipeAblePager
         )
     }
 }
