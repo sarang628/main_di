@@ -12,6 +12,7 @@ import com.sarang.torang.di.image.provideTorangAsyncImage
 internal fun provideProfileScreen(
     rootNavController: RootNavController,
     navController: NavHostController,
+    onMessage: (Int) -> Unit,
     videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit,
 ): @Composable (NavBackStackEntry) -> Unit =
     {
@@ -32,7 +33,8 @@ internal fun provideProfileScreen(
                         videoPlayer = videoPlayer
                     )
                 },
-                image = provideTorangAsyncImage()
+                image = provideTorangAsyncImage(),
+                onMessage = onMessage
             )
         } else {
             Text(text = "사용자 정보가 없습니다.")

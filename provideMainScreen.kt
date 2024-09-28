@@ -1,6 +1,8 @@
 package com.sarang.torang.di.main_di
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,12 +18,14 @@ import com.sarang.torang.di.profile_di.MyProfileScreenNavHost
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
 import com.sryang.findinglinkmodules.di.finding_di.Finding
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 fun provideMainScreen(
     rootNavController: RootNavController,
     videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit,
     addReviewScreen: @Composable (onClose: () -> Unit) -> Unit,
     chat: @Composable () -> Unit,
     onCloseReview: (() -> Unit),
+    onMessage: (Int) -> Unit,
 ): @Composable () -> Unit = {
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
     val feedNavController = rememberNavController() // 메인 하단 홈버튼 클릭시 처리를 위해 여기에 설정
@@ -41,7 +45,8 @@ fun provideMainScreen(
                     onTop = onTop,
                     consumeOnTop = { onTop = false },
                     videoPlayer = videoPlayer,
-                    onAddReview = onAddReview
+                    onAddReview = onAddReview,
+                    onMessage = onMessage
                 )
             },
             onBottomMenu = {
@@ -77,7 +82,8 @@ fun provideMainScreen(
                             navBackStackEntry = it,
                             videoPlayer = videoPlayer
                         )
-                    }
+                    },
+                    onMessage = onMessage
                 )
             },
             alarm = {

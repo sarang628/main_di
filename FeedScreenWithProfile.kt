@@ -22,6 +22,7 @@ fun FeedScreenWithProfile(
     consumeOnTop: () -> Unit,
     videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit,
     onAddReview: (() -> Unit),
+    onMessage: (Int) -> Unit,
 ) {
     val state = rememberPullToRefreshState()
     NavHost(navController = feedNavController, startDestination = "feed") {
@@ -63,7 +64,8 @@ fun FeedScreenWithProfile(
                 provideProfileScreen(
                     rootNavController = rootNavController,
                     navController = feedNavController,
-                    videoPlayer = videoPlayer
+                    videoPlayer = videoPlayer,
+                    onMessage = onMessage
                 ).invoke(it)
             }
         )
