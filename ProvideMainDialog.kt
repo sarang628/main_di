@@ -6,10 +6,9 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainDialogs
-import com.sarang.torang.di.bottomsheet.provideFeedMenuBottomSheetDialog
 import com.sarang.torang.di.report_di.provideReportModal
+import com.sarang.torang.di.report_di.provideShareBottomSheetDialog
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
-import com.sryang.torangbottomsheet.di.bottomsheet.provideShareBottomSheetDialog
 
 @Composable
 fun ProvideMainDialog(
@@ -21,7 +20,7 @@ fun ProvideMainDialog(
     MainDialogs(
         uiState = uiState,
         commentBottomSheet = { provideCommentBottomDialogSheet(rootNavController).invoke(it) { dialogsViewModel.closeComment() } },
-        menuDialog = provideFeedMenuBottomSheetDialog(),
+        menuDialog = { _,_,_,_,_-> },
         shareDialog = provideShareBottomSheetDialog(),
         reportDialog = provideReportModal(),
         onEdit = rootNavController.modReview(),
