@@ -11,7 +11,6 @@ import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
-import com.sarang.torang.compose.AlarmScreen
 import com.sarang.torang.compose.MainScreen
 import com.sarang.torang.compose.main.Feed
 import com.sarang.torang.di.profile_di.MyProfileScreenNavHost
@@ -25,12 +24,13 @@ fun provideMainScreen(
     addReviewScreen: @Composable (onClose: () -> Unit) -> Unit,
     chat: @Composable () -> Unit,
     onCloseReview: (() -> Unit),
-    onMessage: (Int) -> Unit,
+    onMessage: (Int) -> Unit
 ): @Composable () -> Unit = {
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
     val feedNavController = rememberNavController() // 메인 하단 홈버튼 클릭시 처리를 위해 여기에 설정
     var latestDestination: Any by remember { mutableStateOf(Feed) }
     var onTop by remember { mutableStateOf(false) }
+    val TAG = "__provideMainScreen"
 
     ProvideMainDialog(
         dialogsViewModel = dialogsViewModel,
@@ -58,9 +58,9 @@ fun provideMainScreen(
                     onTop = true
                 }
                 latestDestination = it
-                Log.d("__provideMainScreen", "onBottomMenu:${it}")
+                Log.d(TAG, "onBottomMenu:${it}")
             },
-            findingScreen = { Finding(navController = rootNavController) },
+            feedGrid = provideFeedGreed(),
             myProfileScreen = {
                 val profileNavController = rememberNavController() // 상위에 선언하면 앱 죽음
                 MyProfileScreenNavHost(
@@ -68,10 +68,7 @@ fun provideMainScreen(
                     onSetting = { rootNavController.settings() },
                     onEmailLogin = { rootNavController.emailLogin() },
                     onReview = {
-                        Log.d(
-                            "__Main",
-                            "MyProfileScreen onReview reviewId : ${it}"
-                        )
+                        Log.d(TAG, "MyProfileScreen onReview reviewId : ${it}")
                         profileNavController.navigate("myFeed/${it}")
                     },
                     onClose = { profileNavController.popBackStack() },
@@ -86,11 +83,8 @@ fun provideMainScreen(
                     onMessage = onMessage
                 )
             },
-            alarm = {
-                AlarmScreen(
-                    onEmailLogin = { rootNavController.emailLogin() },
-                    onContents = { rootNavController.review(it) },
-                    onProfile = { rootNavController.profile(it) })
+            findingMapScreen = {
+                Finding(navController = rootNavController)
             },
             addReview = addReviewScreen,
             chat = chat
