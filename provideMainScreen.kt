@@ -24,12 +24,14 @@ fun provideMainScreen(
     addReviewScreen: @Composable (onClose: () -> Unit) -> Unit,
     chat: @Composable () -> Unit,
     onCloseReview: (() -> Unit),
-    onMessage: (Int) -> Unit
+    onMessage: (Int) -> Unit,
 ): @Composable () -> Unit = {
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
     val feedNavController = rememberNavController() // 메인 하단 홈버튼 클릭시 처리를 위해 여기에 설정
     var latestDestination: Any by remember { mutableStateOf(Feed) }
     var onTop by remember { mutableStateOf(false) }
+    // 알림화면 이동 플래그
+    var goAlarm by remember { mutableStateOf(false) }
     val TAG = "__provideMainScreen"
 
     ProvideMainDialog(
@@ -46,6 +48,7 @@ fun provideMainScreen(
                     consumeOnTop = { onTop = false },
                     videoPlayer = videoPlayer,
                     onAddReview = onAddReview,
+                    onAlarm = { goAlarm = true },
                     onMessage = onMessage
                 )
             },
@@ -87,7 +90,10 @@ fun provideMainScreen(
                 Finding(navController = rootNavController)
             },
             addReview = addReviewScreen,
-            chat = chat
+            chat = chat,
+            goAlarm = goAlarm,
+            consumeAlarm = { goAlarm = false },
+            alarm = provideAlarm(rootNavController)
         )
     }
 }
