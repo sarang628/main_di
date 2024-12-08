@@ -10,6 +10,15 @@ import com.sarang.torang.di.report_di.provideReportModal
 import com.sarang.torang.di.report_di.provideShareBottomSheetDialog
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
 
+/**
+ * 메인 다이얼로그
+ *
+ * 메인 화면에서 필요한 다이얼로그 종류:
+ * 댓글 보기, 공유, 신고, 메뉴 4가지가 있다.
+ *
+ * 각 다이얼로그는 다른 모듈에서 가져온다.
+ *
+ */
 @Composable
 fun ProvideMainDialog(
     dialogsViewModel: FeedDialogsViewModel = hiltViewModel(),
