@@ -10,6 +10,9 @@ import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.di.image.provideTorangAsyncImage
 
+/**
+ * @param onPage 페이지 콜백 Int: 현재 페이지, Boolean: 첫번째 페이지 여부, Boolean: 마지막 페이지 여부
+ */
 fun provideFeed(
     onComment: ((Int) -> Unit),
     onMenu: ((Int) -> Unit),
@@ -17,6 +20,7 @@ fun provideFeed(
     navController: NavHostController,
     rootNavController: RootNavController,
     videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit,
+    onPage: (Int, Boolean, Boolean) -> Unit = { _, _, _ -> }
 ): @Composable ((
     feed: Feed,
     onLike: (Int) -> Unit,
@@ -43,6 +47,7 @@ fun provideFeed(
             expandableText = provideExpandableText(),
             isLogin = isLogin,
             videoPlayer = { videoPlayer.invoke(it, feed.isPlaying, onVideoClick) },
-            imageHeight = if (imageHeight > 0) imageHeight.dp else 600.dp
+            imageHeight = if (imageHeight > 0) imageHeight.dp else 600.dp,
+            onPage = onPage
         )
     }

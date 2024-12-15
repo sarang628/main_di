@@ -16,6 +16,7 @@ import com.sryang.library.pullrefresh.rememberPullToRefreshState
 /**
  * 피드 화면과 프로필 화면
  * @param onAlarm 상단바에서 알림 클릭 콜백
+ * @param onPage 페이지 콜백 Int: 현재 페이지, Boolean: 첫번째 페이지 여부, Boolean: 마지막 페이지 여부
  */
 @Composable
 fun FeedScreenWithProfile(
@@ -28,6 +29,7 @@ fun FeedScreenWithProfile(
     onAddReview: (() -> Unit),
     onMessage: (Int) -> Unit,
     onAlarm: () -> Unit = { Log.w("__FeedScreenWithProfile", "onAlarm is not implemented") },
+    onPage: (Int, Boolean, Boolean) -> Unit = { _, _, _ -> }
 ) {
     val state = rememberPullToRefreshState()
     NavHost(navController = feedNavController, startDestination = "feed") {
@@ -41,7 +43,8 @@ fun FeedScreenWithProfile(
                     { dialogsViewModel.onShare(it) },
                     navController = feedNavController,
                     rootNavController = rootNavController,
-                    videoPlayer = videoPlayer
+                    videoPlayer = videoPlayer,
+                    onPage = onPage
                 ),
                 shimmerBrush = { shimmerBrush(it) },
                 onScrollToTop = consumeOnTop,
