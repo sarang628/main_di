@@ -1,6 +1,7 @@
 package com.sarang.torang.di.main_di
 
 import android.util.Log
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
@@ -26,7 +27,9 @@ fun ProvideMyFeedScreen(
     rootNavController: RootNavController,
     navBackStackEntry: NavBackStackEntry,
     videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit,
-    commentBottomSheet: @Composable (reviewId: Int?, onHidden: (() -> Unit)) -> Unit,
+    commentBottomSheet: @Composable (
+        reviewId: Int?, onHidden: () -> Unit, content: @Composable (PaddingValues) -> Unit
+    ) -> Unit,
 ) {
     val reviewId: Int? = navBackStackEntry.arguments?.getString("reviewId")?.toInt()
     val state = rememberPullToRefreshState()

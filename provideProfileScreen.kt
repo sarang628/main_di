@@ -1,7 +1,9 @@
 package com.sarang.torang.di.main_di
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -31,10 +33,11 @@ internal fun provideProfileScreen(
                         rootNavController = rootNavController,
                         navController = profileNavController,
                         videoPlayer = videoPlayer,
-                        commentBottomSheet = { reviewId, onHidden ->
+                        commentBottomSheet = { reviewId, onHidden, contents ->
                             provideCommentBottomDialogSheet(rootNavController).invoke(
                                 reviewId,
-                                onHidden
+                                onHidden,
+                                contents
                             )
                         }
                     )

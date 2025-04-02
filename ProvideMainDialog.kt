@@ -1,8 +1,10 @@
 package com.sarang.torang.di.main_di
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainDialogs
@@ -32,13 +34,17 @@ fun ProvideMainDialog(
     menuDialog: @Composable (reviewId: Int, onClose: () -> Unit, onReport: (Int) -> Unit, onDelete: (Int) -> Unit, onEdit: (Int) -> Unit) -> Unit = provideFeedMenuBottomSheetDialog(),
     shareDialog: @Composable (onClose: () -> Unit) -> Unit = provideShareBottomSheetDialog(),
     reportDialog: @Composable (Int, onReported: () -> Unit) -> Unit = provideReportModal(),
-    commentBottomSheet: @Composable (reviewId: Int?, onHidden: (() -> Unit)) -> Unit,
-    contents: @Composable () -> Unit
+    commentBottomSheet: @Composable (
+        reviewId: Int?, onHidden: () -> Unit, content: @Composable (PaddingValues) -> Unit
+    ) -> Unit,
+    contents: @Composable (PaddingValues) -> Unit
 ) {
     val uiState by dialogsViewModel.uiState.collectAsState()
     MainDialogs(
         uiState = uiState,
-        commentBottomSheet = { commentBottomSheet.invoke(it) { dialogsViewModel.closeComment() } },
+        commentBottomSheet = { reviewId, contents ->
+            commentBottomSheet.invoke(reviewId, { dialogsViewModel.closeComment() }, contents)
+        },
         menuDialog = menuDialog,
         shareDialog = shareDialog,
         reportDialog = reportDialog,

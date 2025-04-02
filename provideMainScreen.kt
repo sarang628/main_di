@@ -3,6 +3,7 @@ package com.sarang.torang.di.main_di
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -30,6 +31,9 @@ fun provideMainScreen(
     chat: @Composable () -> Unit,
     onCloseReview: (() -> Unit),
     onMessage: (Int) -> Unit,
+    commentBottomSheet: @Composable (
+        reviewId: Int?, onHidden: () -> Unit, content: @Composable (PaddingValues) -> Unit
+    ) -> Unit = provideCommentBottomDialogSheet(rootNavController)
 ): @Composable () -> Unit = {
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
     val feedNavController = rememberNavController() // 메인 하단 홈버튼 클릭시 처리를 위해 여기에 설정
@@ -53,12 +57,7 @@ fun provideMainScreen(
     ProvideMainDialog(
         dialogsViewModel = dialogsViewModel,
         rootNavController = rootNavController,
-        commentBottomSheet = { reviewId, onHidden ->
-            provideCommentBottomDialogSheet(rootNavController).invoke(
-                reviewId,
-                onHidden
-            )
-        }
+        commentBottomSheet = provideCommentBottomDialogSheet(rootNavController)
     ) {
         MainScreen(
             feedScreen = { onAddReview ->
@@ -119,12 +118,7 @@ fun provideMainScreen(
                             navController = profileNavController,
                             navBackStackEntry = it,
                             videoPlayer = videoPlayer,
-                            commentBottomSheet = { reviewId, onHidden ->
-                                provideCommentBottomDialogSheet(rootNavController).invoke(
-                                    reviewId,
-                                    onHidden
-                                )
-                            }
+                            commentBottomSheet = commentBottomSheet
                         )
                     },
                     onMessage = onMessage
