@@ -42,13 +42,12 @@ fun ProvideMainDialog(
     val uiState by dialogsViewModel.uiState.collectAsState()
     MainDialogs(
         uiState = uiState,
-        commentBottomSheet = { reviewId, contents ->
+        commentBottomSheet = { reviewId ->
             commentBottomSheet.invoke(reviewId, { dialogsViewModel.closeComment() }, contents)
         },
         menuDialog = menuDialog,
         shareDialog = shareDialog,
         reportDialog = reportDialog,
-        onEdit = rootNavController.modReview(),
-        contents = contents
+        onEdit = rootNavController.modReview()
     )
 }
