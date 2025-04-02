@@ -32,12 +32,13 @@ fun ProvideMainDialog(
     menuDialog: @Composable (reviewId: Int, onClose: () -> Unit, onReport: (Int) -> Unit, onDelete: (Int) -> Unit, onEdit: (Int) -> Unit) -> Unit = provideFeedMenuBottomSheetDialog(),
     shareDialog: @Composable (onClose: () -> Unit) -> Unit = provideShareBottomSheetDialog(),
     reportDialog: @Composable (Int, onReported: () -> Unit) -> Unit = provideReportModal(),
-    contents: @Composable () -> Unit,
+    commentBottomSheet: @Composable (reviewId: Int?, onHidden: (() -> Unit)) -> Unit,
+    contents: @Composable () -> Unit
 ) {
     val uiState by dialogsViewModel.uiState.collectAsState()
     MainDialogs(
         uiState = uiState,
-        commentBottomSheet = { provideCommentBottomDialogSheet(rootNavController).invoke(it) { dialogsViewModel.closeComment() } },
+        commentBottomSheet = { commentBottomSheet.invoke(it) { dialogsViewModel.closeComment() } },
         menuDialog = menuDialog,
         shareDialog = shareDialog,
         reportDialog = reportDialog,

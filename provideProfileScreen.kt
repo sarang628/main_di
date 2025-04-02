@@ -30,7 +30,13 @@ internal fun provideProfileScreen(
                         navBackStackEntry = it,
                         rootNavController = rootNavController,
                         navController = profileNavController,
-                        videoPlayer = videoPlayer
+                        videoPlayer = videoPlayer,
+                        commentBottomSheet = { reviewId, onHidden ->
+                            provideCommentBottomDialogSheet(rootNavController).invoke(
+                                reviewId,
+                                onHidden
+                            )
+                        }
                     )
                 },
                 image = provideTorangAsyncImage(),

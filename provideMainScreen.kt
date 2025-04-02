@@ -19,7 +19,6 @@ import com.sarang.torang.di.profile_di.MyProfileScreenNavHost
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
 import com.sryang.findinglinkmodules.di.finding_di.Finding
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -36,8 +35,7 @@ fun provideMainScreen(
     val feedNavController = rememberNavController() // 메인 하단 홈버튼 클릭시 처리를 위해 여기에 설정
     var latestDestination: Any by remember { mutableStateOf(Feed) }
     var onTop by remember { mutableStateOf(false) }
-    // 알림화면 이동 플래그
-    var goAlarm by remember { mutableStateOf(false) }
+    var goAlarm by remember { mutableStateOf(false) } // 알림화면 이동 플래그
     val TAG = "__provideMainScreen"
     var isSwipeEnabled by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
@@ -54,7 +52,13 @@ fun provideMainScreen(
 
     ProvideMainDialog(
         dialogsViewModel = dialogsViewModel,
-        rootNavController = rootNavController
+        rootNavController = rootNavController,
+        commentBottomSheet = { reviewId, onHidden ->
+            provideCommentBottomDialogSheet(rootNavController).invoke(
+                reviewId,
+                onHidden
+            )
+        }
     ) {
         MainScreen(
             feedScreen = { onAddReview ->
@@ -114,7 +118,13 @@ fun provideMainScreen(
                             rootNavController = rootNavController,
                             navController = profileNavController,
                             navBackStackEntry = it,
-                            videoPlayer = videoPlayer
+                            videoPlayer = videoPlayer,
+                            commentBottomSheet = { reviewId, onHidden ->
+                                provideCommentBottomDialogSheet(rootNavController).invoke(
+                                    reviewId,
+                                    onHidden
+                                )
+                            }
                         )
                     },
                     onMessage = onMessage

@@ -26,6 +26,7 @@ fun ProvideMyFeedScreen(
     rootNavController: RootNavController,
     navBackStackEntry: NavBackStackEntry,
     videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit,
+    commentBottomSheet: @Composable (reviewId: Int?, onHidden: (() -> Unit)) -> Unit,
 ) {
     val reviewId: Int? = navBackStackEntry.arguments?.getString("reviewId")?.toInt()
     val state = rememberPullToRefreshState()
@@ -37,7 +38,8 @@ fun ProvideMyFeedScreen(
 
     ProvideMainDialog(
         dialogsViewModel = dialogsViewModel,
-        rootNavController = rootNavController
+        rootNavController = rootNavController,
+        commentBottomSheet = commentBottomSheet
     ) {
         MyFeedScreen(
             reviewId = reviewId,
