@@ -25,12 +25,11 @@ import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 fun provideMainScreen(
-    rootNavController: RootNavController,
-    videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit,
-    addReviewScreen: @Composable (onClose: () -> Unit) -> Unit,
-    chat: @Composable () -> Unit,
-    onCloseReview: (() -> Unit),
-    onMessage: (Int) -> Unit,
+    rootNavController: RootNavController = RootNavController(),
+    videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit = { _, _, _ -> },
+    addReviewScreen: @Composable (onClose: () -> Unit) -> Unit = {},
+    chat: @Composable () -> Unit = {},
+    onMessage: (Int) -> Unit = {},
     commentBottomSheet: @Composable (
         reviewId: Int?, onHidden: () -> Unit, content: @Composable (PaddingValues) -> Unit
     ) -> Unit = provideCommentBottomDialogSheet(rootNavController)
