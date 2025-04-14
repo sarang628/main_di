@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedScreenForMain
 import com.sarang.torang.di.feed_di.provideBottonDetectingLazyColumn
+import com.sarang.torang.di.feed_di.provideFeed
 import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sarang.torang.di.pulltorefresh.providePullToRefreshLayout
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
