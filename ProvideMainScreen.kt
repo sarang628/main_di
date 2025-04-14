@@ -18,16 +18,16 @@ import com.sarang.torang.compose.main.Feed
 import com.sarang.torang.di.addreview_di.provideAddReviewScreen
 import com.sarang.torang.di.chat_di.ChatActivity
 import com.sarang.torang.di.chat_di.provideChatScreen
-import com.sarang.torang.di.profile_di.MyProfileScreenNavHost
-import com.sarang.torang.di.video.provideVideoPlayer
-import com.sarang.torang.viewmodels.FeedDialogsViewModel
 import com.sarang.torang.di.finding_di.Finding
+import com.sarang.torang.di.profile_di.provideMyProfileScreenNavHost
+import com.sarang.torang.viewmodels.FeedDialogsViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-fun provideMainScreen(rootNavController: RootNavController): @Composable () -> Unit = {
+@Composable
+fun ProvideMainScreen(rootNavController: RootNavController) {
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
     val feedNavController = rememberNavController() // 메인 하단 홈버튼 클릭시 처리를 위해 여기에 설정
     var latestDestination: Any by remember { mutableStateOf(Feed) }
@@ -60,7 +60,6 @@ fun provideMainScreen(rootNavController: RootNavController): @Composable () -> U
                     dialogsViewModel = dialogsViewModel,
                     onTop = onTop,
                     consumeOnTop = { onTop = false },
-                    videoPlayer = provideVideoPlayer(),
                     onAddReview = onAddReview,
                     onAlarm = { goAlarm = true },
                     onMessage = { ChatActivity.go(context, it) },
@@ -91,26 +90,7 @@ fun provideMainScreen(rootNavController: RootNavController): @Composable () -> U
                 latestDestination = it
             },
             feedGrid = provideFeedGreed(),
-            myProfileScreen = {
-                val profileNavController = rememberNavController() // 상위에 선언하면 앱 죽음
-                MyProfileScreenNavHost(
-                    navController = profileNavController,
-                    onSetting = rootNavController::settings,
-                    onEmailLogin = rootNavController::emailLogin,
-                    onReview = { profileNavController.navigate("myFeed/${it}") },
-                    onClose = profileNavController::popBackStack,
-                    myFeed = {
-                        ProvideMyFeedScreen(
-                            rootNavController = rootNavController,
-                            navController = profileNavController,
-                            navBackStackEntry = it,
-                            videoPlayer = provideVideoPlayer(),
-                            commentBottomSheet = provideCommentBottomDialogSheet(rootNavController)
-                        )
-                    },
-                    onMessage = { ChatActivity.go(context, it) }
-                )
-            },
+            myProfileScreen = provideMyProfileScreenNavHost(rootNavController),
             findingMapScreen = { Finding(navController = rootNavController) },
             addReview = provideAddReviewScreen(rootNavController),
             chat = provideChatScreen(),

@@ -10,12 +10,14 @@ import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.ProfileScreenNavHost
 import com.sarang.torang.di.image.provideTorangAsyncImage
+import com.sarang.torang.di.video.provideVideoPlayer
 
+@Composable
 internal fun provideProfileScreen(
     rootNavController: RootNavController,
     navController: NavHostController,
     onMessage: (Int) -> Unit,
-    videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit,
+    videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit = provideVideoPlayer(),
 ): @Composable (NavBackStackEntry) -> Unit =
     {
         val profileNavController = rememberNavController() // 상위에 선언하면 앱 죽음

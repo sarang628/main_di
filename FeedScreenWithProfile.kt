@@ -11,8 +11,6 @@ import com.sarang.torang.di.feed_di.provideBottonDetectingLazyColumn
 import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sarang.torang.di.pulltorefresh.providePullToRefreshLayout
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
-import com.sryang.library.pullrefresh.PullToRefreshLayout
-import com.sryang.library.pullrefresh.RefreshIndicatorState
 import com.sryang.library.pullrefresh.rememberPullToRefreshState
 
 /**
@@ -27,7 +25,6 @@ fun FeedScreenWithProfile(
     dialogsViewModel: FeedDialogsViewModel,
     onTop: Boolean,
     consumeOnTop: () -> Unit,
-    videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit,
     onAddReview: (() -> Unit),
     onMessage: (Int) -> Unit,
     onAlarm: () -> Unit = { Log.w("__FeedScreenWithProfile", "onAlarm is not implemented") },
@@ -40,12 +37,9 @@ fun FeedScreenWithProfile(
                 onAddReview = onAddReview,
                 onAlarm = onAlarm,
                 feed = provideFeed(
-                    onComment = dialogsViewModel::onComment,
-                    onMenu = dialogsViewModel::onMenu,
-                    onShare = dialogsViewModel::onShare,
+                    dialogsViewModel = dialogsViewModel,
                     navController = feedNavController,
                     rootNavController = rootNavController,
-                    videoPlayer = videoPlayer,
                     onPage = onPage
                 ),
                 shimmerBrush = { shimmerBrush(it) },
@@ -61,7 +55,6 @@ fun FeedScreenWithProfile(
                 provideProfileScreen(
                     rootNavController = rootNavController,
                     navController = feedNavController,
-                    videoPlayer = videoPlayer,
                     onMessage = onMessage
                 ).invoke(it)
             }
