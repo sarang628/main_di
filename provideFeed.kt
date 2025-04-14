@@ -32,7 +32,7 @@ fun provideFeed(
     { feed, onLike, onFavirite, isLogin, onVideoClick, imageHeight ->
         Feed(
             review = feed.toReview(),
-            isZooming = { Log.w("_provideFeed", "isZooming  is nothing") /*scrollEnabled = !it*/ },
+            isZooming = { },
             imageLoadCompose = provideTorangAsyncImage(),
             onComment = { onComment.invoke(feed.reviewId) },
             onShare = { if (isLogin) onShare.invoke(feed.reviewId) else rootNavController.emailLogin() },

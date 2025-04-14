@@ -9,6 +9,7 @@ import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedScreenForMain
 import com.sarang.torang.di.feed_di.provideBottonDetectingLazyColumn
 import com.sarang.torang.di.feed_di.shimmerBrush
+import com.sarang.torang.di.pulltorefresh.providePullToRefreshLayout
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
 import com.sryang.library.pullrefresh.PullToRefreshLayout
 import com.sryang.library.pullrefresh.RefreshIndicatorState
@@ -39,9 +40,9 @@ fun FeedScreenWithProfile(
                 onAddReview = onAddReview,
                 onAlarm = onAlarm,
                 feed = provideFeed(
-                    { dialogsViewModel.onComment(it) },
-                    { dialogsViewModel.onMenu(it) },
-                    { dialogsViewModel.onShare(it) },
+                    onComment = dialogsViewModel::onComment,
+                    onMenu = dialogsViewModel::onMenu,
+                    onShare = dialogsViewModel::onShare,
                     navController = feedNavController,
                     rootNavController = rootNavController,
                     videoPlayer = videoPlayer,
@@ -50,22 +51,7 @@ fun FeedScreenWithProfile(
                 shimmerBrush = { shimmerBrush(it) },
                 onScrollToTop = consumeOnTop,
                 scrollToTop = onTop,
-                pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
-
-                    if (isRefreshing) {
-                        state.updateState(RefreshIndicatorState.Refreshing)
-                    } else {
-                        state.updateState(RefreshIndicatorState.Default)
-                    }
-
-                    PullToRefreshLayout(
-                        pullRefreshLayoutState = state,
-                        refreshThreshold = 80,
-                        onRefresh = onRefresh
-                    ) {
-                        contents.invoke()
-                    }
-                },
+                pullToRefreshLayout = providePullToRefreshLayout(state),
                 bottomDetectingLazyColumn = provideBottonDetectingLazyColumn()
             )
         }

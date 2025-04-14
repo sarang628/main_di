@@ -1,9 +1,7 @@
 package com.sarang.torang.di.main_di
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -11,37 +9,33 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainScreen
 import com.sarang.torang.compose.main.Feed
+import com.sarang.torang.di.addreview_di.provideAddReviewScreen
+import com.sarang.torang.di.chat_di.ChatActivity
+import com.sarang.torang.di.chat_di.provideChatScreen
 import com.sarang.torang.di.profile_di.MyProfileScreenNavHost
+import com.sarang.torang.di.video.provideVideoPlayer
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
-import com.sryang.findinglinkmodules.di.finding_di.Finding
+import com.sarang.torang.di.finding_di.Finding
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-fun provideMainScreen(
-    rootNavController: RootNavController,
-    videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit = { _, _, _ -> },
-    addReviewScreen: @Composable (onClose: () -> Unit) -> Unit = {},
-    chat: @Composable () -> Unit = {},
-    onMessage: (Int) -> Unit = {},
-    commentBottomSheet: @Composable (
-        reviewId: Int?, onHidden: () -> Unit, content: @Composable (PaddingValues) -> Unit
-    ) -> Unit = provideCommentBottomDialogSheet(rootNavController)
-): @Composable () -> Unit = {
+fun provideMainScreen(rootNavController: RootNavController): @Composable () -> Unit = {
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
     val feedNavController = rememberNavController() // 메인 하단 홈버튼 클릭시 처리를 위해 여기에 설정
     var latestDestination: Any by remember { mutableStateOf(Feed) }
     var onTop by remember { mutableStateOf(false) }
     var goAlarm by remember { mutableStateOf(false) } // 알림화면 이동 플래그
-    val TAG = "__provideMainScreen"
     var isSwipeEnabled by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     var job: Job? by remember { mutableStateOf(null) }
 
@@ -66,10 +60,10 @@ fun provideMainScreen(
                     dialogsViewModel = dialogsViewModel,
                     onTop = onTop,
                     consumeOnTop = { onTop = false },
-                    videoPlayer = videoPlayer,
+                    videoPlayer = provideVideoPlayer(),
                     onAddReview = onAddReview,
                     onAlarm = { goAlarm = true },
-                    onMessage = onMessage,
+                    onMessage = { ChatActivity.go(context, it) },
                     onPage = { page, isFirst, isLast ->
                         // 기존 Job이 실행 중이라면 취소
                         job?.cancel()
@@ -77,11 +71,9 @@ fun provideMainScreen(
                         // 새로운 Job 실행
                         job = coroutineScope.launch {
                             if (isFirst || isLast) {
-                                Log.d(TAG, "5초 스와이프 불가")
                                 isSwipeEnabled = false
                                 delay(2000)
                                 isSwipeEnabled = true
-                                Log.d(TAG, "스와이프 가능")
                             }
                         }
                     }
@@ -97,35 +89,31 @@ fun provideMainScreen(
                     onTop = true
                 }
                 latestDestination = it
-                Log.d(TAG, "onBottomMenu:${it}")
             },
             feedGrid = provideFeedGreed(),
             myProfileScreen = {
                 val profileNavController = rememberNavController() // 상위에 선언하면 앱 죽음
                 MyProfileScreenNavHost(
                     navController = profileNavController,
-                    onSetting = { rootNavController.settings() },
-                    onEmailLogin = { rootNavController.emailLogin() },
-                    onReview = {
-                        Log.d(TAG, "MyProfileScreen onReview reviewId : ${it}")
-                        profileNavController.navigate("myFeed/${it}")
-                    },
-                    onClose = { profileNavController.popBackStack() },
+                    onSetting = rootNavController::settings,
+                    onEmailLogin = rootNavController::emailLogin,
+                    onReview = { profileNavController.navigate("myFeed/${it}") },
+                    onClose = profileNavController::popBackStack,
                     myFeed = {
                         ProvideMyFeedScreen(
                             rootNavController = rootNavController,
                             navController = profileNavController,
                             navBackStackEntry = it,
-                            videoPlayer = videoPlayer,
-                            commentBottomSheet = commentBottomSheet
+                            videoPlayer = provideVideoPlayer(),
+                            commentBottomSheet = provideCommentBottomDialogSheet(rootNavController)
                         )
                     },
-                    onMessage = onMessage
+                    onMessage = { ChatActivity.go(context, it) }
                 )
             },
             findingMapScreen = { Finding(navController = rootNavController) },
-            addReview = addReviewScreen,
-            chat = chat,
+            addReview = provideAddReviewScreen(rootNavController),
+            chat = provideChatScreen(),
             goAlarm = goAlarm,
             consumeAlarm = { goAlarm = false },
             alarm = provideAlarm(rootNavController)
