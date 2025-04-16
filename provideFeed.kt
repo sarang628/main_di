@@ -1,13 +1,16 @@
 package com.sarang.torang.di.main_di
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.Feed
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.di.feed_di.toReview
-import com.sarang.torang.di.image.provideTorangAsyncImage
+import com.sarang.torang.di.image.provideZoomableTorangAsyncImage
 import com.sarang.torang.di.video.provideVideoPlayer
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
 
@@ -20,7 +23,8 @@ fun provideFeed(
     navController: NavHostController,
     rootNavController: RootNavController,
     videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit = provideVideoPlayer(),
-    onPage: (Int, Boolean, Boolean) -> Unit = { _, _, _ -> }
+    onPage: (Int, Boolean, Boolean) -> Unit = { _, _, _ -> },
+    imageCompose: @Composable (Modifier, String, Dp?, Dp?, ContentScale?, Dp?) -> Unit = provideZoomableTorangAsyncImage()
 ): @Composable ((
     feed: Feed,
     onLike: (Int) -> Unit,
@@ -33,7 +37,7 @@ fun provideFeed(
         Feed(
             review = feed.toReview(),
             isZooming = { },
-            imageLoadCompose = provideTorangAsyncImage(),
+            imageLoadCompose = imageCompose,
             onComment = { dialogsViewModel.onComment(feed.reviewId) },
             onShare = { if (isLogin) dialogsViewModel.onShare(feed.reviewId) else rootNavController.emailLogin() },
             onMenu = { dialogsViewModel.onMenu(feed.reviewId) },
