@@ -44,10 +44,7 @@ internal fun provideProfileScreen(
                         }
                     )
                 },
-                image = { a, b, c, d, e ->
-                    provideTorangAsyncImage()
-                        .invoke(a, b, c, d, e, null)
-                },
+                image = provideTorangAsyncImage(),
                 onMessage = onMessage
             )
         } else {

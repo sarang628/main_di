@@ -15,6 +15,7 @@ import com.sarang.torang.di.feed_di.provideBottonDetectingLazyColumn
 import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.di.image.provideTorangAsyncImage
+import com.sarang.torang.di.image.provideZoomableTorangAsyncImage
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
 import com.sryang.library.pullrefresh.PullToRefreshLayout
 import com.sryang.library.pullrefresh.RefreshIndicatorState
@@ -52,7 +53,7 @@ fun ProvideMyFeedScreen(
                 Feed(
                     review = feed.toReview(),
                     isZooming = { /*scrollEnabled = !it*/ },
-                    imageLoadCompose = provideTorangAsyncImage(),
+                    imageLoadCompose = provideZoomableTorangAsyncImage(),
                     onComment = { dialogsViewModel.onComment(feed.reviewId) },
                     onShare = { if (isLogin) dialogsViewModel.onShare(feed.reviewId) },
                     onMenu = { dialogsViewModel.onMenu(feed.reviewId) },

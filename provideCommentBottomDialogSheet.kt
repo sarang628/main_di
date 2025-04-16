@@ -31,10 +31,7 @@ fun provideCommentBottomDialogSheet(
             onHidden = { onHidden.invoke(); show = false },
             show = show,
             content = content,
-            image = { a, b, c, d, e ->
-                provideTorangAsyncImage()
-                    .invoke(a, b, c, d, e, null)
-            },
+            image = provideTorangAsyncImage(),
             onImage = { rootNavController.profile(it) },
             onName = { rootNavController.profile(it) }
         )

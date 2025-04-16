@@ -12,6 +12,7 @@ import com.sarang.torang.di.feed_di.provideExpandableText
 import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.di.image.provideTorangAsyncImage
+import com.sarang.torang.di.image.provideZoomableTorangAsyncImage
 import com.sarang.torang.di.video.VideoPlayerScreen
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
 import com.sryang.library.pullrefresh.PullToRefreshLayout
@@ -33,7 +34,7 @@ fun provideFeedScreenByRestaurantId(rootNavController: RootNavController): @Comp
                 feed = { feed, onLike, onFavorite, isLogin, onVideoClick, imageHeight ->
                     Feed(
                         review = feed.toReview(),
-                        imageLoadCompose = provideTorangAsyncImage(),
+                        imageLoadCompose = provideZoomableTorangAsyncImage(),
                         onComment = { dialogsViewModel.onComment(feed.reviewId) },
                         onShare = { dialogsViewModel.onShare(feed.reviewId) },
                         onMenu = { dialogsViewModel.onMenu(feed.reviewId) },

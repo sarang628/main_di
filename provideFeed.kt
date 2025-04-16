@@ -10,6 +10,7 @@ import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.Feed
 import com.sarang.torang.data.feed.Feed
 import com.sarang.torang.di.feed_di.toReview
+import com.sarang.torang.di.image.ZoomableImage
 import com.sarang.torang.di.image.provideZoomableTorangAsyncImage
 import com.sarang.torang.di.video.provideVideoPlayer
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
@@ -24,7 +25,7 @@ fun provideFeed(
     rootNavController: RootNavController,
     videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit = provideVideoPlayer(),
     onPage: (Int, Boolean, Boolean) -> Unit = { _, _, _ -> },
-    imageCompose: @Composable (Modifier, String, Dp?, Dp?, ContentScale?, Dp?) -> Unit = provideZoomableTorangAsyncImage()
+    imageCompose: ZoomableImage = provideZoomableTorangAsyncImage()
 ): @Composable ((
     feed: Feed,
     onLike: (Int) -> Unit,
