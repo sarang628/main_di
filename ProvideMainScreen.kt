@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
@@ -19,7 +20,8 @@ import com.sarang.torang.di.addreview_di.provideAddReviewScreen
 import com.sarang.torang.di.chat_di.ChatActivity
 import com.sarang.torang.di.chat_di.provideChatScreen
 import com.sarang.torang.di.finding_di.Finding
-import com.sarang.torang.di.image.PinchZoomImageBox
+import com.sarang.torang.di.image.provideTorangAsyncImage
+import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
 import com.sarang.torang.di.profile_di.provideMyProfileScreenNavHost
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
 import kotlinx.coroutines.Job
@@ -53,43 +55,43 @@ fun ProvideMainScreen(rootNavController: RootNavController) {
         rootNavController = rootNavController,
         commentBottomSheet = provideCommentBottomDialogSheet(rootNavController)
     ) {
-        PinchZoomImageBox { pinchZoomImageCompose, zoomState ->
+        PinchZoomImageBox({ modifier, url, contentScale ->
+            provideTorangAsyncImage().invoke(modifier, url, 30.dp, 30.dp, contentScale)
+        }) { zoomableImage, zoomState ->
             MainScreen(
                 feedScreen = { onAddReview ->
                     FeedScreenWithProfile(
                         rootNavController = rootNavController,
                         feedNavController = feedNavController,
                         dialogsViewModel = dialogsViewModel,
+                        imageCompose = zoomableImage,
                         onTop = onTop,
                         consumeOnTop = { onTop = false },
                         onAddReview = onAddReview,
                         onAlarm = { goAlarm = true },
                         onMessage = { ChatActivity.go(context, it) },
                         onPage = { page, isFirst, isLast ->
-                            // 기존 Job이 실행 중이라면 취소
-                            job?.cancel()
-
-                            // 새로운 Job 실행
-                            job = coroutineScope.launch {
+                            job?.cancel() // 기존 Job이 실행 중이라면 취소
+                            job = coroutineScope.launch { // 새로운 Job 실행
                                 if (isFirst || isLast) {
                                     isSwipeEnabled = false
                                     delay(2000)
                                     isSwipeEnabled = true
                                 }
                             }
-                        },
-                        imageCompose = pinchZoomImageCompose
+                        }
                     )
 
                 },
                 swipeAblePager = isSwipeEnabled && !zoomState.isZooming.value,
                 onBottomMenu = {
                     if (feedNavController.currentDestination?.route != "feed" && latestDestination == "feed" && it == "feed") {
-                        // 피드 화면안에서 다른화면 상태일 때 피드 버튼을 눌렀다면 피드 화면으로 이동
-                        feedNavController.popBackStack("feed", inclusive = false)
+                        feedNavController.popBackStack(
+                            "feed",
+                            inclusive = false
+                        ) // 피드 화면안에서 다른화면 상태일 때 피드 버튼을 눌렀다면 피드 화면으로 이동
                     } else if (latestDestination == "feed" && it == "feed") {
-                        // 피드화면에서 피드 버튼을 눌렀을 때 리스트 최상단 이동
-                        onTop = true
+                        onTop = true // 피드 화면 에서 피드 버튼을 눌렀을 때 리스트 최상단 이동
                     }
                     latestDestination = it
                 },

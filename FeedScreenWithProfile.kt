@@ -2,9 +2,6 @@ package com.sarang.torang.di.main_di
 
 import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,6 +9,7 @@ import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedScreenForMain
 import com.sarang.torang.di.feed_di.provideBottonDetectingLazyColumn
 import com.sarang.torang.di.feed_di.shimmerBrush
+import com.sarang.torang.di.image.ZoomableTorangAsyncImage
 import com.sarang.torang.di.image.provideZoomableTorangAsyncImage
 import com.sarang.torang.di.pulltorefresh.providePullToRefreshLayout
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
@@ -29,11 +27,11 @@ fun FeedScreenWithProfile(
     dialogsViewModel: FeedDialogsViewModel,
     onTop: Boolean,
     consumeOnTop: () -> Unit,
-    onAddReview: (() -> Unit),
+    onAddReview: () -> Unit,
     onMessage: (Int) -> Unit,
     onAlarm: () -> Unit = { Log.w("__FeedScreenWithProfile", "onAlarm is not implemented") },
     onPage: (Int, Boolean, Boolean) -> Unit = { _, _, _ -> },
-    imageCompose: @Composable (Modifier, String, Dp?, Dp?, ContentScale?, Dp?) -> Unit = provideZoomableTorangAsyncImage()
+    imageCompose: ZoomableTorangAsyncImage = provideZoomableTorangAsyncImage()
 ) {
     val state = rememberPullToRefreshState()
     NavHost(navController = feedNavController, startDestination = "feed") {
