@@ -10,7 +10,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
@@ -20,7 +19,7 @@ import com.sarang.torang.di.addreview_di.provideAddReviewScreen
 import com.sarang.torang.di.chat_di.ChatActivity
 import com.sarang.torang.di.chat_di.provideChatScreen
 import com.sarang.torang.di.finding_di.Finding
-import com.sarang.torang.di.image.provideTorangAsyncImage
+import com.sarang.torang.di.image.provideImageLoader
 import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
 import com.sarang.torang.di.profile_di.provideMyProfileScreenNavHost
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
@@ -55,16 +54,14 @@ fun ProvideMainScreen(rootNavController: RootNavController) {
         rootNavController = rootNavController,
         commentBottomSheet = provideCommentBottomDialogSheet(rootNavController)
     ) {
-        PinchZoomImageBox({ modifier, url, contentScale ->
-            provideTorangAsyncImage().invoke(modifier, url, 30.dp, 30.dp, contentScale)
-        }) { zoomableImage, zoomState ->
+        PinchZoomImageBox(provideImageLoader()) { zoomableImage, zoomState ->
             MainScreen(
                 feedScreen = { onAddReview ->
                     FeedScreenWithProfile(
                         rootNavController = rootNavController,
                         feedNavController = feedNavController,
                         dialogsViewModel = dialogsViewModel,
-                        imageCompose = zoomableImage,
+                        imageCompose = { modifier, url, width, height, contentScale, originHeight-> zoomableImage.invoke(modifier, url, contentScale, originHeight ) },
                         onTop = onTop,
                         consumeOnTop = { onTop = false },
                         onAddReview = onAddReview,
