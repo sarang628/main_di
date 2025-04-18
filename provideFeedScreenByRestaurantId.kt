@@ -7,7 +7,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.Feed
 import com.sarang.torang.compose.feed.FeedScreenByRestaurantId
-import com.sarang.torang.di.feed_di.provideBottonDetectingLazyColumn
+import com.sarang.torang.di.feed_di.provideBottomDetectingLazyColumn
 import com.sarang.torang.di.feed_di.provideExpandableText
 import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sarang.torang.di.feed_di.toReview
@@ -81,7 +81,7 @@ fun provideFeedScreenByRestaurantId(rootNavController: RootNavController): @Comp
                         contents.invoke()
                     }
                 },
-                bottomDetectingLazyColumn = provideBottonDetectingLazyColumn()
+                bottomDetectingLazyColumn = provideBottomDetectingLazyColumn()
             )
         }
     }

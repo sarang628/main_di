@@ -11,7 +11,7 @@ import androidx.navigation.NavHostController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.Feed
 import com.sarang.torang.compose.feed.MyFeedScreen
-import com.sarang.torang.di.feed_di.provideBottonDetectingLazyColumn
+import com.sarang.torang.di.feed_di.provideBottomDetectingLazyColumn
 import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.di.image.provideTorangAsyncImage
@@ -86,7 +86,7 @@ fun ProvideMyFeedScreen(
                     contents.invoke()
                 }
             },
-            bottomDetectingLazyColumn = provideBottonDetectingLazyColumn()
+            bottomDetectingLazyColumn = provideBottomDetectingLazyColumn()
         )
     }
 }

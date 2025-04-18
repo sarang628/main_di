@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedScreenByReviewId
-import com.sarang.torang.di.feed_di.provideBottonDetectingLazyColumn
+import com.sarang.torang.di.feed_di.provideBottomDetectingLazyColumn
 import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sarang.torang.di.video.provideVideoPlayer
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
@@ -51,7 +51,7 @@ fun provideFeedScreen(
                         contents.invoke()
                     }
                 },
-                bottomDetectingLazyColumn = provideBottonDetectingLazyColumn()
+                bottomDetectingLazyColumn = provideBottomDetectingLazyColumn()
             )
         }
     }

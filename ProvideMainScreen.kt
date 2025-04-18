@@ -76,7 +76,8 @@ fun ProvideMainScreen(rootNavController: RootNavController) {
                                     isSwipeEnabled = true
                                 }
                             }
-                        }
+                        },
+                        scrollEnabled = !zoomState.isZooming.value
                     )
 
                 },

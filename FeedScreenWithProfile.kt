@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedScreenForMain
-import com.sarang.torang.di.feed_di.provideBottonDetectingLazyColumn
+import com.sarang.torang.di.feed_di.provideBottomDetectingLazyColumn
 import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sarang.torang.di.image.ZoomableTorangAsyncImage
 import com.sarang.torang.di.image.provideZoomableTorangAsyncImage
@@ -31,7 +31,8 @@ fun FeedScreenWithProfile(
     onMessage: (Int) -> Unit,
     onAlarm: () -> Unit = { Log.w("__FeedScreenWithProfile", "onAlarm is not implemented") },
     onPage: (Int, Boolean, Boolean) -> Unit = { _, _, _ -> },
-    imageCompose: ZoomableTorangAsyncImage = provideZoomableTorangAsyncImage()
+    imageCompose: ZoomableTorangAsyncImage = provideZoomableTorangAsyncImage(),
+    scrollEnabled: Boolean = true
 ) {
     val state = rememberPullToRefreshState()
     NavHost(navController = feedNavController, startDestination = "feed") {
@@ -50,7 +51,8 @@ fun FeedScreenWithProfile(
                 onScrollToTop = consumeOnTop,
                 scrollToTop = onTop,
                 pullToRefreshLayout = providePullToRefreshLayout(state),
-                bottomDetectingLazyColumn = provideBottonDetectingLazyColumn()
+                bottomDetectingLazyColumn = provideBottomDetectingLazyColumn(),
+                scrollEnabled = scrollEnabled
             )
         }
         composable(
