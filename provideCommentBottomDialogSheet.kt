@@ -18,8 +18,6 @@ fun provideCommentBottomDialogSheet(
         var currentReviewId: Int? by remember { mutableStateOf(null) }
         var show by remember { mutableStateOf(false) }
 
-        Log.d("__sryang", reviewId.toString());
-
         if (currentReviewId != reviewId) {
             currentReviewId = reviewId;
             show = true

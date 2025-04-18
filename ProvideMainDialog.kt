@@ -21,14 +21,17 @@ fun ProvideMainDialog(
     ) -> Unit,
     contents: @Composable (PaddingValues) -> Unit
 ) {
+    val tag = "__ProvideMainDialog"
     val uiState by dialogsViewModel.uiState.collectAsState()
-    Log.d("__ProvideMainDialog", "showComment: ${uiState.showComment}")
     MainDialogs(
         uiState = uiState,
         commentBottomSheet = { reviewId ->
             commentBottomSheet.invoke(reviewId, { dialogsViewModel.closeComment() }, contents)
         },
-        menuDialog = { _, _, _, _, _ -> },
+        menuDialog = { _, _, _, _, _ ->
+            Log.d(tag, "menuDialog isn't setting")
+            dialogsViewModel.closeMenu()
+        },
         shareDialog = provideShareBottomSheetDialog(),
         reportDialog = provideReportModal(),
         onEdit = rootNavController.modReview(),
