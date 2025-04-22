@@ -34,7 +34,7 @@ fun provideFeed(
             onMenu = { dialogsViewModel.onMenu(feed.reviewId) },
             onName = { navController.navigate("profile/${feed.userId}") },
             onRestaurant = { rootNavController.restaurant(feed.restaurantId) },
-            onImage = { rootNavController.imagePager(feed.reviewId, it) },
+            onImage = { if (pageScrollAble) rootNavController.imagePager(feed.reviewId, it) }, // TODO::[need optimize] 줌 상태에서 손을 때면 이미지 클릭 이벤트가 발생해 줌 하는동안은 pageScrollAble이 flase 상태여서 예외처리
             onProfile = { navController.navigate("profile/${feed.userId}") },
             onLike = { if (isLogin) onLike.invoke(feed.reviewId) else rootNavController.emailLogin() },
             onFavorite = { if (isLogin) onFavorite.invoke(feed.reviewId) else rootNavController.emailLogin() },
