@@ -10,7 +10,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.Feed
-import com.sarang.torang.compose.feed.MyFeedScreen
+import com.sarang.torang.compose.feed.FeedScreenByReviewId
 import com.sarang.torang.di.feed_di.provideBottomDetectingLazyColumn
 import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sarang.torang.di.feed_di.toReview
@@ -45,11 +45,11 @@ fun ProvideMyFeedScreen(
         rootNavController = rootNavController,
         commentBottomSheet = commentBottomSheet
     ) {
-        MyFeedScreen(
+        FeedScreenByReviewId(
             reviewId = reviewId,
-            listState = rememberLazyListState(),
+            //listState = rememberLazyListState(),
             shimmerBrush = { it -> shimmerBrush(it) },
-            feed = { feed, onLike, onFavorite, isLogin, onVideoClick, imageHeight ->
+            feed = { feed, onLike, onFavorite, isLogin, onVideoClick, imageHeight, pageScrollable ->
                 Feed(
                     review = feed.toReview(),
                     isZooming = { /*scrollEnabled = !it*/ },
@@ -66,10 +66,11 @@ fun ProvideMyFeedScreen(
                     onLikes = { rootNavController.like(feed.reviewId) },
                     expandableText = provideExpandableText(),
                     videoPlayer = { videoPlayer.invoke(it, feed.isPlaying, onVideoClick) },
-                    imageHeight = if (imageHeight > 0) imageHeight.dp else 600.dp
+                    imageHeight = if (imageHeight > 0) imageHeight.dp else 600.dp,
+                    pageScrollAble = pageScrollable
                 )
             },
-            onBack = { navController.popBackStack() },
+            //onBack = { navController.popBackStack() },
             pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
 
                 if (isRefreshing) {

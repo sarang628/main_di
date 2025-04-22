@@ -31,7 +31,7 @@ fun provideFeedScreenByRestaurantId(rootNavController: RootNavController): @Comp
             FeedScreenByRestaurantId(
                 restaurantId = 1,
                 shimmerBrush = { it -> shimmerBrush(it) },
-                feed = { feed, onLike, onFavorite, isLogin, onVideoClick, imageHeight ->
+                feed = { feed, onLike, onFavorite, isLogin, onVideoClick, imageHeight, pageScrollable ->
                     Feed(
                         review = feed.toReview(),
                         imageLoadCompose = provideZoomableTorangAsyncImage(),

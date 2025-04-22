@@ -77,7 +77,8 @@ fun ProvideMainScreen(rootNavController: RootNavController) {
                                 }
                             }
                         },
-                        scrollEnabled = !zoomState.isZooming.value
+                        scrollEnabled = !zoomState.isZooming.value,
+                        pageScrollable = !zoomState.isZooming.value
                     )
 
                 },
