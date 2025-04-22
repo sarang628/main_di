@@ -21,6 +21,7 @@ import com.sarang.torang.di.chat_di.provideChatScreen
 import com.sarang.torang.di.finding_di.Finding
 import com.sarang.torang.di.image.provideImageLoader
 import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
+import com.sarang.torang.di.pinchzoom.isZooming
 import com.sarang.torang.di.profile_di.provideMyProfileScreenNavHost
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
 import kotlinx.coroutines.Job
@@ -77,12 +78,12 @@ fun ProvideMainScreen(rootNavController: RootNavController) {
                                 }
                             }
                         },
-                        scrollEnabled = !zoomState.isZooming.value,
-                        pageScrollable = !zoomState.isZooming.value
+                        scrollEnabled = !zoomState.isZooming,
+                        pageScrollable = !zoomState.isZooming
                     )
 
                 },
-                swipeAblePager = isSwipeEnabled && !zoomState.isZooming.value,
+                swipeAblePager = isSwipeEnabled && !zoomState.isZooming,
                 onBottomMenu = {
                     if (feedNavController.currentDestination?.route != "feed" && latestDestination == "feed" && it == "feed") {
                         feedNavController.popBackStack(
