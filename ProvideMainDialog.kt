@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainDialogs
+import com.sarang.torang.di.bottomsheet_di.provideFeedMenuBottomSheetDialog
 import com.sarang.torang.di.report_di.provideReportModal
 import com.sarang.torang.di.report_di.provideShareBottomSheetDialog
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
@@ -28,10 +29,7 @@ fun ProvideMainDialog(
         commentBottomSheet = { reviewId ->
             commentBottomSheet.invoke(reviewId, { dialogsViewModel.closeComment() }, contents)
         },
-        menuDialog = { _, _, _, _, _ ->
-            Log.d(tag, "menuDialog isn't setting")
-            dialogsViewModel.closeMenu()
-        },
+        menuDialog = provideFeedMenuBottomSheetDialog(),
         shareDialog = provideShareBottomSheetDialog(),
         reportDialog = provideReportModal(),
         onEdit = rootNavController.modReview(),
