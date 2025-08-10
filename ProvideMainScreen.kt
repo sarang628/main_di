@@ -11,6 +11,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainScreen
@@ -30,7 +31,7 @@ import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
-fun ProvideMainScreen(rootNavController: RootNavController) {
+fun ProvideMainScreen(rootNavController: RootNavController) : @Composable () -> Unit = {
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
     val feedNavController = rememberNavController() // 메인 하단 홈버튼 클릭시 처리를 위해 여기에 설정
     var latestDestination: Any by remember { mutableStateOf(Feed) }
@@ -43,11 +44,7 @@ fun ProvideMainScreen(rootNavController: RootNavController) {
     var job: Job? by remember { mutableStateOf(null) }
 
     LaunchedEffect("") {
-        job = launch {
-            isSwipeEnabled = false // 스와이프 비활성화
-            delay(5000)            // 5초 대기
-            isSwipeEnabled = true  // 스와이프 다시 활성화
-        }
+        job = launch { isSwipeEnabled = false; delay(5000); isSwipeEnabled = true }
     }
 
     ProvideMainDialog(
@@ -71,11 +68,7 @@ fun ProvideMainScreen(rootNavController: RootNavController) {
                         onPage = { page, isFirst, isLast ->
                             job?.cancel() // 기존 Job이 실행 중이라면 취소
                             job = coroutineScope.launch { // 새로운 Job 실행
-                                if (isFirst || isLast) {
-                                    isSwipeEnabled = false
-                                    delay(2000)
-                                    isSwipeEnabled = true
-                                }
+                                if (isFirst || isLast) { isSwipeEnabled = false; delay(2000); isSwipeEnabled = true }
                             }
                         },
                         scrollEnabled = !zoomState.isZooming,
@@ -86,10 +79,7 @@ fun ProvideMainScreen(rootNavController: RootNavController) {
                 swipeAblePager = isSwipeEnabled && !zoomState.isZooming,
                 onBottomMenu = {
                     if (feedNavController.currentDestination?.route != "feed" && latestDestination == "feed" && it == "feed") {
-                        feedNavController.popBackStack(
-                            "feed",
-                            inclusive = false
-                        ) // 피드 화면안에서 다른화면 상태일 때 피드 버튼을 눌렀다면 피드 화면으로 이동
+                        feedNavController.popBackStack("feed", inclusive = false) // 피드 화면안에서 다른화면 상태일 때 피드 버튼을 눌렀다면 피드 화면으로 이동
                     } else if (latestDestination == "feed" && it == "feed") {
                         onTop = true // 피드 화면 에서 피드 버튼을 눌렀을 때 리스트 최상단 이동
                     }
