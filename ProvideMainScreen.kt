@@ -20,11 +20,13 @@ import com.sarang.torang.di.addreview_di.provideAddReviewScreen
 import com.sarang.torang.di.chat_di.ChatActivity
 import com.sarang.torang.di.chat_di.provideChatScreen
 import com.sarang.torang.di.finding_di.Finding
+import com.sarang.torang.di.finding_di.FindingWithPermission
 import com.sarang.torang.di.image.provideImageLoader
 import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
 import com.sarang.torang.di.pinchzoom.isZooming
 import com.sarang.torang.di.profile_di.provideMyProfileScreenNavHost
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
+import com.sryang.library.compose.workflow.BestPracticeViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -87,7 +89,7 @@ fun ProvideMainScreen(rootNavController: RootNavController) : @Composable () -> 
                 },
                 feedGrid = provideFeedGreed(),
                 myProfileScreen = provideMyProfileScreenNavHost(rootNavController),
-                findingMapScreen = { Finding(navController = rootNavController) },
+                findingMapScreen = { FindingWithPermission(navController = rootNavController, viewModel = BestPracticeViewModel()) },
                 addReview = provideAddReviewScreen(rootNavController),
                 chat = provideChatScreen(),
                 goAlarm = goAlarm,
