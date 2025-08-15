@@ -12,44 +12,17 @@ import com.sryang.library.pullrefresh.PullToRefreshLayout
 import com.sryang.library.pullrefresh.PullToRefreshLayoutState
 import com.sryang.library.pullrefresh.RefreshIndicatorState
 
-fun provideFeedScreen(
-    rootNavController: RootNavController,
-    state: PullToRefreshLayoutState,
-    reviewId: Int
-): @Composable (Int) -> Unit =
+fun provideFeedScreen(reviewId: Int, rootNavController: RootNavController, state: PullToRefreshLayoutState): @Composable (Int) -> Unit =
     {
         val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
-        ProvideMainDialog(
-            dialogsViewModel = dialogsViewModel,
-            rootNavController = rootNavController,
-            commentBottomSheet = provideCommentBottomDialogSheet(
-                rootNavController
-            )
-        ) {
-            FeedScreenByReviewId(
-                reviewId = reviewId,
-                shimmerBrush = { shimmerBrush(it) },
-                feed = provideFeed(
-                    dialogsViewModel = dialogsViewModel,
-                    navController = rootNavController.navController,
-                    rootNavController = rootNavController,
-                    videoPlayer = provideVideoPlayer()
-                ),
+        ProvideMainDialog(dialogsViewModel = dialogsViewModel, rootNavController = rootNavController, commentBottomSheet = provideCommentBottomDialogSheet(rootNavController)) {
+            FeedScreenByReviewId(reviewId = reviewId, shimmerBrush = { shimmerBrush(it) },
+                feed = provideFeed(dialogsViewModel = dialogsViewModel, navController = rootNavController.navController, rootNavController = rootNavController, videoPlayer = provideVideoPlayer()),
                 pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
-
-                    if (isRefreshing) {
-                        state.updateState(RefreshIndicatorState.Refreshing)
-                    } else {
-                        state.updateState(RefreshIndicatorState.Default)
-                    }
-
-                    PullToRefreshLayout(
-                        pullRefreshLayoutState = state,
-                        refreshThreshold = 80,
-                        onRefresh = onRefresh
-                    ) {
-                        contents.invoke()
-                    }
+                    if (isRefreshing) { state.updateState(RefreshIndicatorState.Refreshing) }
+                    else { state.updateState(RefreshIndicatorState.Default) }
+                    PullToRefreshLayout(pullRefreshLayoutState = state, refreshThreshold = 80, onRefresh = onRefresh) {
+                        contents.invoke() }
                 },
                 bottomDetectingLazyColumn = provideBottomDetectingLazyColumn()
             )
