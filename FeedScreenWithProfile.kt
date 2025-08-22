@@ -2,16 +2,24 @@ package com.sarang.torang.di.main_di
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedScreenInMain
-import com.sarang.torang.di.feed_di.provideBottomDetectingLazyColumn
-import com.sarang.torang.di.feed_di.shimmerBrush
+import com.sarang.torang.compose.feed.LocalPullToRefreshLayoutType
+import com.sarang.torang.compose.feed.component.LocalBottomDetectingLazyColumnType
+import com.sarang.torang.compose.feed.component.LocalFeedCompose
+import com.sarang.torang.compose.feed.feedType
+import com.sarang.torang.compose.type.PullToRefresh
+import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
+import com.sarang.torang.di.feed_di.CustomLocalPullToRefreshType
+import com.sarang.torang.di.main_di.provideFeed
 import com.sarang.torang.di.image.ZoomableTorangAsyncImage
 import com.sarang.torang.di.image.provideZoomableTorangAsyncImage
-import com.sarang.torang.di.pulltorefresh.providePullToRefreshLayout
+import com.sarang.torang.di.pulltorefresh.providePullToRefresh
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
 import com.sryang.library.pullrefresh.rememberPullToRefreshState
 
@@ -38,24 +46,18 @@ fun FeedScreenWithProfile(
     val state = rememberPullToRefreshState()
     NavHost(navController = feedNavController, startDestination = "feed") {
         composable("feed") {
-            FeedScreenInMain(
-                onAddReview = onAddReview,
-                onAlarm = onAlarm,
-                feed = provideFeed(
-                    dialogsViewModel = dialogsViewModel,
-                    navController = feedNavController,
-                    rootNavController = rootNavController,
-                    onPage = onPage,
-                    imageCompose = imageCompose
-                ),
-                shimmerBrush = { shimmerBrush(it) },
-                onScrollToTop = consumeOnTop,
-                scrollToTop = onTop,
-                pullToRefreshLayout = providePullToRefreshLayout(state),
-                bottomDetectingLazyColumn = provideBottomDetectingLazyColumn(),
-                scrollEnabled = scrollEnabled,
-                pageScrollable = pageScrollable
-            )
+            CompositionLocalProvider(LocalFeedCompose provides MainFeed(dialogsViewModel, feedNavController, rootNavController, onPage),
+                LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
+                LocalPullToRefreshLayoutType provides CustomLocalPullToRefreshType){
+                FeedScreenInMain(
+                    onAddReview = onAddReview,
+                    onAlarm = onAlarm,
+                    onScrollToTop = consumeOnTop,
+                    scrollToTop = onTop,
+                    scrollEnabled = scrollEnabled,
+                    pageScrollable = pageScrollable
+                )
+            }
         }
         composable(
             "profile/{id}",
@@ -68,4 +70,18 @@ fun FeedScreenWithProfile(
             }
         )
     }
+}
+
+fun MainFeed(
+    dialogsViewModel: FeedDialogsViewModel,
+    feedNavController: NavHostController,
+    rootNavController: RootNavController,
+    onPage: (Int, Boolean, Boolean) -> Unit = { _, _, _ -> }
+): feedType = { feed, onLike, onFavorite, isLogin, onVideoClick, imageHeight, pageScrollAble ->
+    provideFeed(
+        dialogsViewModel = dialogsViewModel,
+        navController = feedNavController,
+        rootNavController = rootNavController,
+        onPage = onPage
+    ).invoke(feed,onLike,onFavorite,isLogin,onVideoClick, imageHeight, pageScrollAble )
 }

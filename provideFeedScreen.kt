@@ -16,15 +16,16 @@ fun provideFeedScreen(reviewId: Int, rootNavController: RootNavController, state
     {
         val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
         ProvideMainDialog(dialogsViewModel = dialogsViewModel, rootNavController = rootNavController, commentBottomSheet = provideCommentBottomDialogSheet(rootNavController)) {
-            FeedScreenByReviewId(reviewId = reviewId, shimmerBrush = { shimmerBrush(it) },
-                feed = provideFeed(dialogsViewModel = dialogsViewModel, navController = rootNavController.navController, rootNavController = rootNavController, videoPlayer = provideVideoPlayer()),
-                pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
+            FeedScreenByReviewId(reviewId = reviewId,
+                //shimmerBrush = { shimmerBrush(it) },
+                //feed = provideFeed(dialogsViewModel = dialogsViewModel, navController = rootNavController.navController, rootNavController = rootNavController, videoPlayer = provideVideoPlayer()),
+                /*pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
                     if (isRefreshing) { state.updateState(RefreshIndicatorState.Refreshing) }
                     else { state.updateState(RefreshIndicatorState.Default) }
                     PullToRefreshLayout(pullRefreshLayoutState = state, refreshThreshold = 80, onRefresh = onRefresh) {
                         contents.invoke() }
-                },
-                bottomDetectingLazyColumn = provideBottomDetectingLazyColumn()
+                },*/
+                /*bottomDetectingLazyColumn = provideBottomDetectingLazyColumn()*/
             )
         }
     }

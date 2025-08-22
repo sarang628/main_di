@@ -2,23 +2,13 @@ package com.sarang.torang.di.main_di
 
 import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import com.sarang.torang.RootNavController
-import com.sarang.torang.compose.feed.Feed
 import com.sarang.torang.compose.feed.FeedScreenByReviewId
-import com.sarang.torang.di.feed_di.provideBottomDetectingLazyColumn
-import com.sarang.torang.di.feed_di.shimmerBrush
-import com.sarang.torang.di.feed_di.toReview
-import com.sarang.torang.di.image.provideTorangAsyncImage
-import com.sarang.torang.di.image.provideZoomableTorangAsyncImage
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
-import com.sryang.library.pullrefresh.PullToRefreshLayout
-import com.sryang.library.pullrefresh.RefreshIndicatorState
 import com.sryang.library.pullrefresh.rememberPullToRefreshState
 
 @Composable
@@ -48,11 +38,10 @@ fun ProvideMyFeedScreen(
         FeedScreenByReviewId(
             reviewId = reviewId,
             //listState = rememberLazyListState(),
-            shimmerBrush = { it -> shimmerBrush(it) },
-            feed = { feed, onLike, onFavorite, isLogin, onVideoClick, imageHeight, pageScrollable ->
+            /*feed = { feed, onLike, onFavorite, isLogin, onVideoClick, imageHeight, pageScrollable ->
                 Feed(
                     review = feed.toReview(),
-                    isZooming = { /*scrollEnabled = !it*/ },
+                    isZooming = { *//*scrollEnabled = !it*//* },
                     imageLoadCompose = provideZoomableTorangAsyncImage(),
                     onComment = { dialogsViewModel.onComment(feed.reviewId) },
                     onShare = { if (isLogin) dialogsViewModel.onShare(feed.reviewId) },
@@ -69,9 +58,9 @@ fun ProvideMyFeedScreen(
                     imageHeight = if (imageHeight > 0) imageHeight.dp else 600.dp,
                     pageScrollAble = pageScrollable
                 )
-            },
+            },*/
             //onBack = { navController.popBackStack() },
-            pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
+            /*pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
 
                 if (isRefreshing) {
                     state.updateState(RefreshIndicatorState.Refreshing)
@@ -87,7 +76,7 @@ fun ProvideMyFeedScreen(
                     contents.invoke()
                 }
             },
-            bottomDetectingLazyColumn = provideBottomDetectingLazyColumn()
+            bottomDetectingLazyColumn = provideBottomDetectingLazyColumn()*/
         )
     }
 }
