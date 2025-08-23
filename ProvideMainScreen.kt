@@ -1,6 +1,7 @@
 package com.sarang.torang.di.main_di
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -9,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
@@ -33,7 +35,7 @@ import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
-fun ProvideMainScreen(rootNavController: RootNavController) : @Composable () -> Unit = {
+fun ProvideMainScreen(rootNavController: RootNavController) {
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
     val feedNavController = rememberNavController() // 메인 하단 홈버튼 클릭시 처리를 위해 여기에 설정
     var latestDestination: Any by remember { mutableStateOf(Feed) }
@@ -43,10 +45,18 @@ fun ProvideMainScreen(rootNavController: RootNavController) : @Composable () -> 
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
+    Log.d("__ProvideMainScreen", "ProvideMainScreen")
+
     var job: Job? by remember { mutableStateOf(null) }
 
     LaunchedEffect("") {
         job = launch { isSwipeEnabled = false; delay(5000); isSwipeEnabled = true }
+    }
+
+    LaunchedEffect(latestDestination) {
+        snapshotFlow { latestDestination }.collect {
+            Log.d("__ProvideMainScreen", "latestDestination : $latestDestination")
+        }
     }
 
     ProvideMainDialog(
@@ -61,7 +71,6 @@ fun ProvideMainScreen(rootNavController: RootNavController) : @Composable () -> 
                         rootNavController = rootNavController,
                         feedNavController = feedNavController,
                         dialogsViewModel = dialogsViewModel,
-                        imageCompose = { modifier, url, width, height, contentScale, originHeight-> zoomableImage.invoke(modifier, url, contentScale, originHeight ) },
                         onTop = onTop,
                         consumeOnTop = { onTop = false },
                         onAddReview = onAddReview,
