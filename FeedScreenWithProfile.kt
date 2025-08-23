@@ -3,7 +3,6 @@ package com.sarang.torang.di.main_di
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,13 +12,12 @@ import com.sarang.torang.compose.feed.LocalPullToRefreshLayoutType
 import com.sarang.torang.compose.feed.component.LocalBottomDetectingLazyColumnType
 import com.sarang.torang.compose.feed.component.LocalFeedCompose
 import com.sarang.torang.compose.feed.feedType
-import com.sarang.torang.compose.type.PullToRefresh
+import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
+import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
+import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
+import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
-import com.sarang.torang.di.feed_di.CustomLocalPullToRefreshType
-import com.sarang.torang.di.main_di.provideFeed
-import com.sarang.torang.di.image.ZoomableTorangAsyncImage
-import com.sarang.torang.di.image.provideZoomableTorangAsyncImage
-import com.sarang.torang.di.pulltorefresh.providePullToRefresh
+import com.sarang.torang.di.feed_di.CustomPullToRefreshType
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
 import com.sryang.library.pullrefresh.rememberPullToRefreshState
 
@@ -39,16 +37,19 @@ fun FeedScreenWithProfile(
     onMessage: (Int) -> Unit,
     onAlarm: () -> Unit = { Log.w("__FeedScreenWithProfile", "onAlarm is not implemented") },
     onPage: (Int, Boolean, Boolean) -> Unit = { _, _, _ -> },
-    imageCompose: ZoomableTorangAsyncImage = provideZoomableTorangAsyncImage(),
     scrollEnabled: Boolean = true,
     pageScrollable : Boolean = true
 ) {
     val state = rememberPullToRefreshState()
     NavHost(navController = feedNavController, startDestination = "feed") {
         composable("feed") {
-            CompositionLocalProvider(LocalFeedCompose provides MainFeed(dialogsViewModel, feedNavController, rootNavController, onPage),
+            CompositionLocalProvider(
+                LocalFeedCompose provides MainFeed(dialogsViewModel, feedNavController, rootNavController, onPage),
                 LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
-                LocalPullToRefreshLayoutType provides CustomLocalPullToRefreshType){
+                LocalPullToRefreshLayoutType provides CustomPullToRefreshType,
+                LocalFeedImageLoader provides CustomFeedImageLoader,
+                LocalExpandableTextType provides CustomExpandableTextType
+            ){
                 FeedScreenInMain(
                     onAddReview = onAddReview,
                     onAlarm = onAlarm,
