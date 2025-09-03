@@ -47,7 +47,7 @@ fun FeedScreenWithProfile(
                 LocalFeedCompose provides MainFeed(dialogsViewModel, feedNavController, rootNavController, onPage),
                 LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
                 LocalPullToRefreshLayoutType provides CustomPullToRefreshType,
-                LocalFeedImageLoader provides CustomFeedImageLoader,
+                //LocalFeedImageLoader provides CustomFeedImageLoader, // 상위 zoom 이미지 로더로 설정
                 LocalExpandableTextType provides CustomExpandableTextType
             ){
                 FeedScreenInMain(

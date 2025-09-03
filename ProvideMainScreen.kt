@@ -4,6 +4,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,6 +18,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainScreen
+import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
 import com.sarang.torang.compose.main.Feed
 import com.sarang.torang.di.addreview_di.provideAddReviewScreen
 import com.sarang.torang.di.chat_di.ChatActivity
@@ -67,25 +69,26 @@ fun ProvideMainScreen(rootNavController: RootNavController) {
         PinchZoomImageBox(provideImageLoader()) { zoomableImage, zoomState ->
             MainScreen(
                 feedScreen = { onAddReview ->
-                    FeedScreenWithProfile(
-                        rootNavController = rootNavController,
-                        feedNavController = feedNavController,
-                        dialogsViewModel = dialogsViewModel,
-                        onTop = onTop,
-                        consumeOnTop = { onTop = false },
-                        onAddReview = onAddReview,
-                        onAlarm = { goAlarm = true },
-                        onMessage = { ChatActivity.go(context, it) },
-                        onPage = { page, isFirst, isLast ->
-                            job?.cancel() // 기존 Job이 실행 중이라면 취소
-                            job = coroutineScope.launch { // 새로운 Job 실행
-                                if (isFirst || isLast) { isSwipeEnabled = false; delay(2000); isSwipeEnabled = true }
-                            }
-                        },
-                        scrollEnabled = !zoomState.isZooming,
-                        pageScrollable = !zoomState.isZooming
-                    )
-
+                    CompositionLocalProvider(LocalFeedImageLoader provides {m,url,h,a,c,o-> zoomableImage.invoke(m,url,c, o)}) {
+                        FeedScreenWithProfile(
+                            rootNavController = rootNavController,
+                            feedNavController = feedNavController,
+                            dialogsViewModel = dialogsViewModel,
+                            onTop = onTop,
+                            consumeOnTop = { onTop = false },
+                            onAddReview = onAddReview,
+                            onAlarm = { goAlarm = true },
+                            onMessage = { ChatActivity.go(context, it) },
+                            onPage = { page, isFirst, isLast ->
+                                job?.cancel() // 기존 Job이 실행 중이라면 취소
+                                job = coroutineScope.launch { // 새로운 Job 실행
+                                    if (isFirst || isLast) { isSwipeEnabled = false; delay(2000); isSwipeEnabled = true }
+                                }
+                            },
+                            scrollEnabled = !zoomState.isZooming,
+                            pageScrollable = !zoomState.isZooming
+                        )
+                    }
                 },
                 swipeAblePager = isSwipeEnabled && !zoomState.isZooming,
                 onBottomMenu = {
