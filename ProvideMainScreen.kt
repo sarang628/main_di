@@ -46,9 +46,6 @@ fun ProvideMainScreen(rootNavController: RootNavController) {
     var isSwipeEnabled by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-
-    Log.d("__ProvideMainScreen", "ProvideMainScreen")
-
     var job: Job? by remember { mutableStateOf(null) }
 
     LaunchedEffect("") {
