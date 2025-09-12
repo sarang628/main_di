@@ -16,7 +16,7 @@ class DeleteReviewUseCaseImpl {
     ): DeleteReviewUseCase {
         return object : DeleteReviewUseCase {
             override suspend fun invoke(reviewId : Int) {
-                feedRepository.deleteFeed(reviewId)
+                feedRepository.deleteById(reviewId)
             }
         }
     }
