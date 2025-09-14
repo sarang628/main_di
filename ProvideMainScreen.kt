@@ -37,7 +37,9 @@ import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
-fun ProvideMainScreen(rootNavController: RootNavController) {
+fun ProvideMainScreen(rootNavController: RootNavController,
+  findingMapScreen: @Composable () -> Unit = {}
+) {
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
     val feedNavController = rememberNavController() // 메인 하단 홈버튼 클릭시 처리를 위해 여기에 설정
     var latestDestination: Any by remember { mutableStateOf(Feed) }
@@ -63,10 +65,10 @@ fun ProvideMainScreen(rootNavController: RootNavController) {
         rootNavController = rootNavController,
         commentBottomSheet = provideCommentBottomDialogSheet(rootNavController)
     ) {
-        PinchZoomImageBox(provideImageLoader()) { zoomableImage, zoomState ->
+        PinchZoomImageBox(imageLoader = provideImageLoader()) { zoomableImage, zoomState ->
             MainScreen(
                 feedScreen = { onAddReview ->
-                    CompositionLocalProvider(LocalFeedImageLoader provides {m,url,h,a,c,o-> zoomableImage.invoke(m,url,c, o)}) {
+                    CompositionLocalProvider(LocalFeedImageLoader provides {a,b,c,d,e,f-> zoomableImage.invoke(a, b, e, f) }) {
                         FeedScreenWithProfile(
                             rootNavController = rootNavController,
                             feedNavController = feedNavController,
@@ -98,7 +100,7 @@ fun ProvideMainScreen(rootNavController: RootNavController) {
                 },
                 feedGrid = provideFeedGreed(),
                 myProfileScreen = provideMyProfileScreenNavHost(rootNavController),
-                findingMapScreen = { FindingWithPermission(navController = rootNavController, viewModel = BestPracticeViewModel()) },
+                findingMapScreen = findingMapScreen,
                 addReview = provideAddReviewScreen(rootNavController),
                 chat = provideChatScreen(),
                 goAlarm = goAlarm,
