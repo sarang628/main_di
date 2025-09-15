@@ -34,7 +34,6 @@ fun provideFeed(
             onFavorite = { if (isLogin) onFavorite.invoke(feed.reviewId) else rootNavController.emailLogin() },
             onLikes = { rootNavController.like(feed.reviewId) },
             isLogin = isLogin,
-            imageHeight = if (imageHeight > 0) imageHeight.dp else 600.dp,
             onPage = onPage,
             pageScrollAble = pageScrollAble
         )
