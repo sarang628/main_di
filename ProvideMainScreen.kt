@@ -38,7 +38,12 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun ProvideMainScreen(rootNavController: RootNavController,
-  findingMapScreen: @Composable () -> Unit = {}
+  findingMapScreen  : @Composable () -> Unit = {},
+  feedGrid          : @Composable () -> Unit = {},
+  myProfileScreen   : @Composable () -> Unit = {},
+  addReview         : @Composable (onClose: () -> Unit) -> Unit = {},
+  chat              : @Composable () -> Unit = {},
+  alarm             : @Composable () -> Unit = {}
 ) {
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
     val feedNavController = rememberNavController() // 메인 하단 홈버튼 클릭시 처리를 위해 여기에 설정
@@ -67,6 +72,15 @@ fun ProvideMainScreen(rootNavController: RootNavController,
     ) {
         PinchZoomImageBox(imageLoader = provideImageLoader()) { zoomableImage, zoomState ->
             MainScreen(
+                swipeAblePager      = isSwipeEnabled && !zoomState.isZooming,
+                feedGrid            = feedGrid,
+                myProfileScreen     = myProfileScreen,
+                findingMapScreen    = findingMapScreen,
+                addReview           = addReview,
+                chat                = chat,
+                goAlarm             = goAlarm,
+                alarm               = alarm,
+                consumeAlarm        = { goAlarm = false },
                 feedScreen = { onAddReview ->
                     CompositionLocalProvider(LocalFeedImageLoader provides {a,b,c,d,e,f-> zoomableImage.invoke(a, b, e, f) }) {
                         FeedScreenWithProfile(
@@ -89,7 +103,6 @@ fun ProvideMainScreen(rootNavController: RootNavController,
                         )
                     }
                 },
-                swipeAblePager = isSwipeEnabled && !zoomState.isZooming,
                 onBottomMenu = {
                     if (feedNavController.currentDestination?.route != "feed" && latestDestination == "feed" && it == "feed") {
                         feedNavController.popBackStack("feed", inclusive = false) // 피드 화면안에서 다른화면 상태일 때 피드 버튼을 눌렀다면 피드 화면으로 이동
@@ -97,15 +110,7 @@ fun ProvideMainScreen(rootNavController: RootNavController,
                         onTop = true // 피드 화면 에서 피드 버튼을 눌렀을 때 리스트 최상단 이동
                     }
                     latestDestination = it
-                },
-                feedGrid = provideFeedGreed(),
-                myProfileScreen = provideMyProfileScreenNavHost(rootNavController),
-                findingMapScreen = findingMapScreen,
-                addReview = provideAddReviewScreen(rootNavController),
-                chat = provideChatScreen(),
-                goAlarm = goAlarm,
-                consumeAlarm = { goAlarm = false },
-                alarm = provideAlarm(rootNavController)
+                }
             )
         }
     }
