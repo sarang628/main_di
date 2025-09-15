@@ -40,7 +40,6 @@ fun FeedScreenWithProfile(
     scrollEnabled: Boolean = true,
     pageScrollable : Boolean = true
 ) {
-    val state = rememberPullToRefreshState()
     NavHost(navController = feedNavController, startDestination = "feed") {
         composable("feed") {
             CompositionLocalProvider(
@@ -60,16 +59,13 @@ fun FeedScreenWithProfile(
                 )
             }
         }
-        composable(
-            "profile/{id}",
-            content = {
-                provideProfileScreen(
-                    rootNavController = rootNavController,
-                    navController = feedNavController,
-                    onMessage = onMessage
-                ).invoke(it)
-            }
-        )
+        composable("profile/{id}"){
+            ProvideProfileScreen(
+                rootNavController = rootNavController,
+                navController = feedNavController,
+                onMessage = onMessage,
+                navBackStackEntry = it)
+        }
     }
 }
 

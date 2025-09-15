@@ -1,9 +1,7 @@
 package com.sarang.torang.di.main_di
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -13,15 +11,15 @@ import com.sarang.torang.di.image.provideTorangAsyncImage
 import com.sarang.torang.di.video.provideVideoPlayer
 
 @Composable
-internal fun provideProfileScreen(
+internal fun ProvideProfileScreen(
     rootNavController: RootNavController,
     navController: NavHostController,
     onMessage: (Int) -> Unit,
+    navBackStackEntry: NavBackStackEntry,
     videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit = provideVideoPlayer(),
-): @Composable (NavBackStackEntry) -> Unit =
-    {
+) {
         val profileNavController = rememberNavController() // 상위에 선언하면 앱 죽음
-        val userId = it.arguments?.getString("id")?.toInt()
+        val userId = navBackStackEntry.arguments?.getString("id")?.toInt()
         if (userId != null) {
             ProfileScreenNavHost(
                 navController = profileNavController,
@@ -31,7 +29,7 @@ internal fun provideProfileScreen(
                 onReview = { profileNavController.navigate("myFeed/${it}") },
                 myFeed = {
                     ProvideMyFeedScreen(
-                        navBackStackEntry = it,
+                        navBackStackEntry = navBackStackEntry,
                         rootNavController = rootNavController,
                         navController = profileNavController,
                         videoPlayer = videoPlayer,
