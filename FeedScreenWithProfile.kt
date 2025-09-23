@@ -8,18 +8,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedScreenInMain
-import com.sarang.torang.compose.feed.LocalPullToRefreshLayoutType
-import com.sarang.torang.compose.feed.component.LocalBottomDetectingLazyColumnType
-import com.sarang.torang.compose.feed.component.LocalFeedCompose
-import com.sarang.torang.compose.feed.feedType
 import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
-import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
+import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
+import com.sarang.torang.compose.feed.type.LocalFeedCompose
+import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
+import com.sarang.torang.compose.feed.type.feedType
 import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
-import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
-import com.sarang.torang.di.feed_di.CustomPullToRefreshType
+import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
-import com.sryang.library.pullrefresh.rememberPullToRefreshState
 
 /**
  * 피드 화면과 프로필 화면
@@ -45,15 +42,13 @@ fun FeedScreenWithProfile(
             CompositionLocalProvider(
                 LocalFeedCompose provides MainFeed(dialogsViewModel, feedNavController, rootNavController, onPage),
                 LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
-                LocalPullToRefreshLayoutType provides CustomPullToRefreshType,
+                LocalPullToRefreshLayoutType provides customPullToRefresh,
                 //LocalFeedImageLoader provides CustomFeedImageLoader, // 상위 zoom 이미지 로더로 설정
                 LocalExpandableTextType provides CustomExpandableTextType
             ){
                 FeedScreenInMain(
                     onAddReview = onAddReview,
                     onAlarm = onAlarm,
-                    onScrollToTop = consumeOnTop,
-                    scrollToTop = onTop,
                     scrollEnabled = scrollEnabled,
                     pageScrollable = pageScrollable
                 )
@@ -74,11 +69,11 @@ fun MainFeed(
     feedNavController: NavHostController,
     rootNavController: RootNavController,
     onPage: (Int, Boolean, Boolean) -> Unit = { _, _, _ -> }
-): feedType = { feed, onLike, onFavorite, isLogin, onVideoClick, imageHeight, pageScrollAble ->
+): feedType = { data ->
     provideFeed(
         dialogsViewModel = dialogsViewModel,
         navController = feedNavController,
         rootNavController = rootNavController,
         onPage = onPage
-    ).invoke(feed,onLike,onFavorite,isLogin,onVideoClick, imageHeight, pageScrollAble )
+    ).invoke(data)
 }
