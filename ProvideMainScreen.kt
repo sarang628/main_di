@@ -19,6 +19,8 @@ import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainScreen
 import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
+import com.sarang.torang.compose.feed.state.FeedScreenState
+import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.main.Feed
 import com.sarang.torang.di.addreview_di.provideAddReviewScreen
 import com.sarang.torang.di.chat_di.ChatActivity
@@ -46,9 +48,9 @@ fun ProvideMainScreen(rootNavController: RootNavController,
   alarm             : @Composable () -> Unit = {}
 ) {
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
+    val feedScreenState : FeedScreenState  = rememberFeedScreenState()
     val feedNavController = rememberNavController() // 메인 하단 홈버튼 클릭시 처리를 위해 여기에 설정
     var latestDestination: Any by remember { mutableStateOf(Feed) }
-    var onTop by remember { mutableStateOf(false) }
     var goAlarm by remember { mutableStateOf(false) } // 알림화면 이동 플래그
     var isSwipeEnabled by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
@@ -87,8 +89,7 @@ fun ProvideMainScreen(rootNavController: RootNavController,
                             rootNavController = rootNavController,
                             feedNavController = feedNavController,
                             dialogsViewModel = dialogsViewModel,
-                            onTop = onTop,
-                            consumeOnTop = { onTop = false },
+                            feedScreenState = feedScreenState,
                             onAddReview = onAddReview,
                             onAlarm = { goAlarm = true },
                             onMessage = { ChatActivity.go(context, it) },
@@ -107,7 +108,9 @@ fun ProvideMainScreen(rootNavController: RootNavController,
                     if (feedNavController.currentDestination?.route != "feed" && latestDestination == "feed" && it == "feed") {
                         feedNavController.popBackStack("feed", inclusive = false) // 피드 화면안에서 다른화면 상태일 때 피드 버튼을 눌렀다면 피드 화면으로 이동
                     } else if (latestDestination == "feed" && it == "feed") {
-                        onTop = true // 피드 화면 에서 피드 버튼을 눌렀을 때 리스트 최상단 이동
+                        coroutineScope.launch {
+                            feedScreenState.onTop() // 피드 화면 에서 피드 버튼을 눌렀을 때 리스트 최상단 이동
+                        }
                     }
                     latestDestination = it
                 }

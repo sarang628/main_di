@@ -9,6 +9,8 @@ import androidx.navigation.compose.composable
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedScreenInMain
 import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
+import com.sarang.torang.compose.feed.state.FeedScreenState
+import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
 import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
@@ -28,8 +30,7 @@ fun FeedScreenWithProfile(
     rootNavController: RootNavController,
     feedNavController: NavHostController,
     dialogsViewModel: FeedDialogsViewModel,
-    onTop: Boolean,
-    consumeOnTop: () -> Unit,
+    feedScreenState : FeedScreenState   = rememberFeedScreenState(),
     onAddReview: () -> Unit,
     onMessage: (Int) -> Unit,
     onAlarm: () -> Unit = { Log.w("__FeedScreenWithProfile", "onAlarm is not implemented") },
@@ -48,6 +49,7 @@ fun FeedScreenWithProfile(
             ){
                 FeedScreenInMain(
                     onAddReview = onAddReview,
+                    feedScreenState = feedScreenState,
                     onAlarm = onAlarm,
                     scrollEnabled = scrollEnabled,
                     pageScrollable = pageScrollable

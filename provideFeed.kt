@@ -21,7 +21,7 @@ fun provideFeed(
 ): feedType =
     { feedData ->
         FeedItem(
-            uiState = feedData.feed.toReview(),
+            uiState = feedData.feed.toReview(feedData.isLogin),
             feedItemClickEvents = FeedItemClickEvents(
                 onComment = { dialogsViewModel.onComment(feedData.feed.reviewId) },
                 onShare = { if (feedData.isLogin) dialogsViewModel.onShare(feedData.feed.reviewId) else rootNavController.emailLogin() },
