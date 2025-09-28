@@ -15,6 +15,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainScreen
@@ -29,6 +30,8 @@ import com.sarang.torang.di.finding_di.Finding
 import com.sarang.torang.di.finding_di.FindingWithPermission
 import com.sarang.torang.di.image.provideImageLoader
 import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
+import com.sarang.torang.di.pinchzoom.PinchZoomState
+import com.sarang.torang.di.pinchzoom.PinchZoomableImageType
 import com.sarang.torang.di.pinchzoom.isZooming
 import com.sarang.torang.di.profile_di.provideMyProfileScreenNavHost
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
@@ -84,7 +87,7 @@ fun ProvideMainScreen(rootNavController: RootNavController,
                 alarm               = alarm,
                 consumeAlarm        = { goAlarm = false },
                 feedScreen = { onAddReview ->
-                    CompositionLocalProvider(LocalFeedImageLoader provides {a,b,c,d,e,f-> zoomableImage.invoke(a, b, e, f) }) {
+                    CompositionLocalProvider(LocalFeedImageLoader provides { data -> zoomableImage.invoke(data.modifier, data.url ?:"" , data.contentScale, data.height) }) {
                         FeedScreenWithProfile(
                             rootNavController = rootNavController,
                             feedNavController = feedNavController,
