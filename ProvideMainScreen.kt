@@ -14,8 +14,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainScreen
@@ -23,33 +21,24 @@ import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.main.Feed
-import com.sarang.torang.di.addreview_di.provideAddReviewScreen
 import com.sarang.torang.di.chat_di.ChatActivity
-import com.sarang.torang.di.chat_di.provideChatScreen
-import com.sarang.torang.di.finding_di.Finding
-import com.sarang.torang.di.finding_di.FindingWithPermission
 import com.sarang.torang.di.image.provideImageLoader
 import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
-import com.sarang.torang.di.pinchzoom.PinchZoomState
-import com.sarang.torang.di.pinchzoom.PinchZoomableImageType
 import com.sarang.torang.di.pinchzoom.isZooming
-import com.sarang.torang.di.profile_di.provideMyProfileScreenNavHost
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
-import com.sryang.library.compose.workflow.BestPracticeViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-@Composable
-fun ProvideMainScreen(rootNavController: RootNavController,
+fun provideMainScreen(rootNavController: RootNavController,
   findingMapScreen  : @Composable () -> Unit = {},
   feedGrid          : @Composable () -> Unit = {},
   myProfileScreen   : @Composable () -> Unit = {},
   addReview         : @Composable (onClose: () -> Unit) -> Unit = {},
   chat              : @Composable () -> Unit = {},
   alarm             : @Composable () -> Unit = {}
-) {
+) : @Composable () ->Unit = {
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
     val feedScreenState : FeedScreenState  = rememberFeedScreenState()
     val feedNavController = rememberNavController() // 메인 하단 홈버튼 클릭시 처리를 위해 여기에 설정
