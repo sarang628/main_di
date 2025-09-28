@@ -21,6 +21,7 @@ import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.main.Feed
+import com.sarang.torang.compose.rememberMainScreenState
 import com.sarang.torang.di.chat_di.ChatActivity
 import com.sarang.torang.di.image.provideImageLoader
 import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
@@ -41,9 +42,9 @@ fun provideMainScreen(rootNavController: RootNavController,
 ) : @Composable () ->Unit = {
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
     val feedScreenState : FeedScreenState  = rememberFeedScreenState()
+    val mainScreenState = rememberMainScreenState()
     val feedNavController = rememberNavController() // 메인 하단 홈버튼 클릭시 처리를 위해 여기에 설정
     var latestDestination: Any by remember { mutableStateOf(Feed) }
-    var goAlarm by remember { mutableStateOf(false) } // 알림화면 이동 플래그
     var isSwipeEnabled by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -67,14 +68,13 @@ fun provideMainScreen(rootNavController: RootNavController,
         PinchZoomImageBox(imageLoader = provideImageLoader()) { zoomableImage, zoomState ->
             MainScreen(
                 swipeAblePager      = isSwipeEnabled && !zoomState.isZooming,
+                state               = mainScreenState,
                 feedGrid            = feedGrid,
                 myProfileScreen     = myProfileScreen,
                 findingMapScreen    = findingMapScreen,
                 addReview           = addReview,
                 chat                = chat,
-                goAlarm             = goAlarm,
                 alarm               = alarm,
-                consumeAlarm        = { goAlarm = false },
                 feedScreen = { onAddReview ->
                     CompositionLocalProvider(LocalFeedImageLoader provides { data -> zoomableImage.invoke(data.modifier, data.url ?:"" , data.contentScale, data.height) }) {
                         FeedScreenWithProfile(
@@ -83,7 +83,7 @@ fun provideMainScreen(rootNavController: RootNavController,
                             dialogsViewModel = dialogsViewModel,
                             feedScreenState = feedScreenState,
                             onAddReview = onAddReview,
-                            onAlarm = { goAlarm = true },
+                            onAlarm = { mainScreenState.goAlarm() },
                             onMessage = { ChatActivity.go(context, it) },
                             onPage = { page, isFirst, isLast ->
                                 job?.cancel() // 기존 Job이 실행 중이라면 취소
