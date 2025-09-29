@@ -31,7 +31,7 @@ fun FeedScreenWithProfile(
     feedNavController: NavHostController,
     dialogsViewModel: FeedDialogsViewModel,
     feedScreenState : FeedScreenState   = rememberFeedScreenState(),
-    onAddReview: () -> Unit,
+    onChat: () -> Unit,
     onMessage: (Int) -> Unit,
     onAlarm: () -> Unit = { Log.w("__FeedScreenWithProfile", "onAlarm is not implemented") },
     onPage: (Int, Boolean, Boolean) -> Unit = { _, _, _ -> },
@@ -48,7 +48,7 @@ fun FeedScreenWithProfile(
                 LocalExpandableTextType provides CustomExpandableTextType
             ){
                 FeedScreenInMain(
-                    onAddReview = onAddReview,
+                    onAddReview = onChat,
                     feedScreenState = feedScreenState,
                     onAlarm = onAlarm,
                     scrollEnabled = scrollEnabled,
