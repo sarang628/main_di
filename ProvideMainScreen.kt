@@ -44,9 +44,9 @@ fun provideMainScreen(rootNavController: RootNavController,
         rootNavController = rootNavController,
         commentBottomSheet = provideCommentBottomDialogSheet(rootNavController)
     ) {
-        PinchZoomImageBox(imageLoader = provideImageLoader()) { zoomableImage, zoomState ->
+        PinchZoomImageBox(imageLoader = provideImageLoader()) { zoomableImage ->
             MainScreen(
-                swipeAblePager      = mainScreenState.isSwipeEnabled && !zoomState.isZooming,
+                swipeAblePager      = mainScreenState.isSwipeEnabled /*&& !zoomState.isZooming*/,
                 state               = mainScreenState,
                 feedGrid            = feedGrid,
                 myProfileScreen     = myProfileScreen,
@@ -64,10 +64,10 @@ fun provideMainScreen(rootNavController: RootNavController,
                             onChat              = onChat,
                             onAlarm             = { mainScreenState.goAlarm() },
                             onMessage           = { ChatActivity.go(context, it) },
-                            scrollEnabled       = !zoomState.isZooming,
-                            pageScrollable      = !zoomState.isZooming,
+                            scrollEnabled       = true/*!zoomState.isZooming*/,
+                            pageScrollable      = true/*!zoomState.isZooming*/,
                             onPage = { page, isFirst, isLast ->
-                                if (isFirst || isLast) mainScreenState.swipeDisableForMillies(coroutineScope = coroutineScope)
+                                /*if (isFirst || isLast) mainScreenState.swipeDisableForMillies(coroutineScope = coroutineScope)*/
                             }
                         )
                     }
