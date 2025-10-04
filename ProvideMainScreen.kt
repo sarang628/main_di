@@ -47,7 +47,7 @@ fun provideMainScreen(rootNavController: RootNavController,
         rootNavController = rootNavController,
         commentBottomSheet = provideCommentBottomDialogSheet(rootNavController)
     ) {
-        PinchZoomImageBox(imageLoader = provideImageLoader()) { zoomableImage ->
+        PinchZoomImageBox {
             MainScreen(
                 swipeAblePager      = mainScreenState.isSwipeEnabled /*&& !zoomState.isZooming*/,
                 state               = mainScreenState,

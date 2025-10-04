@@ -1,8 +1,10 @@
 package com.sarang.torang.di.main_di
 
 import android.util.Log
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -52,7 +54,8 @@ fun FeedScreenWithProfile(
                     feedScreenState = feedScreenState,
                     onAlarm = onAlarm,
                     scrollEnabled = scrollEnabled,
-                    pageScrollable = pageScrollable
+                    pageScrollable = pageScrollable,
+                    contentWindowInsets = WindowInsets(0.dp)
                 )
             }
         }
