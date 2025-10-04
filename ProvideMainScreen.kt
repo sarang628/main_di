@@ -14,12 +14,15 @@ import com.sarang.torang.compose.MainScreenState
 import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
+import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
+import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
 import com.sarang.torang.compose.rememberMainScreenState
 import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
 import com.sarang.torang.di.chat_di.ChatActivity
+import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
+import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.di.image.provideImageLoader
 import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
-import com.sarang.torang.di.pinchzoom.isZooming
 import com.sarang.torang.viewmodels.FeedDialogsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -55,7 +58,9 @@ fun provideMainScreen(rootNavController: RootNavController,
                 chat                = chat,
                 alarm               = alarm,
                 feedScreen = { onChat ->
-                    CompositionLocalProvider(LocalFeedImageLoader provides CustomFeedImageLoader) {
+                    CompositionLocalProvider(LocalFeedImageLoader provides CustomFeedImageLoader,
+                        LocalPullToRefreshLayoutType provides customPullToRefresh,
+                        LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType) {
                         FeedScreenWithProfile(
                             rootNavController   = rootNavController,
                             feedNavController   = mainScreenState.feedNavController,
