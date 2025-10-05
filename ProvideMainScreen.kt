@@ -65,8 +65,7 @@ fun provideMainScreen(rootNavController: RootNavController,
                         )
                     }
                 },
-                onBottomMenu = {},
-                consumeAlarm = {}
+                onBottomMenu = {}
             )
         }
     }
