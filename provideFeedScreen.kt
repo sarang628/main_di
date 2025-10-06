@@ -7,7 +7,7 @@ import com.sarang.torang.compose.feed.FeedScreenByReviewId
 import com.sarang.torang.di.feed_di.provideBottomDetectingLazyColumn
 import com.sarang.torang.di.feed_di.shimmerBrush
 import com.sarang.torang.di.video.provideVideoPlayer
-import com.sarang.torang.viewmodels.FeedDialogsViewModel
+import com.sarang.torang.viewmodel.FeedDialogsViewModel
 import com.sryang.library.pullrefresh.PullToRefreshLayout
 import com.sryang.library.pullrefresh.PullToRefreshLayoutState
 import com.sryang.library.pullrefresh.RefreshIndicatorState

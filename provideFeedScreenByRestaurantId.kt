@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedScreenByRestaurantId
-import com.sarang.torang.viewmodels.FeedDialogsViewModel
+import com.sarang.torang.viewmodel.FeedDialogsViewModel
 import com.sryang.library.pullrefresh.rememberPullToRefreshState
 
 fun provideFeedScreenByRestaurantId(rootNavController: RootNavController): @Composable (Int) -> Unit =

@@ -6,7 +6,7 @@ import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedItem
 import com.sarang.torang.compose.feed.FeedItemClickEvents
 import com.sarang.torang.di.feed_di.toReview
-import com.sarang.torang.viewmodels.FeedDialogsViewModel
+import com.sarang.torang.viewmodel.FeedDialogsViewModel
 import com.sarang.torang.compose.feed.type.feedType
 
 /**

@@ -8,7 +8,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedScreenByReviewId
-import com.sarang.torang.viewmodels.FeedDialogsViewModel
+import com.sarang.torang.viewmodel.FeedDialogsViewModel
 import com.sryang.library.pullrefresh.rememberPullToRefreshState
 
 @Composable
