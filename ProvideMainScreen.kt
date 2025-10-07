@@ -29,6 +29,7 @@ import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
 import com.sarang.torang.viewmodel.FeedDialogsViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 fun provideMainScreen(rootNavController: RootNavController,
@@ -39,13 +40,14 @@ fun provideMainScreen(rootNavController: RootNavController,
   chat              : @Composable () -> Unit = {},
   alarm             : @Composable () -> Unit = {}
 ) : @Composable () ->Unit = {
+    val tag = "__provideMainScreen"
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
     val feedScreenState : FeedScreenState       = rememberFeedScreenState()
     val coroutineScope  : CoroutineScope        = rememberCoroutineScope()
     val context         : Context               = LocalContext.current
     val mainScreenState : MainScreenState       = rememberMainScreenState()
 
-    Log.d("__provideMainScreen", "recomposition")
+    Log.d(tag, "recomposition")
 
     ProvideMainDialog(
         dialogsViewModel = dialogsViewModel,
@@ -55,6 +57,7 @@ fun provideMainScreen(rootNavController: RootNavController,
         PinchZoomImageBox {
             MainScreen(
                 feedGrid            = feedGrid,
+                state               = mainScreenState,
                 myProfileScreen     = myProfileScreen,
                 findingMapScreen    = findingMapScreen,
                 addReview           = addReview,
@@ -76,9 +79,8 @@ fun provideMainScreen(rootNavController: RootNavController,
                     }
                 },
                 onBottomMenu = {
-                    Log.d("__provideMainScreen", "currentScreen : ${mainScreenState.currentScreen} latestScreen : ${mainScreenState.latestDestination}")
-                    if(mainScreenState.isMain && mainScreenState.latestDestination == MainScreenPager.MAIN){
-                        Log.d("__provideMainScreen", "top")
+                    if(mainScreenState.isFeedOnTop(it)){
+                        coroutineScope.launch { feedScreenState.onTop() }
                     }
                 }
             )
