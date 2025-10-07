@@ -20,12 +20,13 @@ import com.sarang.torang.compose.feed.type.feedType
 import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.customPullToRefresh
-import com.sarang.torang.viewmodels.FeedDialogsViewModel
+import com.sarang.torang.viewmodel.FeedDialogsViewModel
 
 /**
  * 피드 화면과 프로필 화면
  * @param onAlarm 상단바에서 알림 클릭 콜백
  * @param onPage 페이지 콜백 Int: 현재 페이지, Boolean: 첫번째 페이지 여부, Boolean: 마지막 페이지 여부
+ * @param swipeAble 좌우 스와이프 가능 여부
  */
 @Composable
 fun FeedScreenWithProfile(
@@ -38,7 +39,7 @@ fun FeedScreenWithProfile(
     onAlarm: () -> Unit = { Log.w("__FeedScreenWithProfile", "onAlarm is not implemented") },
     onPage: (Int, Boolean, Boolean) -> Unit = { _, _, _ -> },
     scrollEnabled: Boolean = true,
-    pageScrollable : Boolean = true
+    swipeAble : Boolean = true
 ) {
     NavHost(navController = feedNavController, startDestination = "feed") {
         composable("feed") {
@@ -54,7 +55,7 @@ fun FeedScreenWithProfile(
                     feedScreenState = feedScreenState,
                     onAlarm = onAlarm,
                     scrollEnabled = scrollEnabled,
-                    pageScrollable = pageScrollable,
+                    pageScrollable = swipeAble,
                     contentWindowInsets = WindowInsets(0.dp)
                 )
             }
