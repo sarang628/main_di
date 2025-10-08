@@ -12,16 +12,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainScreen
-import com.sarang.torang.compose.MainScreenPager
 import com.sarang.torang.compose.MainScreenState
-import com.sarang.torang.compose.currentScreen
 import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
 import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
-import com.sarang.torang.compose.isMain
 import com.sarang.torang.compose.rememberMainScreenState
+import com.sarang.torang.data.basefeed.FeedItemPageEvent
 import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
 import com.sarang.torang.di.chat_di.ChatActivity
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
@@ -42,10 +40,10 @@ fun provideMainScreen(rootNavController: RootNavController,
 ) : @Composable () ->Unit = {
     val tag = "__provideMainScreen"
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
-    val feedScreenState : FeedScreenState       = rememberFeedScreenState()
-    val coroutineScope  : CoroutineScope        = rememberCoroutineScope()
-    val context         : Context               = LocalContext.current
-    val mainScreenState : MainScreenState       = rememberMainScreenState()
+    val feedScreenState: FeedScreenState = rememberFeedScreenState()
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val context: Context = LocalContext.current
+    val mainScreenState: MainScreenState = rememberMainScreenState()
 
     Log.d(tag, "recomposition")
 
@@ -56,30 +54,37 @@ fun provideMainScreen(rootNavController: RootNavController,
     ) {
         PinchZoomImageBox {
             MainScreen(
-                feedGrid            = feedGrid,
-                state               = mainScreenState,
-                myProfileScreen     = myProfileScreen,
-                findingMapScreen    = findingMapScreen,
-                addReview           = addReview,
-                chat                = chat,
-                alarm               = alarm,
-                swipeAble           = true, //TODO:: 피드 화면 에서만 스와이프 가능하게 하기, 페이지 이미지 페이지 양끝 상태일 때만 스와이프 가능하게 하기
+                feedGrid = feedGrid,
+                state = mainScreenState,
+                myProfileScreen = myProfileScreen,
+                findingMapScreen = findingMapScreen,
+                addReview = addReview,
+                chat = chat,
+                alarm = alarm,
+                swipeAble = mainScreenState.isSwipeEnabled,
                 feedScreen = { onChat ->
-                    CompositionLocalProvider(LocalFeedImageLoader provides CustomFeedImageLoader,
+                    CompositionLocalProvider(
+                        LocalFeedImageLoader provides CustomFeedImageLoader,
                         LocalPullToRefreshLayoutType provides customPullToRefresh,
-                        LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType) {
+                        LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType
+                    ) {
                         FeedScreenWithProfile(
-                            rootNavController   = rootNavController,
-                            feedNavController   = rememberNavController(),
-                            dialogsViewModel    = dialogsViewModel,
-                            feedScreenState     = feedScreenState,
-                            onChat              = onChat,
-                            onMessage           = { ChatActivity.go(context, it) }
+                            rootNavController = rootNavController,
+                            feedNavController = rememberNavController(),
+                            dialogsViewModel = dialogsViewModel,
+                            feedScreenState = feedScreenState,
+                            onChat = onChat,
+                            onMessage = { ChatActivity.go(context, it) },
+                            onPage = {
+                                Log.d(tag, it.swipeable.toString())
+                                if (it.swipeable)
+                                    mainScreenState.swipeDisableForMillis(coroutineScope = coroutineScope)
+                            }
                         )
                     }
                 },
                 onBottomMenu = {
-                    if(mainScreenState.isFeedOnTop(it)){
+                    if (mainScreenState.isFeedOnTop(it)) {
                         coroutineScope.launch { feedScreenState.onTop() }
                     }
                 }
@@ -87,3 +92,5 @@ fun provideMainScreen(rootNavController: RootNavController,
         }
     }
 }
+
+val FeedItemPageEvent.swipeable : Boolean get() = this.isLast || this.isFirst

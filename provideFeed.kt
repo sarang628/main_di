@@ -1,5 +1,6 @@
 package com.sarang.torang.di.main_di
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import com.sarang.torang.RootNavController
@@ -8,16 +9,18 @@ import com.sarang.torang.compose.feed.FeedItemClickEvents
 import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.viewmodel.FeedDialogsViewModel
 import com.sarang.torang.compose.feed.type.feedType
+import com.sarang.torang.data.basefeed.FeedItemPageEvent
 
 /**
  * @param onPage 페이지 콜백 Int: 현재 페이지, Boolean: 첫번째 페이지 여부, Boolean: 마지막 페이지 여부
  */
 @Composable
 fun provideFeed(
+    tag : String = "__provideFeed",
     dialogsViewModel: FeedDialogsViewModel,
     navController: NavHostController,
     rootNavController: RootNavController,
-    onPage: (Int, Boolean, Boolean) -> Unit = { _, _, _ -> },
+    onPage              : (FeedItemPageEvent) -> Unit   = { feedItemPageEvent -> Log.w(tag, "onPage callback is not set page: $feedItemPageEvent.page isFirst: $feedItemPageEvent.isFirst isLast: $feedItemPageEvent.isLast") }
 ): feedType =
     { feedData ->
         FeedItem(

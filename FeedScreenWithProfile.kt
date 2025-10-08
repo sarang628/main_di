@@ -17,6 +17,7 @@ import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
 import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
 import com.sarang.torang.compose.feed.type.feedType
+import com.sarang.torang.data.basefeed.FeedItemPageEvent
 import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.customPullToRefresh
@@ -30,6 +31,7 @@ import com.sarang.torang.viewmodel.FeedDialogsViewModel
  */
 @Composable
 fun FeedScreenWithProfile(
+    tag : String = "__FeedScreenWithProfile",
     rootNavController: RootNavController,
     feedNavController: NavHostController,
     dialogsViewModel: FeedDialogsViewModel,
@@ -37,14 +39,18 @@ fun FeedScreenWithProfile(
     onChat: () -> Unit,
     onMessage: (Int) -> Unit,
     onAlarm: () -> Unit = { Log.w("__FeedScreenWithProfile", "onAlarm is not implemented") },
-    onPage: (Int, Boolean, Boolean) -> Unit = { _, _, _ -> },
+    onPage              : (FeedItemPageEvent) -> Unit   = { feedItemPageEvent -> Log.w(tag, "onPage callback is not set page: $feedItemPageEvent.page isFirst: $feedItemPageEvent.isFirst isLast: $feedItemPageEvent.isLast") },
     scrollEnabled: Boolean = true,
     swipeAble : Boolean = true
 ) {
     NavHost(navController = feedNavController, startDestination = "feed") {
         composable("feed") {
             CompositionLocalProvider(
-                LocalFeedCompose provides MainFeed(dialogsViewModel, feedNavController, rootNavController, onPage),
+                LocalFeedCompose provides MainFeed(
+                    dialogsViewModel = dialogsViewModel,
+                    feedNavController = feedNavController,
+                    rootNavController = rootNavController,
+                    onPage = onPage),
                 LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
                 LocalPullToRefreshLayoutType provides customPullToRefresh,
                 //LocalFeedImageLoader provides CustomFeedImageLoader, // 상위 zoom 이미지 로더로 설정
@@ -71,10 +77,11 @@ fun FeedScreenWithProfile(
 }
 
 fun MainFeed(
+    tag : String = "__MainFeed",
     dialogsViewModel: FeedDialogsViewModel,
     feedNavController: NavHostController,
     rootNavController: RootNavController,
-    onPage: (Int, Boolean, Boolean) -> Unit = { _, _, _ -> }
+    onPage              : (FeedItemPageEvent) -> Unit   = { feedItemPageEvent -> Log.w(tag, "onPage callback is not set page: $feedItemPageEvent.page isFirst: $feedItemPageEvent.isFirst isLast: $feedItemPageEvent.isLast") }
 ): feedType = { data ->
     provideFeed(
         dialogsViewModel = dialogsViewModel,
