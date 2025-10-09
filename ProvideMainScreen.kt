@@ -45,8 +45,6 @@ fun provideMainScreen(rootNavController: RootNavController,
     val context: Context = LocalContext.current
     val mainScreenState: MainScreenState = rememberMainScreenState()
 
-    Log.d(tag, "recomposition")
-
     ProvideMainDialog(
         dialogsViewModel = dialogsViewModel,
         rootNavController = rootNavController,
@@ -76,7 +74,6 @@ fun provideMainScreen(rootNavController: RootNavController,
                             onChat = onChat,
                             onMessage = { ChatActivity.go(context, it) },
                             onPage = {
-                                Log.d(tag, it.swipeable.toString())
                                 if (it.swipeable)
                                     mainScreenState.swipeDisableForMillis(coroutineScope = coroutineScope)
                             }
