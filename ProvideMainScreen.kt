@@ -4,12 +4,19 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+import com.sarang.torang.RestaurantListBottomSheetViewModel
+import com.sarang.torang.RestaurantListBottomSheet_
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainScreen
 import com.sarang.torang.compose.MainScreenState
@@ -29,14 +36,16 @@ import com.sarang.torang.viewmodel.FeedDialogsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 fun provideMainScreen(rootNavController: RootNavController,
-  findingMapScreen  : @Composable () -> Unit = {},
-  feedGrid          : @Composable () -> Unit = {},
-  myProfileScreen   : @Composable () -> Unit = {},
-  addReview         : @Composable (onClose: () -> Unit) -> Unit = {},
-  chat              : @Composable () -> Unit = {},
-  alarm             : @Composable () -> Unit = {}
+  findingMapScreen          : @Composable () -> Unit = {},
+  feedGrid                  : @Composable () -> Unit = {},
+  myProfileScreen           : @Composable () -> Unit = {},
+  addReview                 : @Composable (onClose: () -> Unit) -> Unit = {},
+  chat                      : @Composable () -> Unit = {},
+  alarm                     : @Composable () -> Unit = {},
+  restaurantBottomSheet     : @Composable ( @Composable () -> Unit ) -> Unit = { },
 ) : @Composable () ->Unit = {
     val tag = "__provideMainScreen"
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
@@ -48,7 +57,8 @@ fun provideMainScreen(rootNavController: RootNavController,
     ProvideMainDialog(
         dialogsViewModel = dialogsViewModel,
         rootNavController = rootNavController,
-        commentBottomSheet = provideCommentBottomDialogSheet(rootNavController)
+        commentBottomSheet = provideCommentBottomDialogSheet(rootNavController),
+        restaurantBottomSheet = restaurantBottomSheet
     ) {
         PinchZoomImageBox {
             MainScreen(

@@ -1,6 +1,5 @@
 package com.sarang.torang.di.main_di
 
-import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -15,12 +14,11 @@ import com.sarang.torang.viewmodel.FeedDialogsViewModel
 
 @Composable
 fun ProvideMainDialog(
-    dialogsViewModel: FeedDialogsViewModel = hiltViewModel(),
-    rootNavController: RootNavController,
-    commentBottomSheet: @Composable (
-        reviewId: Int?, onHidden: () -> Unit, content: @Composable (PaddingValues) -> Unit
-    ) -> Unit,
-    contents: @Composable (PaddingValues) -> Unit
+    dialogsViewModel        : FeedDialogsViewModel = hiltViewModel(),
+    rootNavController       : RootNavController,
+    commentBottomSheet      : @Composable (reviewId: Int?, onHidden: () -> Unit, content: @Composable (PaddingValues) -> Unit) -> Unit,
+    restaurantBottomSheet   : @Composable ( @Composable () -> Unit ) -> Unit     = { },
+    contents                : @Composable (PaddingValues) -> Unit
 ) {
     val tag = "__ProvideMainDialog"
     val uiState by dialogsViewModel.uiState.collectAsState()
@@ -29,9 +27,10 @@ fun ProvideMainDialog(
         commentBottomSheet = { reviewId ->
             commentBottomSheet.invoke(reviewId, { dialogsViewModel.closeComment() }, contents)
         },
-        menuDialog = provideFeedMenuBottomSheetDialog(),
-        shareDialog = provideShareBottomSheetDialog(),
-        reportDialog = provideReportModal(),
+        menuBottomSheet = provideFeedMenuBottomSheetDialog(),
+        shareBottomSheet = provideShareBottomSheetDialog(),
+        reportBottomSheet = provideReportModal(),
+        restaurantBottomSheet = restaurantBottomSheet,
         onEdit = rootNavController.modReview(),
     )
 }
