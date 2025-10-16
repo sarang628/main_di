@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+import com.sarang.torang.LocalRestaurantItemImageLoader
 import com.sarang.torang.RestaurantListBottomSheetViewModel
 import com.sarang.torang.RestaurantListBottomSheet_
 import com.sarang.torang.RootNavController
@@ -31,7 +32,9 @@ import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
 import com.sarang.torang.di.chat_di.ChatActivity
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.customPullToRefresh
+import com.sarang.torang.di.finding_di.FindState
 import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
+import com.sarang.torang.di.restaurant_list_bottom_sheet_di.CustomRestaurantItemImageLoader
 import com.sarang.torang.viewmodel.FeedDialogsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -45,7 +48,7 @@ fun provideMainScreen(rootNavController: RootNavController,
   addReview                 : @Composable (onClose: () -> Unit) -> Unit = {},
   chat                      : @Composable () -> Unit = {},
   alarm                     : @Composable () -> Unit = {},
-  restaurantBottomSheet     : @Composable ( @Composable () -> Unit ) -> Unit = { },
+  findState                 : FindState
 ) : @Composable () ->Unit = {
     val tag = "__provideMainScreen"
     val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
@@ -53,6 +56,22 @@ fun provideMainScreen(rootNavController: RootNavController,
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val context: Context = LocalContext.current
     val mainScreenState: MainScreenState = rememberMainScreenState()
+
+    val bottomSheetViewModel : RestaurantListBottomSheetViewModel = hiltViewModel()
+    val bottomSheetUiState by bottomSheetViewModel.uiState.collectAsState()
+
+    val restaurantBottomSheet : @Composable ( @Composable () -> Unit ) -> Unit = {
+        CompositionLocalProvider(LocalRestaurantItemImageLoader provides CustomRestaurantItemImageLoader) {
+            RestaurantListBottomSheet_ (
+                modifier                = Modifier,
+                uiState                 = bottomSheetUiState,
+                sheetPeekHeight         = 0.dp,
+                scaffoldState           = findState.bottomSheetState,
+                onClickRestaurantName   = { coroutineScope.launch { findState.bottomSheetState.bottomSheetState.partialExpand() } },
+                content                 = { it() }
+            )
+        }
+    }
 
     ProvideMainDialog(
         dialogsViewModel = dialogsViewModel,
