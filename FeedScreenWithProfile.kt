@@ -31,37 +31,39 @@ import com.sarang.torang.viewmodel.FeedDialogsViewModel
  */
 @Composable
 fun FeedScreenWithProfile(
-    tag : String = "__FeedScreenWithProfile",
-    rootNavController: RootNavController,
-    feedNavController: NavHostController,
-    dialogsViewModel: FeedDialogsViewModel,
-    feedScreenState : FeedScreenState   = rememberFeedScreenState(),
-    onChat: () -> Unit,
-    onMessage: (Int) -> Unit,
-    onAlarm: () -> Unit = { Log.w("__FeedScreenWithProfile", "onAlarm is not implemented") },
+    tag : String        = "__FeedScreenWithProfile",
+    rootNavController   : RootNavController,
+    feedNavController   : NavHostController,
+    dialogsViewModel    : FeedDialogsViewModel,
+    feedScreenState     : FeedScreenState   = rememberFeedScreenState(),
+    onChat              : () -> Unit                    = {},
+    onMessage           : (Int) -> Unit                 = {},
+    onAlarm             : () -> Unit                    = { Log.w("__FeedScreenWithProfile", "onAlarm is not implemented") },
     onPage              : (FeedItemPageEvent) -> Unit   = { feedItemPageEvent -> Log.w(tag, "onPage callback is not set page: $feedItemPageEvent.page isFirst: $feedItemPageEvent.isFirst isLast: $feedItemPageEvent.isLast") },
-    scrollEnabled: Boolean = true,
-    swipeAble : Boolean = true
+    scrollEnabled       : Boolean                       = true,
+    swipeAble           : Boolean                       = true
 ) {
-    NavHost(navController = feedNavController, startDestination = "feed") {
+    NavHost(
+        navController       = feedNavController,
+        startDestination    = "feed") {
         composable("feed") {
             CompositionLocalProvider(
                 LocalFeedCompose provides MainFeed(
-                    dialogsViewModel = dialogsViewModel,
-                    feedNavController = feedNavController,
-                    rootNavController = rootNavController,
-                    onPage = onPage),
+                    dialogsViewModel    = dialogsViewModel,
+                    feedNavController   = feedNavController,
+                    rootNavController   = rootNavController,
+                    onPage              = onPage),
                 LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
                 LocalPullToRefreshLayoutType provides customPullToRefresh,
                 //LocalFeedImageLoader provides CustomFeedImageLoader, // 상위 zoom 이미지 로더로 설정
                 LocalExpandableTextType provides CustomExpandableTextType
             ){
                 FeedScreenInMain(
-                    onAddReview = onChat,
-                    feedScreenState = feedScreenState,
-                    onAlarm = onAlarm,
-                    scrollEnabled = scrollEnabled,
-                    pageScrollable = swipeAble,
+                    onAddReview         = onChat,
+                    feedScreenState     = feedScreenState,
+                    onAlarm             = onAlarm,
+                    scrollEnabled       = scrollEnabled,
+                    pageScrollable      = swipeAble,
                     contentWindowInsets = WindowInsets(0.dp)
                 )
             }
@@ -77,16 +79,16 @@ fun FeedScreenWithProfile(
 }
 
 fun MainFeed(
-    tag : String = "__MainFeed",
-    dialogsViewModel: FeedDialogsViewModel,
-    feedNavController: NavHostController,
-    rootNavController: RootNavController,
+    tag                 : String                        = "__MainFeed",
+    dialogsViewModel    : FeedDialogsViewModel,
+    feedNavController   : NavHostController,
+    rootNavController   : RootNavController,
     onPage              : (FeedItemPageEvent) -> Unit   = { feedItemPageEvent -> Log.w(tag, "onPage callback is not set page: $feedItemPageEvent.page isFirst: $feedItemPageEvent.isFirst isLast: $feedItemPageEvent.isLast") }
 ): feedType = { data ->
     provideFeed(
-        dialogsViewModel = dialogsViewModel,
-        navController = feedNavController,
-        rootNavController = rootNavController,
-        onPage = onPage
+        dialogsViewModel    = dialogsViewModel,
+        navController       = feedNavController,
+        rootNavController   = rootNavController,
+        onPage              = onPage
     ).invoke(data)
 }
