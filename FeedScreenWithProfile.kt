@@ -5,10 +5,13 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
+import com.sarang.torang.compose.feed.FeedItem
 import com.sarang.torang.compose.feed.FeedScreenInMain
 import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
 import com.sarang.torang.compose.feed.state.FeedScreenState
@@ -21,6 +24,7 @@ import com.sarang.torang.data.basefeed.FeedItemPageEvent
 import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.customPullToRefresh
+import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.viewmodel.FeedDialogsViewModel
 
 /**
@@ -31,14 +35,14 @@ import com.sarang.torang.viewmodel.FeedDialogsViewModel
  */
 @Composable
 fun FeedScreenWithProfile(
-    tag : String        = "__FeedScreenWithProfile",
-    rootNavController   : RootNavController,
-    feedNavController   : NavHostController,
-    dialogsViewModel    : FeedDialogsViewModel,
-    feedScreenState     : FeedScreenState   = rememberFeedScreenState(),
-    onChat              : () -> Unit                    = {},
-    onMessage           : (Int) -> Unit                 = {},
-    onAlarm             : () -> Unit                    = { Log.w("__FeedScreenWithProfile", "onAlarm is not implemented") },
+    tag                 : String                        = "__FeedScreenWithProfile",
+    rootNavController   : RootNavController             = RootNavController(),
+    feedNavController   : NavHostController             = rememberNavController(),
+    dialogsViewModel    : FeedDialogsViewModel          = hiltViewModel(),
+    feedScreenState     : FeedScreenState               = rememberFeedScreenState(),
+    onChat              : () -> Unit                    = { Log.w(tag, "onChat is not implemented") },
+    onMessage           : (Int) -> Unit                 = { Log.w(tag, "onMessage is not implemented") },
+    onAlarm             : () -> Unit                    = { Log.w(tag, "onAlarm is not implemented") },
     onPage              : (FeedItemPageEvent) -> Unit   = { feedItemPageEvent -> Log.w(tag, "onPage callback is not set page: $feedItemPageEvent.page isFirst: $feedItemPageEvent.isFirst isLast: $feedItemPageEvent.isLast") },
     scrollEnabled       : Boolean                       = true,
     swipeAble           : Boolean                       = true
@@ -48,11 +52,14 @@ fun FeedScreenWithProfile(
         startDestination    = "feed") {
         composable("feed") {
             CompositionLocalProvider(
-                LocalFeedCompose provides MainFeed(
-                    dialogsViewModel    = dialogsViewModel,
-                    feedNavController   = feedNavController,
-                    rootNavController   = rootNavController,
-                    onPage              = onPage),
+                LocalFeedCompose provides { data ->
+                    FeedItem(
+                        uiState             = data.feed.toReview(data.isLogin),
+                        feedItemClickEvents = generateCommonFeedItemClickEvent(data, dialogsViewModel, feedNavController, rootNavController),
+                        onPage              = onPage,
+                        pageScrollAble      = data.pageScrollable
+                    )
+                },
                 LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
                 LocalPullToRefreshLayoutType provides customPullToRefresh,
                 //LocalFeedImageLoader provides CustomFeedImageLoader, // 상위 zoom 이미지 로더로 설정
@@ -70,25 +77,10 @@ fun FeedScreenWithProfile(
         }
         composable("profile/{id}"){
             ProvideProfileScreen(
-                rootNavController = rootNavController,
-                navController = feedNavController,
-                onMessage = onMessage,
-                navBackStackEntry = it)
+                rootNavController   = rootNavController,
+                navController       = feedNavController,
+                onMessage           = onMessage,
+                navBackStackEntry   = it)
         }
     }
-}
-
-fun MainFeed(
-    tag                 : String                        = "__MainFeed",
-    dialogsViewModel    : FeedDialogsViewModel,
-    feedNavController   : NavHostController,
-    rootNavController   : RootNavController,
-    onPage              : (FeedItemPageEvent) -> Unit   = { feedItemPageEvent -> Log.w(tag, "onPage callback is not set page: $feedItemPageEvent.page isFirst: $feedItemPageEvent.isFirst isLast: $feedItemPageEvent.isLast") }
-): feedType = { data ->
-    provideFeed(
-        dialogsViewModel    = dialogsViewModel,
-        navController       = feedNavController,
-        rootNavController   = rootNavController,
-        onPage              = onPage
-    ).invoke(data)
 }
