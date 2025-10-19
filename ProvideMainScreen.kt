@@ -77,15 +77,15 @@ fun provideMainScreen(
     ) {
         PinchZoomImageBox(imageLoader = imageLoader) {
             MainScreen(
-                feedGrid            = feedGrid,
                 state               = mainScreenState,
-                myProfileScreen     = profile,
-                findingMapScreen    = find,
+                feedScreen          = feed,
+                feedGrid            = feedGrid,
                 addReview           = addReview,
+                findingMapScreen    = find,
+                myProfileScreen     = profile,
                 chat                = chat,
                 alarm               = alarm,
                 swipeAble           = mainScreenState.isSwipeEnabled,
-                feedScreen          = feed,
                 onBottomMenu        = onBottomMenu
             )
         }
