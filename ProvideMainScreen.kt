@@ -1,8 +1,6 @@
 package com.sarang.torang.di.main_di
 
-import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -24,10 +22,8 @@ import com.sarang.torang.compose.MainScreen
 import com.sarang.torang.compose.MainScreenState
 import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
 import com.sarang.torang.compose.feed.state.FeedScreenState
-import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
 import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
-import com.sarang.torang.compose.rememberMainScreenState
 import com.sarang.torang.data.basefeed.FeedItemPageEvent
 import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
 import com.sarang.torang.di.chat_di.ChatActivity
@@ -41,23 +37,53 @@ import com.sarang.torang.viewmodel.FeedDialogsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+
+fun provideFeedScreen(
+    navController           : RootNavController,
+    dialogsViewModel        : FeedDialogsViewModel,
+    feedScreenState         : FeedScreenState,
+    mainScreenState         : MainScreenState
+) : @Composable (onChat: () -> Unit) -> Unit = { onChat ->
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+    CompositionLocalProvider(
+        LocalFeedImageLoader                provides CustomFeedImageLoader,
+        LocalPullToRefreshLayoutType        provides customPullToRefresh,
+        LocalBottomDetectingLazyColumnType  provides CustomBottomDetectingLazyColumnType
+    ) {
+        FeedScreenWithProfile(
+            rootNavController   = navController,
+            feedNavController   = rememberNavController(),
+            dialogsViewModel    = dialogsViewModel,
+            feedScreenState     = feedScreenState,
+            onChat              = onChat,
+            onMessage           = { ChatActivity.go(context, it) },
+            onPage              = {
+                if (it.swipeable)
+                    mainScreenState.swipeDisableForMillis(coroutineScope = coroutineScope)
+            }
+        )
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-fun provideMainScreen(rootNavController: RootNavController,
-  findingMapScreen          : @Composable () -> Unit = {},
-  feedGrid                  : @Composable () -> Unit = {},
-  myProfileScreen           : @Composable () -> Unit = {},
-  addReview                 : @Composable (onClose: () -> Unit) -> Unit = {},
-  chat                      : @Composable () -> Unit = {},
-  alarm                     : @Composable () -> Unit = {},
-  findState                 : FindState
+fun provideMainScreen(
+    navController   : RootNavController,
+    dialogsViewModel: FeedDialogsViewModel,
+    feedScreenState : FeedScreenState,
+    mainScreenState : MainScreenState,
+    findState       : FindState,
+    find            : @Composable () -> Unit = {},
+    feedGrid        : @Composable () -> Unit = {},
+    profile         : @Composable () -> Unit = {},
+    addReview       : @Composable (onClose: () -> Unit) -> Unit = {},
+    chat            : @Composable () -> Unit = {},
+    alarm           : @Composable () -> Unit = {},
+    feed            : @Composable (onChat: () -> Unit) -> Unit = {}
 ) : @Composable () ->Unit = {
     val tag = "__provideMainScreen"
-    val dialogsViewModel        : FeedDialogsViewModel                  = hiltViewModel()
-    val feedScreenState         : FeedScreenState                       = rememberFeedScreenState()
     val coroutineScope          : CoroutineScope                        = rememberCoroutineScope()
-    val context                 : Context                               = LocalContext.current
-    val mainScreenState         : MainScreenState                       = rememberMainScreenState()
     val bottomSheetViewModel    : RestaurantListBottomSheetViewModel    = hiltViewModel()
     val bottomSheetUiState      : List<RestaurantItemUiState>           by bottomSheetViewModel.uiState.collectAsState()
 
@@ -74,27 +100,6 @@ fun provideMainScreen(rootNavController: RootNavController,
         }
     }
 
-    val feedScreen : @Composable (onChat: () -> Unit) -> Unit = { onChat ->
-        CompositionLocalProvider(
-            LocalFeedImageLoader                provides CustomFeedImageLoader,
-            LocalPullToRefreshLayoutType        provides customPullToRefresh,
-            LocalBottomDetectingLazyColumnType  provides CustomBottomDetectingLazyColumnType
-        ) {
-            FeedScreenWithProfile(
-                rootNavController   = rootNavController,
-                feedNavController   = rememberNavController(),
-                dialogsViewModel    = dialogsViewModel,
-                feedScreenState     = feedScreenState,
-                onChat              = onChat,
-                onMessage           = { ChatActivity.go(context, it) },
-                onPage              = {
-                    if (it.swipeable)
-                        mainScreenState.swipeDisableForMillis(coroutineScope = coroutineScope)
-                }
-            )
-        }
-    }
-
     val onBottomMenu: (Any) -> Unit = {
         if (mainScreenState.isFeedOnTop(it)) {
             coroutineScope.launch { feedScreenState.onTop() }
@@ -103,21 +108,21 @@ fun provideMainScreen(rootNavController: RootNavController,
 
     ProvideMainDialog(
         dialogsViewModel        = dialogsViewModel,
-        rootNavController       = rootNavController,
-        commentBottomSheet      = provideCommentBottomDialogSheet(rootNavController),
+        rootNavController       = navController,
+        commentBottomSheet      = provideCommentBottomDialogSheet(navController),
         restaurantBottomSheet   = restaurantBottomSheet
     ) {
         PinchZoomImageBox(imageLoader = imageLoader) {
             MainScreen(
                 feedGrid            = feedGrid,
                 state               = mainScreenState,
-                myProfileScreen     = myProfileScreen,
-                findingMapScreen    = findingMapScreen,
+                myProfileScreen     = profile,
+                findingMapScreen    = find,
                 addReview           = addReview,
                 chat                = chat,
                 alarm               = alarm,
                 swipeAble           = mainScreenState.isSwipeEnabled,
-                feedScreen          = feedScreen,
+                feedScreen          = feed,
                 onBottomMenu        = onBottomMenu
             )
         }
