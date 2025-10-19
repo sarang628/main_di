@@ -12,7 +12,7 @@ import com.sryang.library.pullrefresh.PullToRefreshLayout
 import com.sryang.library.pullrefresh.PullToRefreshLayoutState
 import com.sryang.library.pullrefresh.RefreshIndicatorState
 
-fun provideFeedScreen(reviewId: Int, rootNavController: RootNavController, state: PullToRefreshLayoutState): @Composable (Int) -> Unit =
+fun provideFeedMainScreen(reviewId: Int, rootNavController: RootNavController, state: PullToRefreshLayoutState): @Composable (Int) -> Unit =
     {
         val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
         ProvideMainDialog(dialogsViewModel = dialogsViewModel, rootNavController = rootNavController, commentBottomSheet = provideCommentBottomDialogSheet(rootNavController)) {

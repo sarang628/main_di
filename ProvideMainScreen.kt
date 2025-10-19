@@ -9,10 +9,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.LocalRestaurantItemImageLoader
 import com.sarang.torang.RestaurantItemUiState
 import com.sarang.torang.RestaurantListBottomSheetViewModel
@@ -20,15 +18,8 @@ import com.sarang.torang.RestaurantListBottomSheet_
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainScreen
 import com.sarang.torang.compose.MainScreenState
-import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
 import com.sarang.torang.compose.feed.state.FeedScreenState
-import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
-import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
 import com.sarang.torang.data.basefeed.FeedItemPageEvent
-import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
-import com.sarang.torang.di.chat_di.ChatActivity
-import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
-import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.di.finding_di.FindState
 import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
 import com.sarang.torang.di.pinchzoom.imageLoader
@@ -37,34 +28,6 @@ import com.sarang.torang.viewmodel.FeedDialogsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-
-fun provideFeedScreen(
-    navController           : RootNavController,
-    dialogsViewModel        : FeedDialogsViewModel,
-    feedScreenState         : FeedScreenState,
-    mainScreenState         : MainScreenState
-) : @Composable (onChat: () -> Unit) -> Unit = { onChat ->
-    val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
-    CompositionLocalProvider(
-        LocalFeedImageLoader                provides CustomFeedImageLoader,
-        LocalPullToRefreshLayoutType        provides customPullToRefresh,
-        LocalBottomDetectingLazyColumnType  provides CustomBottomDetectingLazyColumnType
-    ) {
-        FeedScreenWithProfile(
-            rootNavController   = navController,
-            feedNavController   = rememberNavController(),
-            dialogsViewModel    = dialogsViewModel,
-            feedScreenState     = feedScreenState,
-            onChat              = onChat,
-            onMessage           = { ChatActivity.go(context, it) },
-            onPage              = {
-                if (it.swipeable)
-                    mainScreenState.swipeDisableForMillis(coroutineScope = coroutineScope)
-            }
-        )
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
