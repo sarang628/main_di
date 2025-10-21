@@ -18,9 +18,7 @@ fun ProvideMyFeedScreen(
     rootNavController: RootNavController,
     navBackStackEntry: NavBackStackEntry,
     videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit,
-    commentBottomSheet: @Composable (
-        reviewId: Int?, onHidden: () -> Unit, content: @Composable (PaddingValues) -> Unit
-    ) -> Unit,
+    commentBottomSheet: @Composable (commentBottomDialogSheetData:CommentBottomDialogSheetData) -> Unit,
 ) {
     val reviewId: Int? = navBackStackEntry.arguments?.getString("reviewId")?.toInt()
     val state = rememberPullToRefreshState()

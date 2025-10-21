@@ -16,16 +16,22 @@ import com.sarang.torang.viewmodel.FeedDialogsViewModel
 fun ProvideMainDialog(
     dialogsViewModel        : FeedDialogsViewModel = hiltViewModel(),
     rootNavController       : RootNavController,
-    commentBottomSheet      : @Composable (reviewId: Int?, onHidden: () -> Unit, content: @Composable (PaddingValues) -> Unit) -> Unit,
+    commentBottomSheet      : @Composable (commentBottomDialogSheetData:CommentBottomDialogSheetData) -> Unit,
     restaurantBottomSheet   : @Composable ( @Composable () -> Unit ) -> Unit     = { },
-    contents                : @Composable (PaddingValues) -> Unit
+    content                 : @Composable (PaddingValues) -> Unit
 ) {
     val tag = "__ProvideMainDialog"
     val uiState by dialogsViewModel.uiState.collectAsState()
     MainDialogs(
         uiState = uiState,
         commentBottomSheet = { reviewId ->
-            commentBottomSheet.invoke(reviewId, { dialogsViewModel.closeComment() }, contents)
+            commentBottomSheet.invoke(
+                CommentBottomDialogSheetData(
+                    reviewId = reviewId,
+                    onHidden = { dialogsViewModel.closeComment() },
+                    content  = content
+                )
+            )
         },
         menuBottomSheet = provideFeedMenuBottomSheetDialog(),
         shareBottomSheet = provideShareBottomSheetDialog(),
