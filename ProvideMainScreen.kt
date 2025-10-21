@@ -110,9 +110,8 @@ fun provideMainScreen(rootNavController: RootNavController,
                     }
                 },
                 onBottomMenu = {
-                    if (mainScreenState.isFeedOnTop(it)) {
-                        coroutineScope.launch { feedScreenState.onTop() }
-                    }
+                    //TODO 현재 피드화면에서 한 번 더 눌렀을 때 onTop 호출하기
+                    //coroutineScope.launch { feedScreenState.onTop() }
                 }
             )
         }
