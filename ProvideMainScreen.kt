@@ -17,8 +17,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
-import com.example.pinchzoom.library.pinchzoom.rememberPinchZoomState
 import com.sarang.torang.LocalRestaurantItemImageLoader
+import com.sarang.torang.RestaurantItemUiState
 import com.sarang.torang.RestaurantListBottomSheetViewModel
 import com.sarang.torang.RestaurantListBottomSheet_
 import com.sarang.torang.RootNavController
@@ -38,8 +38,9 @@ import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.di.finding_di.FindState
 import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
 import com.sarang.torang.di.pinchzoom.PinchZoomState
+import com.sarang.torang.di.pinchzoom.d
 import com.sarang.torang.di.pinchzoom.imageLoader
-import com.sarang.torang.di.pinchzoom.pinchZoomImageLoader
+import com.sarang.torang.di.pinchzoom.isZooming
 import com.sarang.torang.di.restaurant_list_bottom_sheet_di.CustomRestaurantItemImageLoader
 import com.sarang.torang.viewmodel.FeedDialogsViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -48,24 +49,24 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 fun provideMainScreen(rootNavController: RootNavController,
-  findingMapScreen          : @Composable () -> Unit = {},
-  feedGrid                  : @Composable () -> Unit = {},
-  myProfileScreen           : @Composable () -> Unit = {},
-  addReview                 : @Composable (onClose: () -> Unit) -> Unit = {},
-  chat                      : @Composable () -> Unit = {},
-  alarm                     : @Composable () -> Unit = {},
-  findState                 : FindState
+                      find          : @Composable () -> Unit = {},
+                      feedGrid                  : @Composable () -> Unit = {},
+                      profile           : @Composable () -> Unit = {},
+                      addReview                 : @Composable (onClose: () -> Unit) -> Unit = {},
+                      chat                      : @Composable () -> Unit = {},
+                      alarm                     : @Composable () -> Unit = {},
+                      findState                 : FindState,
+                      showLog                   : Boolean                                   = false
 ) : @Composable () ->Unit = {
-    val tag = "__provideMainScreen"
-    val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
-    val feedScreenState: FeedScreenState = rememberFeedScreenState()
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    val context: Context = LocalContext.current
-    val mainScreenState: MainScreenState = rememberMainScreenState()
-    var zoomState by remember { mutableStateOf<PinchZoomState?>(null) }
-
-    val bottomSheetViewModel : RestaurantListBottomSheetViewModel = hiltViewModel()
-    val bottomSheetUiState by bottomSheetViewModel.uiState.collectAsState()
+    val tag                     : String                                = "__provideMainScreen"
+    val dialogsViewModel        : FeedDialogsViewModel                  = hiltViewModel()
+    val feedScreenState         : FeedScreenState                       = rememberFeedScreenState()
+    val coroutineScope          : CoroutineScope                        = rememberCoroutineScope()
+    val context                 : Context                               = LocalContext.current
+    val mainScreenState         : MainScreenState                       = rememberMainScreenState()
+    var zoomState               : PinchZoomState?                       by remember { mutableStateOf<PinchZoomState?>(null) } // Data shared between a zoomed image and the rest of the list when zooming.
+    val bottomSheetViewModel    : RestaurantListBottomSheetViewModel    = hiltViewModel()
+    val bottomSheetUiState      : List<RestaurantItemUiState>           by bottomSheetViewModel.uiState.collectAsState()
 
     val restaurantBottomSheet : @Composable ( @Composable () -> Unit ) -> Unit = {
         CompositionLocalProvider(LocalRestaurantItemImageLoader provides CustomRestaurantItemImageLoader) {
@@ -80,47 +81,71 @@ fun provideMainScreen(rootNavController: RootNavController,
         }
     }
 
+    val feed : @Composable (onChat: () -> Unit) -> Unit = { onChat ->
+        CompositionLocalProvider(
+            LocalPullToRefreshLayoutType        provides customPullToRefresh,
+            LocalBottomDetectingLazyColumnType  provides CustomBottomDetectingLazyColumnType,
+            LocalFeedImageLoader                provides CustomFeedImageLoader(
+                zoomState   = zoomState,
+                showLog     = showLog,
+                onZoomState = {
+                                showLog.d(tag, "onZoomState $it")
+                                zoomState = it
+                              },
+            )
+        ) {
+            FeedScreenWithProfile(
+                rootNavController   = rootNavController,
+                feedNavController   = rememberNavController(),
+                dialogsViewModel    = dialogsViewModel,
+                feedScreenState     = feedScreenState,
+                onChat              = onChat,
+                onMessage           = { ChatActivity.go(context, it) },
+                scrollEnabled       = zoomState?.isZooming != true,
+                swipeAble           = zoomState?.isZooming != true,
+                onPage              = {
+                    if (it.swipeable)
+                        mainScreenState.swipeDisableForMillis(coroutineScope = coroutineScope)
+                },
+            )
+        }
+    }
+
+    val pinchZoomImageBox : @Composable (@Composable ()->Unit)->Unit = {
+        PinchZoomImageBox(
+            imageLoader     = imageLoader,
+            activeZoomState = zoomState,
+            showLog         = showLog,
+            content         = it
+        )
+    }
+
+    val mainScreen = @Composable {
+        MainScreen(
+            state           = mainScreenState,
+            feed            = feed,
+            feedGrid        = feedGrid,
+            addReview       = addReview,
+            find            = find,
+            profile         = profile,
+            chat            = chat,
+            alarm           = alarm,
+            swipeAble       = mainScreenState.isSwipeEnabled,
+            onBottomMenu    = {
+                //TODO 현재 피드화면에서 한 번 더 눌렀을 때 onTop 호출하기
+                //coroutineScope.launch { feedScreenState.onTop() }
+            }
+        )
+    }
+
     ProvideMainDialog(
         dialogsViewModel = dialogsViewModel,
         rootNavController = rootNavController,
         commentBottomSheet = provideCommentBottomDialogSheet(rootNavController),
         restaurantBottomSheet = restaurantBottomSheet
     ) {
-        PinchZoomImageBox(imageLoader = imageLoader, activeZoomState = zoomState, showLog = true) {
-            MainScreen(
-                feedGrid = feedGrid,
-                state = mainScreenState,
-                profile = myProfileScreen,
-                find = findingMapScreen,
-                addReview = addReview,
-                chat = chat,
-                alarm = alarm,
-                swipeAble = mainScreenState.isSwipeEnabled,
-                feed = { onChat ->
-                    CompositionLocalProvider(
-                        LocalFeedImageLoader provides CustomFeedImageLoader(zoomState = zoomState, onZoomState = {zoomState = it}, showLog = true ),
-                        LocalPullToRefreshLayoutType provides customPullToRefresh,
-                        LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType
-                    ) {
-                        FeedScreenWithProfile(
-                            rootNavController = rootNavController,
-                            feedNavController = rememberNavController(),
-                            dialogsViewModel = dialogsViewModel,
-                            feedScreenState = feedScreenState,
-                            onChat = onChat,
-                            onMessage = { ChatActivity.go(context, it) },
-                            onPage = {
-                                if (it.swipeable)
-                                    mainScreenState.swipeDisableForMillis(coroutineScope = coroutineScope)
-                            }
-                        )
-                    }
-                },
-                onBottomMenu = {
-                    //TODO 현재 피드화면에서 한 번 더 눌렀을 때 onTop 호출하기
-                    //coroutineScope.launch { feedScreenState.onTop() }
-                }
-            )
+        pinchZoomImageBox{
+            mainScreen()
         }
     }
 }

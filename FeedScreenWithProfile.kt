@@ -66,7 +66,7 @@ fun FeedScreenWithProfile(
                 },
                 LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
                 LocalPullToRefreshLayoutType provides customPullToRefresh,
-                LocalFeedImageLoader provides CustomFeedImageLoader(rememberPinchZoomState()),
+                //LocalFeedImageLoader provides CustomFeedImageLoader(rememberPinchZoomState()), //부모에 설정
                 LocalExpandableTextType provides CustomExpandableTextType
             ){
                 FeedScreenInMain(
