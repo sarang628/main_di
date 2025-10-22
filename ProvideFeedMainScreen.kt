@@ -33,7 +33,8 @@ fun provideFeedMainScreen(
     navController           : RootNavController,
     dialogsViewModel        : FeedDialogsViewModel,
     feedScreenState         : FeedScreenState,
-    mainScreenState         : MainScreenState
+    mainScreenState         : MainScreenState,
+    showLog                 : Boolean = false
 ) : @Composable (onChat: () -> Unit) -> Unit = { onChat ->
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -57,7 +58,7 @@ fun provideFeedMainScreen(
                 },
                 LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
                 LocalPullToRefreshLayoutType provides customPullToRefresh,
-                LocalFeedImageLoader provides CustomFeedImageLoader(rememberPinchZoomState()),
+                LocalFeedImageLoader provides CustomFeedImageLoader(zoomState = rememberPinchZoomState(), showLog = showLog),
                 LocalExpandableTextType provides CustomExpandableTextType
             ){
                 FeedScreenInMain(
