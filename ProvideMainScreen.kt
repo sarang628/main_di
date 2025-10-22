@@ -8,12 +8,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+import com.example.pinchzoom.library.pinchzoom.rememberPinchZoomState
 import com.sarang.torang.LocalRestaurantItemImageLoader
 import com.sarang.torang.RestaurantListBottomSheetViewModel
 import com.sarang.torang.RestaurantListBottomSheet_
@@ -33,7 +37,9 @@ import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.di.finding_di.FindState
 import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
+import com.sarang.torang.di.pinchzoom.PinchZoomState
 import com.sarang.torang.di.pinchzoom.imageLoader
+import com.sarang.torang.di.pinchzoom.pinchZoomImageLoader
 import com.sarang.torang.di.restaurant_list_bottom_sheet_di.CustomRestaurantItemImageLoader
 import com.sarang.torang.viewmodel.FeedDialogsViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -56,6 +62,7 @@ fun provideMainScreen(rootNavController: RootNavController,
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val context: Context = LocalContext.current
     val mainScreenState: MainScreenState = rememberMainScreenState()
+    var zoomState by remember { mutableStateOf<PinchZoomState?>(null) }
 
     val bottomSheetViewModel : RestaurantListBottomSheetViewModel = hiltViewModel()
     val bottomSheetUiState by bottomSheetViewModel.uiState.collectAsState()
@@ -79,7 +86,7 @@ fun provideMainScreen(rootNavController: RootNavController,
         commentBottomSheet = provideCommentBottomDialogSheet(rootNavController),
         restaurantBottomSheet = restaurantBottomSheet
     ) {
-        PinchZoomImageBox(imageLoader = imageLoader) {
+        PinchZoomImageBox(imageLoader = imageLoader, activeZoomState = zoomState, showLog = true) {
             MainScreen(
                 feedGrid = feedGrid,
                 state = mainScreenState,
@@ -91,7 +98,7 @@ fun provideMainScreen(rootNavController: RootNavController,
                 swipeAble = mainScreenState.isSwipeEnabled,
                 feed = { onChat ->
                     CompositionLocalProvider(
-                        LocalFeedImageLoader provides CustomFeedImageLoader,
+                        LocalFeedImageLoader provides CustomFeedImageLoader(zoomState = zoomState, onZoomState = {zoomState = it}, showLog = true ),
                         LocalPullToRefreshLayoutType provides customPullToRefresh,
                         LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType
                     ) {
