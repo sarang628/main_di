@@ -89,7 +89,6 @@ fun provideMainScreen(rootNavController: RootNavController,
                 zoomState   = zoomState,
                 showLog     = showLog,
                 onZoomState = {
-                                showLog.d(tag, "onZoomState $it")
                                 zoomState = it
                               },
             )
