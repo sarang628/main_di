@@ -36,6 +36,7 @@ import com.sarang.torang.di.chat_di.ChatActivity
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.di.finding_di.FindState
+import com.sarang.torang.di.finding_di.rememberFindState
 import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
 import com.sarang.torang.di.pinchzoom.PinchZoomState
 import com.sarang.torang.di.pinchzoom.d
@@ -48,24 +49,25 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-fun provideMainScreen(rootNavController: RootNavController,
-                      find          : @Composable () -> Unit = {},
-                      feedGrid                  : @Composable () -> Unit = {},
-                      profile           : @Composable () -> Unit = {},
-                      addReview                 : @Composable (onClose: () -> Unit) -> Unit = {},
-                      chat                      : @Composable () -> Unit = {},
-                      alarm                     : @Composable () -> Unit = {},
-                      findState                 : FindState,
-                      showLog                   : Boolean                                   = false
+@Composable
+fun provideMainScreen(rootNavController    : RootNavController,
+                      find                 : @Composable () -> Unit                     = {},
+                      feedGrid             : @Composable () -> Unit                     = {},
+                      profile              : @Composable () -> Unit                     = {},
+                      addReview            : @Composable (onClose: () -> Unit) -> Unit  = {},
+                      chat                 : @Composable () -> Unit                     = {},
+                      alarm                : @Composable () -> Unit                     = {},
+                      findState            : FindState                                  = rememberFindState(),
+                      showLog              : Boolean                                    = false,
+                      dialogsViewModel     : FeedDialogsViewModel                       = hiltViewModel(),
+                      feedScreenState      : FeedScreenState                            = rememberFeedScreenState(),
+                      mainScreenState      : MainScreenState                            = rememberMainScreenState(),
+                      bottomSheetViewModel : RestaurantListBottomSheetViewModel         = hiltViewModel()
 ) : @Composable () ->Unit = {
     val tag                     : String                                = "__provideMainScreen"
-    val dialogsViewModel        : FeedDialogsViewModel                  = hiltViewModel()
-    val feedScreenState         : FeedScreenState                       = rememberFeedScreenState()
     val coroutineScope          : CoroutineScope                        = rememberCoroutineScope()
     val context                 : Context                               = LocalContext.current
-    val mainScreenState         : MainScreenState                       = rememberMainScreenState()
     var zoomState               : PinchZoomState?                       by remember { mutableStateOf<PinchZoomState?>(null) } // Data shared between a zoomed image and the rest of the list when zooming.
-    val bottomSheetViewModel    : RestaurantListBottomSheetViewModel    = hiltViewModel()
     val bottomSheetUiState      : List<RestaurantItemUiState>           by bottomSheetViewModel.uiState.collectAsState()
 
     val restaurantBottomSheet : @Composable ( @Composable () -> Unit ) -> Unit = {
