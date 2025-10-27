@@ -39,7 +39,6 @@ import com.sarang.torang.di.finding_di.FindState
 import com.sarang.torang.di.finding_di.rememberFindState
 import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
 import com.sarang.torang.di.pinchzoom.PinchZoomState
-import com.sarang.torang.di.pinchzoom.d
 import com.sarang.torang.di.pinchzoom.imageLoader
 import com.sarang.torang.di.pinchzoom.isZooming
 import com.sarang.torang.di.restaurant_list_bottom_sheet_di.CustomRestaurantItemImageLoader
@@ -53,7 +52,7 @@ import kotlinx.coroutines.launch
 fun provideMainScreen(rootNavController    : RootNavController,
                       find                 : @Composable () -> Unit                     = {},
                       feedGrid             : @Composable () -> Unit                     = {},
-                      profile              : @Composable () -> Unit                     = {},
+                      myProfile            : @Composable () -> Unit                     = {},
                       addReview            : @Composable (onClose: () -> Unit) -> Unit  = {},
                       chat                 : @Composable () -> Unit                     = {},
                       alarm                : @Composable () -> Unit                     = {},
@@ -128,7 +127,7 @@ fun provideMainScreen(rootNavController    : RootNavController,
             feedGrid        = feedGrid,
             addReview       = addReview,
             find            = find,
-            profile         = profile,
+            profile         = myProfile,
             chat            = chat,
             alarm           = alarm,
             swipeAble       = mainScreenState.isSwipeEnabled,
