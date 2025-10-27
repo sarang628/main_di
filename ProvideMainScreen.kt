@@ -141,7 +141,6 @@ fun provideMainScreen(rootNavController    : RootNavController,
     ProvideMainDialog(
         dialogsViewModel = dialogsViewModel,
         rootNavController = rootNavController,
-        commentBottomSheet = provideCommentBottomDialogSheet(rootNavController),
         restaurantBottomSheet = restaurantBottomSheet
     ) {
         pinchZoomImageBox{
