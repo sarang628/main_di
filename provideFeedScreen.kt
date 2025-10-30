@@ -15,7 +15,10 @@ import com.sryang.library.pullrefresh.RefreshIndicatorState
 fun provideFeedMainScreen(reviewId: Int, rootNavController: RootNavController, state: PullToRefreshLayoutState): @Composable (Int) -> Unit =
     {
         val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
-        ProvideMainDialog(dialogsViewModel = dialogsViewModel, rootNavController = rootNavController, commentBottomSheet = provideCommentBottomDialogSheet(rootNavController)) {
+        ProvideMainDialog(dialogsViewModel = dialogsViewModel,
+            rootNavController = rootNavController,
+            //commentBottomSheet = provideCommentBottomDialogSheet(rootNavController)
+        ) {
             FeedScreenByReviewId(reviewId = reviewId,
                 //shimmerBrush = { shimmerBrush(it) },
                 //feed = provideFeed(dialogsViewModel = dialogsViewModel, navController = rootNavController.navController, rootNavController = rootNavController, videoPlayer = provideVideoPlayer()),

@@ -14,7 +14,7 @@ fun provideFeedScreenByRestaurantId(rootNavController: RootNavController): @Comp
         ProvideMainDialog(
             rootNavController = rootNavController,
             dialogsViewModel = dialogsViewModel,
-            commentBottomSheet = provideCommentBottomDialogSheet(rootNavController)
+            //commentBottomSheet = provideCommentBottomDialogSheet(rootNavController)
         ) {
             FeedScreenByRestaurantId(
                 restaurantId = 1,

@@ -31,7 +31,7 @@ fun ProvideMyFeedScreen(
     ProvideMainDialog(
         dialogsViewModel = dialogsViewModel,
         rootNavController = rootNavController,
-        commentBottomSheet = commentBottomSheet
+        //commentBottomSheet = commentBottomSheet
     ) {
         FeedScreenByReviewId(
             reviewId = reviewId,

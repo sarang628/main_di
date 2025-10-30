@@ -33,7 +33,7 @@ fun ProvideMainDialog(
             )
         },
         menuBottomSheet = provideFeedMenuBottomSheetDialog(),
-        shareBottomSheet = provideShareBottomSheetDialog(),
+        shareBottomSheet = provideShareBottomSheetDialog(uiState.showShare),
         reportBottomSheet = provideReportModal(),
         restaurantBottomSheet = restaurantBottomSheet,
         onEdit = rootNavController.modReview(),
