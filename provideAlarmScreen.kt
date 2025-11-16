@@ -1,10 +1,10 @@
 package com.sarang.torang.di.main_di
 
-import androidx.compose.runtime.Composable
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.AlarmScreen
+import com.sarang.torang.compose.type.AlarmScreenType
 
-fun provideAlarm(rootNavController: RootNavController): @Composable () -> Unit = {
+fun provideAlarmScreen(rootNavController: RootNavController): AlarmScreenType = {
     AlarmScreen(
         onEmailLogin = { rootNavController.emailLogin() },
         onContents = { rootNavController.review(it) },

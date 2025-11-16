@@ -1,34 +1,58 @@
 package com.sarang.torang.di.main_di
 
-import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
-import com.sarang.torang.compose.feed.FeedScreenByReviewId
-import com.sarang.torang.di.feed_di.provideBottomDetectingLazyColumn
-import com.sarang.torang.di.feed_di.shimmerBrush
-import com.sarang.torang.di.video.provideVideoPlayer
+import com.sarang.torang.compose.MainScreenState
+import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
+import com.sarang.torang.compose.feed.state.FeedScreenState
+import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
+import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
+import com.sarang.torang.compose.type.FeedScreenType
+import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
+import com.sarang.torang.di.chat_di.ChatActivity
+import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
+import com.sarang.torang.di.feed_di.customPullToRefresh
+import com.sarang.torang.di.pinchzoom.PinchZoomState
+import com.sarang.torang.di.pinchzoom.isZooming
 import com.sarang.torang.viewmodel.FeedDialogsViewModel
-import com.sryang.library.pullrefresh.PullToRefreshLayout
 import com.sryang.library.pullrefresh.PullToRefreshLayoutState
-import com.sryang.library.pullrefresh.RefreshIndicatorState
 
-fun provideFeedMainScreen(reviewId: Int, rootNavController: RootNavController, state: PullToRefreshLayoutState): @Composable (Int) -> Unit =
-    {
-        val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
-        ProvideMainDialog(dialogsViewModel = dialogsViewModel,
-            rootNavController = rootNavController,
-            //commentBottomSheet = provideCommentBottomDialogSheet(rootNavController)
-        ) {
-            FeedScreenByReviewId(reviewId = reviewId,
-                //shimmerBrush = { shimmerBrush(it) },
-                //feed = provideFeed(dialogsViewModel = dialogsViewModel, navController = rootNavController.navController, rootNavController = rootNavController, videoPlayer = provideVideoPlayer()),
-                /*pullToRefreshLayout = { isRefreshing, onRefresh, contents ->
-                    if (isRefreshing) { state.updateState(RefreshIndicatorState.Refreshing) }
-                    else { state.updateState(RefreshIndicatorState.Default) }
-                    PullToRefreshLayout(pullRefreshLayoutState = state, refreshThreshold = 80, onRefresh = onRefresh) {
-                        contents.invoke() }
-                },*/
-                /*bottomDetectingLazyColumn = provideBottomDetectingLazyColumn()*/
-            )
-        }
+fun provideLocalFeedScreenType(
+    showLog : Boolean,
+    zoomState : PinchZoomState?,
+    onZoomState : (PinchZoomState?)->Unit   = {},
+    dialogsViewModel : FeedDialogsViewModel,
+    feedScreenState : FeedScreenState,
+    rootNavController : RootNavController,
+    mainScreenState : MainScreenState
+): FeedScreenType = { onChat ->
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    CompositionLocalProvider(
+        LocalPullToRefreshLayoutType        provides customPullToRefresh,
+        LocalBottomDetectingLazyColumnType  provides CustomBottomDetectingLazyColumnType,
+        LocalFeedImageLoader                provides CustomFeedImageLoader(
+            zoomState   = zoomState,
+            showLog     = showLog,
+            onZoomState = onZoomState,
+        )
+    ) {
+        FeedScreenWithProfile(
+            rootNavController   = rootNavController,
+            feedNavController   = rememberNavController(),
+            dialogsViewModel    = dialogsViewModel,
+            feedScreenState     = feedScreenState,
+            onChat              = onChat,
+            onMessage           = { ChatActivity.go(context, it) },
+            scrollEnabled       = zoomState?.isZooming != true,
+            swipeAble           = zoomState?.isZooming != true,
+            onPage              = {
+                if (it.swipeable)
+                    mainScreenState.swipeDisableForMillis(coroutineScope = coroutineScope)
+            },
+        )
     }
+}

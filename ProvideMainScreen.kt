@@ -18,7 +18,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.LocalRestaurantItemImageLoader
 import com.sarang.torang.RestaurantItemUiState
 import com.sarang.torang.RestaurantListBottomSheetViewModel
@@ -26,23 +25,19 @@ import com.sarang.torang.RestaurantListBottomSheet_
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainScreen
 import com.sarang.torang.compose.MainScreenState
-import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
-import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
-import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
 import com.sarang.torang.compose.rememberMainScreenState
+import com.sarang.torang.compose.type.LocalAlarmScreenType
+import com.sarang.torang.compose.type.LocalFeedGridScreenType
+import com.sarang.torang.compose.type.LocalFeedScreenType
+import com.sarang.torang.compose.type.LocalFindScreenType
 import com.sarang.torang.data.basefeed.FeedItemPageEvent
-import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
-import com.sarang.torang.di.chat_di.ChatActivity
-import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
-import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.di.finding_di.FindState
 import com.sarang.torang.di.finding_di.rememberFindState
 import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
 import com.sarang.torang.di.pinchzoom.PinchZoomState
 import com.sarang.torang.di.pinchzoom.imageLoader
-import com.sarang.torang.di.pinchzoom.isZooming
 import com.sarang.torang.di.restaurant_list_bottom_sheet_di.CustomRestaurantItemImageLoader
 import com.sarang.torang.viewmodel.FeedDialogsViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -51,20 +46,15 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
-fun provideMainScreen(rootNavController    : RootNavController,
-                      find                 : @Composable () -> Unit                     = {},
-                      feedGrid             : @Composable () -> Unit                     = {},
-                      myProfile            : @Composable () -> Unit                     = {},
-                      addReview            : @Composable (onClose: () -> Unit) -> Unit  = {},
-                      chat                 : @Composable () -> Unit                     = {},
-                      alarm                : @Composable () -> Unit                     = {},
-                      findState            : FindState                                  = rememberFindState(),
-                      showLog              : Boolean                                    = false,
-                      dialogsViewModel     : FeedDialogsViewModel                       = hiltViewModel(),
-                      feedScreenState      : FeedScreenState                            = rememberFeedScreenState(),
-                      mainScreenState      : MainScreenState                            = rememberMainScreenState(),
-                      bottomSheetViewModel : RestaurantListBottomSheetViewModel         = hiltViewModel(),
-                      bottomNavBarHeight    : Dp                                        = 80.dp,
+fun provideMainScreen(
+    rootNavController    : RootNavController,
+    findState            : FindState                                  = rememberFindState(),
+    showLog              : Boolean                                    = false,
+    dialogsViewModel     : FeedDialogsViewModel                       = hiltViewModel(),
+    feedScreenState      : FeedScreenState                            = rememberFeedScreenState(),
+    mainScreenState      : MainScreenState                            = rememberMainScreenState(),
+    bottomSheetViewModel : RestaurantListBottomSheetViewModel         = hiltViewModel(),
+    bottomNavBarHeight    : Dp                                        = 80.dp,
 ) : @Composable () ->Unit = {
     val tag                     : String                                = "__provideMainScreen"
     val coroutineScope          : CoroutineScope                        = rememberCoroutineScope()
@@ -85,35 +75,6 @@ fun provideMainScreen(rootNavController    : RootNavController,
         }
     }
 
-    val feed : @Composable (onChat: () -> Unit) -> Unit = { onChat ->
-        CompositionLocalProvider(
-            LocalPullToRefreshLayoutType        provides customPullToRefresh,
-            LocalBottomDetectingLazyColumnType  provides CustomBottomDetectingLazyColumnType,
-            LocalFeedImageLoader                provides CustomFeedImageLoader(
-                zoomState   = zoomState,
-                showLog     = showLog,
-                onZoomState = {
-                                zoomState = it
-                              },
-            )
-        ) {
-            FeedScreenWithProfile(
-                rootNavController   = rootNavController,
-                feedNavController   = rememberNavController(),
-                dialogsViewModel    = dialogsViewModel,
-                feedScreenState     = feedScreenState,
-                onChat              = onChat,
-                onMessage           = { ChatActivity.go(context, it) },
-                scrollEnabled       = zoomState?.isZooming != true,
-                swipeAble           = zoomState?.isZooming != true,
-                onPage              = {
-                    if (it.swipeable)
-                        mainScreenState.swipeDisableForMillis(coroutineScope = coroutineScope)
-                },
-            )
-        }
-    }
-
     val pinchZoomImageBox : @Composable (@Composable ()->Unit)->Unit = {
         PinchZoomImageBox(
             imageLoader     = imageLoader,
@@ -124,22 +85,30 @@ fun provideMainScreen(rootNavController    : RootNavController,
     }
 
     val mainScreen = @Composable {
-        MainScreen(
-            state           = mainScreenState,
-            feed            = feed,
-            feedGrid        = feedGrid,
-            addReview       = addReview,
-            find            = find,
-            profile         = myProfile,
-            chat            = chat,
-            alarm           = alarm,
-            swipeAble       = mainScreenState.isSwipeEnabled,
-            onAlreadyFeed    = {
-                Log.d(tag, "onAlreadyFeed")
-                coroutineScope.launch { feedScreenState.onTop() }
-            },
-            bottomNavBarHeight = bottomNavBarHeight
-        )
+        CompositionLocalProvider(
+            LocalFindScreenType provides provideFindScreenType(findState),
+            LocalAlarmScreenType provides provideAlarmScreen(rootNavController),
+            LocalFeedGridScreenType provides provideFeedGridScreenType,
+            LocalFeedScreenType provides provideLocalFeedScreenType(
+                zoomState   = zoomState,
+                showLog     = showLog,
+                onZoomState = { zoomState = it },
+                rootNavController   = rootNavController,
+                dialogsViewModel    = dialogsViewModel,
+                feedScreenState = feedScreenState,
+                mainScreenState = mainScreenState
+            )
+        ) {
+            MainScreen(
+                state               = mainScreenState,
+                swipeAble           = mainScreenState.isSwipeEnabled,
+                bottomNavBarHeight  = bottomNavBarHeight,
+                onAlreadyFeed       = {
+                    Log.d(tag, "onAlreadyFeed")
+                    coroutineScope.launch { feedScreenState.onTop() }
+                }
+            )
+        }
     }
 
     ProvideMainDialog(
