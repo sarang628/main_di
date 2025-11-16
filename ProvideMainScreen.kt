@@ -2,6 +2,7 @@ package com.sarang.torang.di.main_di
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -14,6 +15,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
@@ -61,7 +63,8 @@ fun provideMainScreen(rootNavController    : RootNavController,
                       dialogsViewModel     : FeedDialogsViewModel                       = hiltViewModel(),
                       feedScreenState      : FeedScreenState                            = rememberFeedScreenState(),
                       mainScreenState      : MainScreenState                            = rememberMainScreenState(),
-                      bottomSheetViewModel : RestaurantListBottomSheetViewModel         = hiltViewModel()
+                      bottomSheetViewModel : RestaurantListBottomSheetViewModel         = hiltViewModel(),
+                      bottomNavBarHeight    : Dp                                        = 80.dp,
 ) : @Composable () ->Unit = {
     val tag                     : String                                = "__provideMainScreen"
     val coroutineScope          : CoroutineScope                        = rememberCoroutineScope()
@@ -131,10 +134,11 @@ fun provideMainScreen(rootNavController    : RootNavController,
             chat            = chat,
             alarm           = alarm,
             swipeAble       = mainScreenState.isSwipeEnabled,
-            onBottomMenu    = {
-                //TODO 현재 피드화면에서 한 번 더 눌렀을 때 onTop 호출하기
-                //coroutineScope.launch { feedScreenState.onTop() }
-            }
+            onAlreadyFeed    = {
+                Log.d(tag, "onAlreadyFeed")
+                coroutineScope.launch { feedScreenState.onTop() }
+            },
+            bottomNavBarHeight = bottomNavBarHeight
         )
     }
 
