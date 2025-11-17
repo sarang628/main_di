@@ -29,15 +29,20 @@ import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.rememberMainScreenState
 import com.sarang.torang.compose.type.LocalAlarmScreenType
+import com.sarang.torang.compose.type.LocalChatScreenType
 import com.sarang.torang.compose.type.LocalFeedGridScreenType
 import com.sarang.torang.compose.type.LocalFeedScreenType
 import com.sarang.torang.compose.type.LocalFindScreenType
+import com.sarang.torang.compose.type.LocalMyProfileScreenType
 import com.sarang.torang.data.basefeed.FeedItemPageEvent
+import com.sarang.torang.di.chat_di.provideChatScreen
 import com.sarang.torang.di.finding_di.FindState
 import com.sarang.torang.di.finding_di.rememberFindState
 import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
 import com.sarang.torang.di.pinchzoom.PinchZoomState
 import com.sarang.torang.di.pinchzoom.imageLoader
+import com.sarang.torang.di.profile_di.provideMyProfileScreenNavHost
+import com.sarang.torang.di.profile_di.provideProfileScreen
 import com.sarang.torang.di.restaurant_list_bottom_sheet_di.CustomRestaurantItemImageLoader
 import com.sarang.torang.viewmodel.FeedDialogsViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -89,6 +94,8 @@ fun provideMainScreen(
             LocalFindScreenType provides provideFindScreenType(findState),
             LocalAlarmScreenType provides provideAlarmScreen(rootNavController),
             LocalFeedGridScreenType provides provideFeedGridScreenType,
+            LocalChatScreenType provides provideChatScreen(),
+            LocalMyProfileScreenType provides provideMyProfileScreenNavHost(rootNavController),
             LocalFeedScreenType provides provideLocalFeedScreenType(
                 zoomState   = zoomState,
                 showLog     = showLog,
