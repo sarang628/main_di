@@ -28,12 +28,16 @@ import com.sarang.torang.compose.MainScreenState
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.rememberMainScreenState
+import com.sarang.torang.compose.type.AlarmScreenType
+import com.sarang.torang.compose.type.ChatScreenType
+import com.sarang.torang.compose.type.FindScreenType
 import com.sarang.torang.compose.type.LocalAlarmScreenType
 import com.sarang.torang.compose.type.LocalChatScreenType
 import com.sarang.torang.compose.type.LocalFeedGridScreenType
 import com.sarang.torang.compose.type.LocalFeedScreenType
 import com.sarang.torang.compose.type.LocalFindScreenType
 import com.sarang.torang.compose.type.LocalMyProfileScreenType
+import com.sarang.torang.compose.type.MyProfileScreenType
 import com.sarang.torang.data.basefeed.FeedItemPageEvent
 import com.sarang.torang.di.chat_di.provideChatScreen
 import com.sarang.torang.di.finding_di.FindState
@@ -59,7 +63,11 @@ fun provideMainScreen(
     feedScreenState      : FeedScreenState                            = rememberFeedScreenState(),
     mainScreenState      : MainScreenState                            = rememberMainScreenState(),
     bottomSheetViewModel : RestaurantListBottomSheetViewModel         = hiltViewModel(),
-    bottomNavBarHeight    : Dp                                        = 80.dp,
+    findScreen           : FindScreenType                             = {},
+    alarmScreen          : AlarmScreenType                            = {},
+    chatScreen           : ChatScreenType                             = {},
+    myProfileScreen      : MyProfileScreenType                        = {},
+    bottomNavBarHeight   : Dp                                         = 80.dp,
 ) : @Composable () ->Unit = {
     val tag                     : String                                = "__provideMainScreen"
     val coroutineScope          : CoroutineScope                        = rememberCoroutineScope()
@@ -91,11 +99,11 @@ fun provideMainScreen(
 
     val mainScreen = @Composable {
         CompositionLocalProvider(
-            LocalFindScreenType provides provideFindScreenType(findState),
-            LocalAlarmScreenType provides provideAlarmScreen(rootNavController),
+            LocalFindScreenType provides findScreen,
+            LocalAlarmScreenType provides alarmScreen,
             LocalFeedGridScreenType provides provideFeedGridScreenType,
-            LocalChatScreenType provides provideChatScreen(),
-            LocalMyProfileScreenType provides provideMyProfileScreenNavHost(rootNavController),
+            LocalChatScreenType provides chatScreen,
+            LocalMyProfileScreenType provides myProfileScreen,
             LocalFeedScreenType provides provideLocalFeedScreenType(
                 zoomState   = zoomState,
                 showLog     = showLog,
