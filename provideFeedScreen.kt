@@ -53,6 +53,9 @@ fun provideLocalFeedScreenType(
                 if (it.swipeable)
                     mainScreenState.swipeDisableForMillis(coroutineScope = coroutineScope)
             },
+            onAlarm = {
+                rootNavController.goAlarm()
+            }
         )
     }
 }
