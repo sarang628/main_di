@@ -28,9 +28,11 @@ import com.sarang.torang.compose.MainScreenState
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.rememberMainScreenState
+import com.sarang.torang.compose.type.AddReviewScreenType
 import com.sarang.torang.compose.type.AlarmScreenType
 import com.sarang.torang.compose.type.ChatScreenType
 import com.sarang.torang.compose.type.FindScreenType
+import com.sarang.torang.compose.type.LocalAddReviewScreenType
 import com.sarang.torang.compose.type.LocalAlarmScreenType
 import com.sarang.torang.compose.type.LocalChatScreenType
 import com.sarang.torang.compose.type.LocalFeedGridScreenType
@@ -39,14 +41,11 @@ import com.sarang.torang.compose.type.LocalFindScreenType
 import com.sarang.torang.compose.type.LocalMyProfileScreenType
 import com.sarang.torang.compose.type.MyProfileScreenType
 import com.sarang.torang.data.basefeed.FeedItemPageEvent
-import com.sarang.torang.di.chat_di.provideChatScreen
 import com.sarang.torang.di.finding_di.FindState
 import com.sarang.torang.di.finding_di.rememberFindState
 import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
 import com.sarang.torang.di.pinchzoom.PinchZoomState
 import com.sarang.torang.di.pinchzoom.imageLoader
-import com.sarang.torang.di.profile_di.provideMyProfileScreenNavHost
-import com.sarang.torang.di.profile_di.provideProfileScreen
 import com.sarang.torang.di.restaurant_list_bottom_sheet_di.CustomRestaurantItemImageLoader
 import com.sarang.torang.viewmodel.FeedDialogsViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -67,6 +66,7 @@ fun provideMainScreen(
     alarmScreen          : AlarmScreenType                            = {},
     chatScreen           : ChatScreenType                             = {},
     myProfileScreen      : MyProfileScreenType                        = {},
+    addReviewScreenType  : AddReviewScreenType                        = {},
     bottomNavBarHeight   : Dp                                         = 80.dp,
 ) : @Composable () ->Unit = {
     val tag                     : String                                = "__provideMainScreen"
@@ -104,6 +104,7 @@ fun provideMainScreen(
             LocalFeedGridScreenType provides provideFeedGridScreenType,
             LocalChatScreenType provides chatScreen,
             LocalMyProfileScreenType provides myProfileScreen,
+            LocalAddReviewScreenType provides addReviewScreenType,
             LocalFeedScreenType provides provideLocalFeedScreenType(
                 zoomState   = zoomState,
                 showLog     = showLog,
