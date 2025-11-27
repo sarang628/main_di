@@ -10,26 +10,22 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.pinchzoom.library.pinchzoom.rememberPinchZoomState
+import com.sarang.torang.FeedDialogsViewModel
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedItem
 import com.sarang.torang.compose.feed.FeedScreenInMain
 import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
-import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.feed.type.FeedTypeData
 import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
 import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
-import com.sarang.torang.compose.feed.type.feedType
 import com.sarang.torang.data.basefeed.FeedItemPageEvent
 import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
-import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.di.feed_di.toReview
-import com.sarang.torang.viewmodel.FeedDialogsViewModel
 
 /**
  * 피드 화면과 프로필 화면

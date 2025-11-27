@@ -4,6 +4,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
+import com.sarang.torang.FeedDialogsViewModel
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainScreenState
 import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
@@ -17,8 +18,6 @@ import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.di.pinchzoom.PinchZoomState
 import com.sarang.torang.di.pinchzoom.isZooming
-import com.sarang.torang.viewmodel.FeedDialogsViewModel
-import com.sryang.library.pullrefresh.PullToRefreshLayoutState
 
 fun provideLocalFeedScreenType(
     showLog : Boolean,

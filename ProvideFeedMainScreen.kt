@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.pinchzoom.library.pinchzoom.rememberPinchZoomState
+import com.sarang.torang.FeedDialogsViewModel
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainScreenState
 import com.sarang.torang.compose.feed.FeedItem
@@ -27,7 +28,6 @@ import com.sarang.torang.di.chat_di.ChatActivity
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.di.feed_di.toReview
-import com.sarang.torang.viewmodel.FeedDialogsViewModel
 
 fun provideFeedMainScreen(
     navController           : RootNavController,
