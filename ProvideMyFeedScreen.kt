@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import com.sarang.torang.FeedDialogsViewModel
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedScreenByReviewId
+import com.sarang.torang.di.comment_di.CommentBottomDialogSheetData
 import com.sarang.torang.di.dialogsbox_di.ProvideMainDialog
 import com.sryang.library.pullrefresh.rememberPullToRefreshState
 
@@ -18,7 +19,7 @@ fun ProvideMyFeedScreen(
     rootNavController: RootNavController,
     navBackStackEntry: NavBackStackEntry,
     videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit,
-    commentBottomSheet: @Composable (commentBottomDialogSheetData:CommentBottomDialogSheetData) -> Unit,
+    commentBottomSheet: @Composable (commentBottomDialogSheetData: CommentBottomDialogSheetData) -> Unit,
 ) {
     val reviewId: Int? = navBackStackEntry.arguments?.getString("reviewId")?.toInt()
     val state = rememberPullToRefreshState()

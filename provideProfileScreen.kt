@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.ProfileScreenNavHost
+import com.sarang.torang.di.comment_di.provideCommentBottomDialogSheet
 import com.sarang.torang.di.image.provideTorangAsyncImage
 import com.sarang.torang.di.video.provideVideoPlayer
 
