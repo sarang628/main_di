@@ -55,7 +55,10 @@ fun FeedScreenWithProfile(
                 LocalFeedCompose provides { data : FeedTypeData ->
                     FeedItem(
                         uiState             = data.feed.toReview(data.isLogin),
-                        feedItemClickEvents = generateCommonFeedItemClickEvent(data, dialogsViewModel, feedNavController, rootNavController),
+                        feedItemClickEvents = generateCommonFeedItemClickEvent( feedData = data,
+                                                                                dialogsViewModel = dialogsViewModel,
+                                                                                navController = feedNavController,
+                                                                                rootNavController = rootNavController ),
                         onPage              = onPage,
                         pageScrollAble      = data.pageScrollable
                     )
