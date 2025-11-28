@@ -26,9 +26,7 @@ internal fun provideMyProfileScreenNavHost(rootNavController: RootNavController)
                 ProvideMyFeedScreen(
                     rootNavController = rootNavController,
                     navController = profileNavController,
-                    navBackStackEntry = it,
-                    videoPlayer = provideVideoPlayer(),
-                    commentBottomSheet = provideCommentBottomDialogSheet(rootNavController)
+                    navBackStackEntry = it
                 )
             },
             onMessage = { ChatActivity.go(context, it) }
