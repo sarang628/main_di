@@ -17,7 +17,6 @@ internal fun ProvideProfileScreen(
     navController: NavHostController,
     onMessage: (Int) -> Unit,
     navBackStackEntry: NavBackStackEntry,
-    videoPlayer: @Composable (url: String, isPlaying: Boolean, onVideoClick: () -> Unit) -> Unit = provideVideoPlayer(),
 ) {
         val profileNavController = rememberNavController() // 상위에 선언하면 앱 죽음
         val userId = navBackStackEntry.arguments?.getString("id")?.toInt()
@@ -32,9 +31,7 @@ internal fun ProvideProfileScreen(
                     ProvideMyFeedScreen(
                         navBackStackEntry = navBackStackEntry,
                         rootNavController = rootNavController,
-                        navController = profileNavController,
-                        videoPlayer = videoPlayer,
-                        commentBottomSheet = { provideCommentBottomDialogSheet(rootNavController).invoke(it) }
+                        navController = profileNavController
                     )
                 },
                 image = provideTorangAsyncImage(),
