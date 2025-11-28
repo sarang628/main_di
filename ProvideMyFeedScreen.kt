@@ -5,16 +5,16 @@ import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
-import com.sarang.torang.FeedDialogsViewModel
+import com.sarang.torang.dialogsbox.compose.DialogsBoxViewModel
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedScreenByReviewId
 import com.sarang.torang.di.comment_di.CommentBottomDialogSheetData
-import com.sarang.torang.di.dialogsbox_di.ProvideMainDialog
+import com.sarang.torang.di.dialogsbox_di.ProvideDialogsBox
 import com.sryang.library.pullrefresh.rememberPullToRefreshState
 
 @Composable
 fun ProvideMyFeedScreen(
-    dialogsViewModel: FeedDialogsViewModel = hiltViewModel(),
+    dialogsViewModel: DialogsBoxViewModel = hiltViewModel(),
     navController: NavHostController,
     rootNavController: RootNavController,
     navBackStackEntry: NavBackStackEntry,
@@ -29,7 +29,7 @@ fun ProvideMyFeedScreen(
         return
     }
 
-    ProvideMainDialog(
+    ProvideDialogsBox(
         dialogsViewModel = dialogsViewModel,
         rootNavController = rootNavController,
         //commentBottomSheet = commentBottomSheet

@@ -10,7 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.sarang.torang.FeedDialogsViewModel
+import com.sarang.torang.dialogsbox.compose.DialogsBoxViewModel
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedItem
 import com.sarang.torang.compose.feed.FeedScreenInMain
@@ -38,7 +38,7 @@ fun FeedScreenWithProfile(
     tag                 : String                        = "__FeedScreenWithProfile",
     rootNavController   : RootNavController             = RootNavController(),
     feedNavController   : NavHostController             = rememberNavController(),
-    dialogsViewModel    : FeedDialogsViewModel          = hiltViewModel(),
+    dialogsViewModel    : DialogsBoxViewModel           = hiltViewModel(),
     feedScreenState     : FeedScreenState               = rememberFeedScreenState(),
     onChat              : () -> Unit                    = { Log.w(tag, "onChat is not implemented") },
     onMessage           : (Int) -> Unit                 = { Log.w(tag, "onMessage is not implemented") },

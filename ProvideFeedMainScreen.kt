@@ -10,7 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.pinchzoom.library.pinchzoom.rememberPinchZoomState
-import com.sarang.torang.FeedDialogsViewModel
+import com.sarang.torang.dialogsbox.compose.DialogsBoxViewModel
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainScreenState
 import com.sarang.torang.compose.feed.FeedItem
@@ -31,7 +31,7 @@ import com.sarang.torang.di.feed_di.toReview
 
 fun provideFeedMainScreen(
     navController           : RootNavController,
-    dialogsViewModel        : FeedDialogsViewModel,
+    dialogsViewModel        : DialogsBoxViewModel,
     feedScreenState         : FeedScreenState,
     mainScreenState         : MainScreenState,
     showLog                 : Boolean = false

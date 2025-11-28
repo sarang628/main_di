@@ -1,14 +1,14 @@
 package com.sarang.torang.di.main_di
 
 import androidx.navigation.NavHostController
-import com.sarang.torang.FeedDialogsViewModel
+import com.sarang.torang.dialogsbox.compose.DialogsBoxViewModel
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedItemClickEvents
 import com.sarang.torang.compose.feed.type.FeedTypeData
 
 fun generateCommonFeedItemClickEvent(
     feedData            : FeedTypeData,
-    dialogsViewModel    : FeedDialogsViewModel,
+    dialogsViewModel    : DialogsBoxViewModel,
     navController       : NavHostController,
     rootNavController   : RootNavController
 ) : FeedItemClickEvents{

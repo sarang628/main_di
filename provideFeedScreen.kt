@@ -4,7 +4,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
-import com.sarang.torang.FeedDialogsViewModel
+import com.sarang.torang.dialogsbox.compose.DialogsBoxViewModel
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainScreenState
 import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
@@ -23,7 +23,7 @@ fun provideLocalFeedScreenType(
     showLog : Boolean,
     zoomState : PinchZoomState?,
     onZoomState : (PinchZoomState?)->Unit   = {},
-    dialogsViewModel : FeedDialogsViewModel,
+    dialogsViewModel : DialogsBoxViewModel,
     feedScreenState : FeedScreenState,
     rootNavController : RootNavController,
     mainScreenState : MainScreenState

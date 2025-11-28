@@ -2,17 +2,17 @@ package com.sarang.torang.di.main_di
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.sarang.torang.FeedDialogsViewModel
+import com.sarang.torang.dialogsbox.compose.DialogsBoxViewModel
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedScreenByRestaurantId
-import com.sarang.torang.di.dialogsbox_di.ProvideMainDialog
+import com.sarang.torang.di.dialogsbox_di.ProvideDialogsBox
 import com.sryang.library.pullrefresh.rememberPullToRefreshState
 
 fun provideFeedScreenByRestaurantId(rootNavController: RootNavController): @Composable (Int) -> Unit =
     {
-        val dialogsViewModel: FeedDialogsViewModel = hiltViewModel()
+        val dialogsViewModel: DialogsBoxViewModel = hiltViewModel()
         val state = rememberPullToRefreshState()
-        ProvideMainDialog(
+        ProvideDialogsBox(
             rootNavController = rootNavController,
             dialogsViewModel = dialogsViewModel,
             //commentBottomSheet = provideCommentBottomDialogSheet(rootNavController)

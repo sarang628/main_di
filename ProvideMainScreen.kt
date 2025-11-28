@@ -18,7 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.sarang.torang.FeedDialogsViewModel
+import com.sarang.torang.dialogsbox.compose.DialogsBoxViewModel
 import com.sarang.torang.LocalRestaurantItemImageLoader
 import com.sarang.torang.RestaurantItemUiState
 import com.sarang.torang.RestaurantListBottomSheetViewModel
@@ -43,7 +43,7 @@ import com.sarang.torang.compose.type.LocalFindScreenType
 import com.sarang.torang.compose.type.LocalMyProfileScreenType
 import com.sarang.torang.compose.type.MyProfileScreenType
 import com.sarang.torang.data.basefeed.FeedItemPageEvent
-import com.sarang.torang.di.dialogsbox_di.ProvideMainDialog
+import com.sarang.torang.di.dialogsbox_di.ProvideDialogsBox
 import com.sarang.torang.di.finding_di.FindState
 import com.sarang.torang.di.finding_di.rememberFindState
 import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
@@ -60,7 +60,7 @@ fun provideMainScreen(
     rootNavController    : RootNavController,
     findState            : FindState                                  = rememberFindState(),
     showLog              : Boolean                                    = false,
-    dialogsViewModel     : FeedDialogsViewModel                       = hiltViewModel(),
+    dialogsViewModel     : DialogsBoxViewModel                       = hiltViewModel(),
     feedScreenState      : FeedScreenState                            = rememberFeedScreenState(),
     mainScreenState      : MainScreenState                            = rememberMainScreenState(),
     bottomSheetViewModel : RestaurantListBottomSheetViewModel         = hiltViewModel(),
@@ -129,7 +129,7 @@ fun provideMainScreen(
         }
     }
 
-    ProvideMainDialog(
+    ProvideDialogsBox(
         dialogsViewModel = dialogsViewModel,
         rootNavController = rootNavController,
         restaurantBottomSheet = restaurantBottomSheet
