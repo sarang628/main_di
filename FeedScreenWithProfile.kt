@@ -65,17 +65,14 @@ fun FeedScreenWithProfile(
                 },
                 LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
                 LocalPullToRefreshLayoutType provides customPullToRefresh,
-                //LocalFeedImageLoader provides CustomFeedImageLoader(rememberPinchZoomState()), //부모에 설정
                 LocalExpandableTextType provides CustomExpandableTextType
             ){
-                FeedScreenInMain(
-                    onAddReview         = onChat,
-                    feedScreenState     = feedScreenState,
-                    onAlarm             = onAlarm,
-                    scrollEnabled       = scrollEnabled,
-                    pageScrollable      = swipeAble,
-                    contentWindowInsets = WindowInsets(0.dp)
-                )
+                FeedScreenInMain(onAddReview         = onChat,
+                                 feedScreenState     = feedScreenState,
+                                 onAlarm             = onAlarm,
+                                 scrollEnabled       = scrollEnabled,
+                                 pageScrollable      = swipeAble,
+                                 contentWindowInsets = WindowInsets(0.dp))
             }
         }
         composable("profile/{id}"){

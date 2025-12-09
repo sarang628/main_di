@@ -19,42 +19,35 @@ import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.di.pinchzoom.PinchZoomState
 import com.sarang.torang.di.pinchzoom.isZooming
 
-fun provideLocalFeedScreenType(
-    showLog : Boolean,
-    zoomState : PinchZoomState?,
-    onZoomState : (PinchZoomState?)->Unit   = {},
-    dialogsViewModel : DialogsBoxViewModel,
-    feedScreenState : FeedScreenState,
-    rootNavController : RootNavController,
-    mainScreenState : MainScreenState
+fun provideLocalFeedScreenType(showLog           : Boolean,
+                               zoomState         : PinchZoomState?,
+                               onZoomState       : (PinchZoomState?)->Unit   = {},
+                               dialogsViewModel  : DialogsBoxViewModel,
+                               feedScreenState   : FeedScreenState,
+                               rootNavController : RootNavController,
+                               mainScreenState   : MainScreenState
 ): FeedScreenType = { onChat ->
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    CompositionLocalProvider(
-        LocalPullToRefreshLayoutType        provides customPullToRefresh,
+    CompositionLocalProvider(LocalPullToRefreshLayoutType        provides customPullToRefresh,
         LocalBottomDetectingLazyColumnType  provides CustomBottomDetectingLazyColumnType,
-        LocalFeedImageLoader                provides CustomFeedImageLoader(
-            zoomState   = zoomState,
-            showLog     = showLog,
-            onZoomState = onZoomState,
-        )
+        LocalFeedImageLoader                provides CustomFeedImageLoader(zoomState   = zoomState,
+                                                                           showLog     = showLog,
+                                                                           onZoomState = onZoomState,)
     ) {
-        FeedScreenWithProfile(
-            rootNavController   = rootNavController,
-            feedNavController   = rememberNavController(),
-            dialogsViewModel    = dialogsViewModel,
-            feedScreenState     = feedScreenState,
-            onChat              = onChat,
-            onMessage           = { ChatActivity.go(context, it) },
-            scrollEnabled       = zoomState?.isZooming != true,
-            swipeAble           = zoomState?.isZooming != true,
-            onPage              = {
-                if (it.swipeable)
-                    mainScreenState.swipeDisableForMillis(coroutineScope = coroutineScope)
-            },
-            onAlarm = {
-                rootNavController.goAlarm()
-            }
+        FeedScreenWithProfile(rootNavController   = rootNavController,
+                              feedNavController   = rememberNavController(),
+                              dialogsViewModel    = dialogsViewModel,
+                              feedScreenState     = feedScreenState,
+                              onChat              = onChat,
+                              onMessage           = { ChatActivity.go(context, it) },
+                              scrollEnabled       = zoomState?.isZooming != true,
+                              swipeAble           = zoomState?.isZooming != true,
+                              onAlarm            = { rootNavController.goAlarm() },
+                              onPage              = {
+                                  if (it.swipeable)
+                                      mainScreenState.swipeDisableForMillis(coroutineScope = coroutineScope)
+                              }
         )
     }
 }
