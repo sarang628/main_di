@@ -21,11 +21,13 @@ import com.sarang.torang.compose.feed.type.FeedTypeData
 import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
 import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
+import com.sarang.torang.compose.profile.LocalProfileImage
 import com.sarang.torang.data.basefeed.FeedItemPageEvent
 import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.di.feed_di.toReview
+import com.sarang.torang.di.image.provideTorangAsyncImage
 
 /**
  * 피드 화면과 프로필 화면
@@ -76,11 +78,13 @@ fun FeedScreenWithProfile(
             }
         }
         composable("profile/{id}"){
-            ProvideProfileScreen(
-                rootNavController   = rootNavController,
-                navController       = feedNavController,
-                onMessage           = onMessage,
-                navBackStackEntry   = it)
+            CompositionLocalProvider(LocalProfileImage provides { provideTorangAsyncImage().invoke(it.modifier, it.url, it.progressSize, it.errorIconSize, it.contentScale) }) {
+                ProvideProfileScreen(
+                    rootNavController   = rootNavController,
+                    navController       = feedNavController,
+                    onMessage           = onMessage,
+                    navBackStackEntry   = it)
+            }
         }
     }
 }
