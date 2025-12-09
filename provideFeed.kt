@@ -15,7 +15,7 @@ fun generateCommonFeedItemClickEvent(
     return FeedItemClickEvents(
         onComment           = { dialogsViewModel.onComment(feedData.feed.reviewId) },
         onMenu              = { dialogsViewModel.onMenu(feedData.feed.reviewId) },
-        onShare             = { if (feedData.isLogin) dialogsViewModel.onShare(feedData.feed.reviewId) else rootNavController.emailLogin() },
+        //onShare             = { if (feedData.isLogin) dialogsViewModel.onShare(feedData.feed.reviewId) else rootNavController.emailLogin() },
         onName              = { navController.navigate("profile/${feedData.feed.userId}") },
         onProfile           = { navController.navigate("profile/${feedData.feed.userId}") },
         onRestaurant        = { rootNavController.restaurant(feedData.feed.restaurantId) },
