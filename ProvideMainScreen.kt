@@ -25,7 +25,6 @@ import com.sarang.torang.RestaurantListBottomSheetViewModel
 import com.sarang.torang.RestaurantListBottomSheet_
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainScreen
-
 import com.sarang.torang.compose.MainScreenState
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
@@ -60,7 +59,7 @@ fun provideMainScreen(
     rootNavController    : RootNavController,
     findState            : FindState                                  = rememberFindState(),
     showLog              : Boolean                                    = false,
-    dialogsViewModel     : DialogsBoxViewModel                       = hiltViewModel(),
+    dialogsViewModel     : DialogsBoxViewModel                        = hiltViewModel(),
     feedScreenState      : FeedScreenState                            = rememberFeedScreenState(),
     mainScreenState      : MainScreenState                            = rememberMainScreenState(),
     bottomSheetViewModel : RestaurantListBottomSheetViewModel         = hiltViewModel(),
@@ -100,22 +99,19 @@ fun provideMainScreen(
     }
 
     val mainScreen = @Composable {
-        CompositionLocalProvider(
-            LocalFindScreenType provides findScreen,
-            LocalAlarmScreenType provides alarmScreen,
-            LocalFeedGridScreenType provides provideFeedGridScreenType,
-            LocalChatScreenType provides chatScreen,
-            LocalMyProfileScreenType provides myProfileScreen,
-            LocalAddReviewScreenType provides addReviewScreenType,
-            LocalFeedScreenType provides provideLocalFeedScreenType(
-                zoomState   = zoomState,
-                showLog     = showLog,
-                onZoomState = { zoomState = it },
-                rootNavController   = rootNavController,
-                dialogsViewModel    = dialogsViewModel,
-                feedScreenState = feedScreenState,
-                mainScreenState = mainScreenState
-            )
+        CompositionLocalProvider(LocalFindScreenType provides findScreen,
+            LocalAlarmScreenType        provides alarmScreen,
+            LocalFeedGridScreenType     provides provideFeedGridScreenType,
+            LocalChatScreenType         provides chatScreen,
+            LocalMyProfileScreenType    provides myProfileScreen,
+            LocalAddReviewScreenType    provides addReviewScreenType,
+            LocalFeedScreenType         provides provideLocalFeedScreenType(zoomState           = zoomState,
+                                                                            showLog             = showLog,
+                                                                            onZoomState         = { zoomState = it },
+                                                                            rootNavController   = rootNavController,
+                                                                            dialogsViewModel    = dialogsViewModel,
+                                                                            feedScreenState     = feedScreenState,
+                                                                            mainScreenState     = mainScreenState )
         ) {
             MainScreen(
                 state               = mainScreenState,
@@ -129,11 +125,9 @@ fun provideMainScreen(
         }
     }
 
-    ProvideDialogsBox(
-        dialogsViewModel = dialogsViewModel,
-        rootNavController = rootNavController,
-        restaurantBottomSheet = restaurantBottomSheet
-    ) {
+    ProvideDialogsBox(dialogsViewModel = dialogsViewModel,
+                      rootNavController = rootNavController,
+                      restaurantBottomSheet = restaurantBottomSheet) {
         pinchZoomImageBox {
             mainScreen()
         }
