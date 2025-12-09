@@ -6,10 +6,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
-import com.sarang.torang.compose.ProfileScreenNavHost
-import com.sarang.torang.di.comment_di.provideCommentBottomDialogSheet
-import com.sarang.torang.di.image.provideTorangAsyncImage
-import com.sarang.torang.di.video.provideVideoPlayer
+import com.sarang.torang.compose.profile.ProfileScreenNavHost
 
 @Composable
 internal fun ProvideProfileScreen(
@@ -27,14 +24,6 @@ internal fun ProvideProfileScreen(
                 onClose = { navController.popBackStack() },
                 onEmailLogin = { rootNavController.emailLogin() },
                 onReview = { profileNavController.navigate("myFeed/${it}") },
-                myFeed = {
-                    ProvideMyFeedScreen(
-                        navBackStackEntry = navBackStackEntry,
-                        rootNavController = rootNavController,
-                        navController = profileNavController
-                    )
-                },
-                image = provideTorangAsyncImage(),
                 onMessage = onMessage
             )
         } else {
