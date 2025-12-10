@@ -34,7 +34,8 @@ fun provideFeedMainScreen(
     dialogsViewModel        : DialogsBoxViewModel,
     feedScreenState         : FeedScreenState,
     mainScreenState         : MainScreenState,
-    showLog                 : Boolean = false
+    showLog                 : Boolean = false,
+    onError                 : (String) -> Unit = {}
 ) : @Composable (onChat: () -> Unit) -> Unit = { onChat ->
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -48,7 +49,11 @@ fun provideFeedMainScreen(
                 LocalFeedCompose provides { data : FeedTypeData ->
                     FeedItem(
                         uiState             = data.feed.toReview(data.isLogin),
-                        feedItemClickEvents = generateCommonFeedItemClickEvent(data, dialogsViewModel, feedNavController, navController),
+                        feedItemClickEvents = generateCommonFeedItemClickEvent(feedData             = data,
+                                                                               dialogsViewModel     = dialogsViewModel,
+                                                                               navController        = feedNavController,
+                                                                               rootNavController    = navController,
+                                                                               onError              = onError ),
                         onPage              = {
                             if (it.swipeable)
                                 mainScreenState.swipeDisableForMillis(coroutineScope = coroutineScope)
