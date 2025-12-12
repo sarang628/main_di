@@ -21,7 +21,7 @@ internal fun provideMyProfileScreenNavHost(rootNavController: RootNavController)
                     navController = profileNavController,
                     onSetting = rootNavController::settings,
                     onEmailLogin = rootNavController::emailLogin,
-                    onReview = { profileNavController.navigate("myFeed/${it}") },
+                    onReview = { rootNavController.myReview(it) },
                     onClose = profileNavController::popBackStack,
                     onMessage = { ChatActivity.go(context, it) },
                     contentWindowInsets = WindowInsets(0, 0, 0, 0)
