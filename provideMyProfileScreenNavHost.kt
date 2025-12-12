@@ -2,11 +2,8 @@ package com.sarang.torang.di.main_di
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
@@ -18,17 +15,17 @@ internal fun provideMyProfileScreenNavHost(rootNavController: RootNavController)
     {
         val context = LocalContext.current
         val profileNavController = rememberNavController() // 상위에 선언하면 앱 죽음
-        Scaffold {
-            Box(Modifier.padding(it)){
+        //Scaffold { // 여기에 만들면 메인 앱에서 상하단 패딩 생김
+            //Box(Modifier.padding(it)){
                 MyProfileScreenNavHost(
                     navController = profileNavController,
                     onSetting = rootNavController::settings,
                     onEmailLogin = rootNavController::emailLogin,
                     onReview = { profileNavController.navigate("myFeed/${it}") },
                     onClose = profileNavController::popBackStack,
-                    onMessage = { ChatActivity.go(context, it) }
-
+                    onMessage = { ChatActivity.go(context, it) },
+                    contentWindowInsets = WindowInsets(0, 0, 0, 0)
                 )
-            }
-        }
+            //}
+        //}
     }
