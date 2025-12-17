@@ -15,17 +15,13 @@ internal fun provideMyProfileScreenNavHost(rootNavController: RootNavController)
     {
         val context = LocalContext.current
         val profileNavController = rememberNavController() // 상위에 선언하면 앱 죽음
-        //Scaffold { // 여기에 만들면 메인 앱에서 상하단 패딩 생김
-            //Box(Modifier.padding(it)){
-                MyProfileScreenNavHost(
-                    navController = profileNavController,
-                    onSetting = rootNavController::settings,
-                    onEmailLogin = rootNavController::emailLogin,
-                    onReview = { rootNavController.myReview(it) },
-                    onClose = profileNavController::popBackStack,
-                    onMessage = { ChatActivity.go(context, it) },
-                    contentWindowInsets = WindowInsets(0, 0, 0, 0)
-                )
-            //}
-        //}
+        MyProfileScreenNavHost(
+            navController = profileNavController,
+            onSetting = rootNavController::settings,
+            onEmailLogin = rootNavController::emailLogin,
+            onReview = { rootNavController.myReview(it) },
+            onClose = profileNavController::popBackStack,
+            onMessage = { ChatActivity.go(context, it) },
+            contentWindowInsets = WindowInsets(0, 0, 0, 0)
+        )
     }
