@@ -1,10 +1,13 @@
 package com.sarang.torang.di.main_di
 
-import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -14,11 +17,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.sarang.torang.dialogsbox.compose.DialogsBoxViewModel
 import com.sarang.torang.LocalRestaurantItemImageLoader
 import com.sarang.torang.RestaurantItemUiState
 import com.sarang.torang.RestaurantListBottomSheetViewModel
@@ -32,6 +33,7 @@ import com.sarang.torang.compose.rememberMainScreenState
 import com.sarang.torang.compose.type.AddReviewScreenType
 import com.sarang.torang.compose.type.AlarmScreenType
 import com.sarang.torang.compose.type.ChatScreenType
+import com.sarang.torang.compose.type.FeedGridScreenType
 import com.sarang.torang.compose.type.FindScreenType
 import com.sarang.torang.compose.type.LocalAddReviewScreenType
 import com.sarang.torang.compose.type.LocalAlarmScreenType
@@ -50,6 +52,7 @@ import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
 import com.sarang.torang.di.pinchzoom.PinchZoomState
 import com.sarang.torang.di.pinchzoom.imageLoader
 import com.sarang.torang.di.restaurant_list_bottom_sheet_di.CustomRestaurantItemImageLoader
+import com.sarang.torang.dialogsbox.compose.DialogsBoxViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -98,10 +101,17 @@ fun provideMainScreen(
         )
     }
 
+    val CostomFeedGridScreenType : FeedGridScreenType = {
+        Scaffold(contentWindowInsets = WindowInsets.statusBars) {
+            ProvideTorangGrid(modifier = Modifier.padding(it),
+                              onReview = rootNavController::review)
+        }
+    }
+
     val mainScreen = @Composable {
         CompositionLocalProvider(LocalFindScreenType provides findScreen,
             LocalAlarmScreenType        provides alarmScreen,
-            LocalFeedGridScreenType     provides { ProvideTorangGrid(onReview = rootNavController::review) },
+            LocalFeedGridScreenType     provides CostomFeedGridScreenType,
             LocalChatScreenType         provides chatScreen,
             LocalMyProfileScreenType    provides myProfileScreen,
             LocalAddReviewScreenType    provides addReviewScreenType,
