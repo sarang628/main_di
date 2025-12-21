@@ -43,6 +43,7 @@ import com.sarang.torang.compose.type.LocalMyProfileScreenType
 import com.sarang.torang.compose.type.MyProfileScreenType
 import com.sarang.torang.data.basefeed.FeedItemPageEvent
 import com.sarang.torang.di.dialogsbox_di.ProvideDialogsBox
+import com.sarang.torang.di.feedgrid_di.ProvideTorangGrid
 import com.sarang.torang.di.finding_di.FindState
 import com.sarang.torang.di.finding_di.rememberFindState
 import com.sarang.torang.di.pinchzoom.PinchZoomImageBox
@@ -72,7 +73,6 @@ fun provideMainScreen(
 ) : @Composable () ->Unit = {
     val tag                     : String                                = "__provideMainScreen"
     val coroutineScope          : CoroutineScope                        = rememberCoroutineScope()
-    val context                 : Context                               = LocalContext.current
     var zoomState               : PinchZoomState?                       by remember { mutableStateOf<PinchZoomState?>(null) } // Data shared between a zoomed image and the rest of the list when zooming.
     val bottomSheetUiState      : List<RestaurantItemUiState>           by bottomSheetViewModel.uiState.collectAsState()
 
@@ -101,7 +101,7 @@ fun provideMainScreen(
     val mainScreen = @Composable {
         CompositionLocalProvider(LocalFindScreenType provides findScreen,
             LocalAlarmScreenType        provides alarmScreen,
-            LocalFeedGridScreenType     provides provideFeedGridScreenType,
+            LocalFeedGridScreenType     provides { ProvideTorangGrid(onReview = rootNavController::review) },
             LocalChatScreenType         provides chatScreen,
             LocalMyProfileScreenType    provides myProfileScreen,
             LocalAddReviewScreenType    provides addReviewScreenType,
