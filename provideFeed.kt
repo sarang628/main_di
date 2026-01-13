@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.navigation.NavHostController
 import com.sarang.torang.dialogsbox.compose.DialogsBoxViewModel
 import com.sarang.torang.RootNavController
-import com.sarang.torang.compose.feed.FeedItemClickEvents
 import com.sarang.torang.compose.feed.type.FeedTypeData
+import com.sarang.torang.data.basefeed.FeedItemClickEvents
 
 fun generateCommonFeedItemClickEvent(
     feedData            : FeedTypeData,
@@ -13,7 +13,7 @@ fun generateCommonFeedItemClickEvent(
     navController       : NavHostController,
     rootNavController   : RootNavController,
     onError             : (String) -> Unit = {}
-) : FeedItemClickEvents{
+) : FeedItemClickEvents {
     val tag = "__generateCommonFeedItemClickEvent"
     return FeedItemClickEvents(
         onComment           = { dialogsViewModel.onComment(feedData.feed.reviewId) },

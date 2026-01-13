@@ -14,7 +14,7 @@ import com.sarang.torang.dialogsbox.compose.DialogsBoxViewModel
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedItem
 import com.sarang.torang.compose.feed.FeedScreenInMain
-import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
+import com.sarang.torang.compose.feed.internal.components.type.LocalExpandableTextType
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.feed.type.FeedTypeData
@@ -62,7 +62,7 @@ fun FeedScreenWithProfile(
                                                                                 navController = feedNavController,
                                                                                 rootNavController = rootNavController ),
                         onPage              = onPage,
-                        pageScrollAble      = data.pageScrollable
+                        pageScroll          = data.pageScrollable
                     )
                 },
                 LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,

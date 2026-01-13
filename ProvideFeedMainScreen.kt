@@ -15,8 +15,8 @@ import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainScreenState
 import com.sarang.torang.compose.feed.FeedItem
 import com.sarang.torang.compose.feed.FeedScreenInMain
-import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
-import com.sarang.torang.compose.feed.internal.components.LocalFeedImageLoader
+import com.sarang.torang.compose.feed.internal.components.type.LocalExpandableTextType
+import com.sarang.torang.compose.feed.internal.components.type.LocalFeedImageLoader
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.type.FeedTypeData
 import com.sarang.torang.compose.feed.type.LocalBottomDetectingLazyColumnType
@@ -58,7 +58,7 @@ fun provideFeedMainScreen(
                             if (it.swipeable)
                                 mainScreenState.swipeDisableForMillis(coroutineScope = coroutineScope)
                         },
-                        pageScrollAble      = data.pageScrollable
+                        pageScroll          = data.pageScrollable
                     )
                 },
                 LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
