@@ -9,10 +9,12 @@ import com.sarang.torang.compose.feed.FeedItem
 import com.sarang.torang.compose.feed.FeedScreenByReviewId
 import com.sarang.torang.compose.feed.internal.components.type.LocalExpandableTextType
 import com.sarang.torang.compose.feed.internal.components.type.LocalFeedImageLoader
+import com.sarang.torang.compose.feed.internal.components.type.LocalVideoPlayerType
 import com.sarang.torang.compose.feed.type.FeedTypeData
 import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
 import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
+import com.sarang.torang.di.basefeed_di.CustomVideoPlayerType
 import com.sarang.torang.di.dialogsbox_di.ProvideDialogsBox
 import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.dialogsbox.compose.DialogsBoxViewModel
@@ -28,6 +30,7 @@ fun ProvideMyFeedScreen(
         rootNavController = rootNavController,
     ) {
         CompositionLocalProvider(LocalFeedImageLoader provides CustomFeedImageLoader(),
+            LocalVideoPlayerType provides CustomVideoPlayerType,
             LocalFeedCompose provides { data : FeedTypeData ->
                 FeedItem(
                     uiState = data.feed.toReview(data.isLogin),

@@ -15,6 +15,7 @@ import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedItem
 import com.sarang.torang.compose.feed.FeedScreenInMain
 import com.sarang.torang.compose.feed.internal.components.type.LocalExpandableTextType
+import com.sarang.torang.compose.feed.internal.components.type.LocalVideoPlayerType
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.feed.type.FeedTypeData
@@ -24,6 +25,7 @@ import com.sarang.torang.compose.feed.type.LocalPullToRefreshLayoutType
 import com.sarang.torang.compose.profile.LocalProfileImage
 import com.sarang.torang.data.basefeed.FeedItemPageEvent
 import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
+import com.sarang.torang.di.basefeed_di.CustomVideoPlayerType
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.di.feed_di.toReview
@@ -54,6 +56,7 @@ fun FeedScreenWithProfile(
         startDestination    = "feed") {
         composable("feed") {
             CompositionLocalProvider(
+                LocalVideoPlayerType provides CustomVideoPlayerType,
                 LocalFeedCompose provides { data : FeedTypeData ->
                     FeedItem(
                         uiState             = data.feed.toReview(data.isLogin),
