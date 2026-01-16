@@ -6,6 +6,8 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -53,6 +55,7 @@ import com.sarang.torang.di.pinchzoom.PinchZoomState
 import com.sarang.torang.di.pinchzoom.imageLoader
 import com.sarang.torang.di.restaurant_list_bottom_sheet_di.CustomRestaurantItemImageLoader
 import com.sarang.torang.dialogsbox.compose.DialogsBoxViewModel
+import dagger.Lazy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -78,6 +81,7 @@ fun provideMainScreen(
     val coroutineScope          : CoroutineScope                        = rememberCoroutineScope()
     var zoomState               : PinchZoomState?                       by remember { mutableStateOf<PinchZoomState?>(null) } // Data shared between a zoomed image and the rest of the list when zooming.
     val bottomSheetUiState      : List<RestaurantItemUiState>           by bottomSheetViewModel.uiState.collectAsState()
+    val listState               : LazyGridState                         = rememberLazyGridState()
 
     val restaurantBottomSheet : @Composable ( @Composable () -> Unit ) -> Unit = {
         CompositionLocalProvider(LocalRestaurantItemImageLoader provides CustomRestaurantItemImageLoader) {
@@ -103,8 +107,9 @@ fun provideMainScreen(
 
     val CostomFeedGridScreenType : FeedGridScreenType = {
         Scaffold(contentWindowInsets = WindowInsets.statusBars) {
-            ProvideTorangGrid(modifier = Modifier.padding(it),
-                              onReview = rootNavController::review)
+            ProvideTorangGrid(modifier  = Modifier.padding(it),
+                              listState = listState,
+                              onReview  = rootNavController::review)
         }
     }
 
@@ -128,8 +133,10 @@ fun provideMainScreen(
                 swipeAble           = mainScreenState.isSwipeEnabled,
                 bottomNavBarHeight  = bottomNavBarHeight,
                 onAlreadyFeed       = {
-                    Log.d(tag, "onAlreadyFeed")
                     coroutineScope.launch { feedScreenState.onTop() }
+                },
+                onAlreadyGridFeed = {
+                    coroutineScope.launch { listState.animateScrollToItem(0) }
                 }
             )
         }
