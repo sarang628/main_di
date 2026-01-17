@@ -137,7 +137,8 @@ fun provideMainScreen(
                 },
                 onAlreadyGridFeed = {
                     coroutineScope.launch { listState.animateScrollToItem(0) }
-                }
+                },
+                onProfile = {}
             )
         }
     }
