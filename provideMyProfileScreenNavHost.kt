@@ -9,14 +9,17 @@ import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.di.chat_di.ChatActivity
 import com.sarang.torang.di.profile_di.MyProfileScreenNavHost
+import com.sarang.torang.viewmodel.profile.MyFeedListViewModel
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-internal fun provideMyProfileScreenNavHost(rootNavController: RootNavController): @Composable () -> Unit =
+internal fun provideMyProfileScreenNavHost(rootNavController : RootNavController,
+                                           feedListViewModel : MyFeedListViewModel): @Composable () -> Unit =
     {
         val context = LocalContext.current
         val profileNavController = rememberNavController() // 상위에 선언하면 앱 죽음
         MyProfileScreenNavHost(
             navController = profileNavController,
+            feedListViewModel = feedListViewModel,
             onSetting = rootNavController::settings,
             onEmailLogin = rootNavController::emailLogin,
             onReview = { rootNavController.myReview(it) },

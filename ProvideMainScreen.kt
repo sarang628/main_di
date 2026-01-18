@@ -75,6 +75,7 @@ fun provideMainScreen(
     chatScreen           : ChatScreenType                             = {},
     myProfileScreen      : MyProfileScreenType                        = {},
     addReviewScreenType  : AddReviewScreenType                        = {},
+    onProfile            : ()->Unit                                   = {},
     bottomNavBarHeight   : Dp                                         = 80.dp,
 ) : @Composable () ->Unit = {
     val tag                     : String                                = "__provideMainScreen"
@@ -138,7 +139,7 @@ fun provideMainScreen(
                 onAlreadyGridFeed = {
                     coroutineScope.launch { listState.animateScrollToItem(0) }
                 },
-                onProfile = {}
+                onProfile = onProfile
             )
         }
     }
