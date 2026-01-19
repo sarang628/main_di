@@ -58,14 +58,13 @@ import com.sarang.torang.dialogsbox.compose.DialogsBoxViewModel
 import dagger.Lazy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
+private const val tag : String = "__provideMainScreen"
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun provideMainScreen(
     rootNavController    : RootNavController,
     findState            : FindState                                  = rememberFindState(),
-    showLog              : Boolean                                    = false,
     dialogsViewModel     : DialogsBoxViewModel                        = hiltViewModel(),
     feedScreenState      : FeedScreenState                            = rememberFeedScreenState(),
     mainScreenState      : MainScreenState                            = rememberMainScreenState(),
@@ -78,7 +77,6 @@ fun provideMainScreen(
     onProfile            : ()->Unit                                   = {},
     bottomNavBarHeight   : Dp                                         = 80.dp,
 ) : @Composable () ->Unit = {
-    val tag                     : String                                = "__provideMainScreen"
     val coroutineScope          : CoroutineScope                        = rememberCoroutineScope()
     var zoomState               : PinchZoomState?                       by remember { mutableStateOf<PinchZoomState?>(null) } // Data shared between a zoomed image and the rest of the list when zooming.
     val bottomSheetUiState      : List<RestaurantItemUiState>           by bottomSheetViewModel.uiState.collectAsState()
@@ -91,7 +89,8 @@ fun provideMainScreen(
                 uiState                 = bottomSheetUiState,
                 sheetPeekHeight         = 0.dp,
                 scaffoldState           = findState.bottomSheetState,
-                onClickRestaurantName   = { coroutineScope.launch { findState.bottomSheetState.bottomSheetState.partialExpand() } },
+                onClickRestaurantName   = { coroutineScope.launch { findState.bottomSheetState.bottomSheetState.partialExpand() }
+                                            bottomSheetViewModel.setRestaurant(it) },
                 content                 = { it() }
             )
         }
@@ -101,7 +100,6 @@ fun provideMainScreen(
         PinchZoomImageBox(
             imageLoader     = imageLoader,
             activeZoomState = zoomState,
-            showLog         = showLog,
             content         = it
         )
     }
@@ -122,7 +120,6 @@ fun provideMainScreen(
             LocalMyProfileScreenType    provides myProfileScreen,
             LocalAddReviewScreenType    provides addReviewScreenType,
             LocalFeedScreenType         provides provideLocalFeedScreenType(zoomState           = zoomState,
-                                                                            showLog             = showLog,
                                                                             onZoomState         = { zoomState = it },
                                                                             rootNavController   = rootNavController,
                                                                             dialogsViewModel    = dialogsViewModel,

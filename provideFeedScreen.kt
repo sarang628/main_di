@@ -19,7 +19,7 @@ import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.di.pinchzoom.PinchZoomState
 import com.sarang.torang.di.pinchzoom.isZooming
 
-fun provideLocalFeedScreenType(showLog           : Boolean,
+fun provideLocalFeedScreenType(showLog           : Boolean = false,
                                zoomState         : PinchZoomState?,
                                onZoomState       : (PinchZoomState?)->Unit   = {},
                                dialogsViewModel  : DialogsBoxViewModel,
