@@ -27,6 +27,7 @@ import com.sarang.torang.data.basefeed.FeedItemPageEvent
 import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
 import com.sarang.torang.di.basefeed_di.CustomVideoPlayerType
 import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
+import com.sarang.torang.di.feed_di.CustomFeedCompose
 import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.di.feed_di.toReview
 import com.sarang.torang.di.image.provideTorangAsyncImage
@@ -65,9 +66,11 @@ fun FeedScreenWithProfile(
                                                                                 navController = feedNavController,
                                                                                 rootNavController = rootNavController ),
                         onPage              = onPage,
-                        pageScroll          = data.pageScrollable
+                        pageScroll          = data.pageScrollable,
+                        isPlaying           = data.isPlaying
                     )
                 },
+                /*LocalFeedCompose provides CustomFeedCompose,*/
                 LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,
                 LocalPullToRefreshLayoutType provides customPullToRefresh,
                 LocalExpandableTextType provides CustomExpandableTextType
