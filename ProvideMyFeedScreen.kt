@@ -30,7 +30,7 @@ fun ProvideMyFeedScreen(
         rootNavController = rootNavController,
     ) {
         CompositionLocalProvider(LocalFeedImageLoader provides CustomFeedImageLoader(),
-            LocalVideoPlayerType provides CustomVideoPlayerType,
+            LocalVideoPlayerType provides CustomVideoPlayerType(),
             LocalFeedCompose provides { data : FeedTypeData ->
                 FeedItem(
                     uiState = data.feed.toReview(data.isLogin),

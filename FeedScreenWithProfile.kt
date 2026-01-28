@@ -56,7 +56,7 @@ fun FeedScreenWithProfile(
         startDestination    = "feed") {
         composable("feed") {
             CompositionLocalProvider(
-                LocalVideoPlayerType provides CustomVideoPlayerType,
+                LocalVideoPlayerType provides CustomVideoPlayerType(),
                 LocalFeedCompose provides { data : FeedTypeData ->
                     FeedItem(
                         uiState             = data.feed.toReview(data.isLogin),

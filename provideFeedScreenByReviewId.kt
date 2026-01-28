@@ -30,7 +30,7 @@ fun provideFeedScreenByReviewId(rootNavController: RootNavController): @Composab
             dialogsViewModel = dialogsViewModel
         ) {
             CompositionLocalProvider(LocalFeedImageLoader provides CustomFeedImageLoader(),
-                LocalVideoPlayerType provides CustomVideoPlayerType,
+                LocalVideoPlayerType provides CustomVideoPlayerType(),
                 LocalFeedCompose provides { data : FeedTypeData ->
                     FeedItem(
                         uiState = data.feed.toReview(data.isLogin),
