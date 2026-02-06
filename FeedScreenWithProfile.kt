@@ -40,17 +40,18 @@ import com.sarang.torang.di.image.provideTorangAsyncImage
  */
 @Composable
 fun FeedScreenWithProfile(
-    tag                 : String                        = "__FeedScreenWithProfile",
-    rootNavController   : RootNavController             = RootNavController(),
-    feedNavController   : NavHostController             = rememberNavController(),
-    dialogsViewModel    : DialogsBoxViewModel           = hiltViewModel(),
-    feedScreenState     : FeedScreenState               = rememberFeedScreenState(),
-    onChat              : () -> Unit                    = { Log.w(tag, "onChat is not implemented") },
-    onMessage           : (Int) -> Unit                 = { Log.w(tag, "onMessage is not implemented") },
-    onAlarm             : () -> Unit                    = { Log.w(tag, "onAlarm is not implemented") },
-    onPage              : (FeedItemPageEvent) -> Unit   = { feedItemPageEvent -> Log.w(tag, "onPage callback is not set page: $feedItemPageEvent.page isFirst: $feedItemPageEvent.isFirst isLast: $feedItemPageEvent.isLast") },
-    scrollEnabled       : Boolean                       = true,
-    swipeAble           : Boolean                       = true
+    tag                         : String                        = "__FeedScreenWithProfile",
+    rootNavController           : RootNavController             = RootNavController(),
+    feedNavController           : NavHostController             = rememberNavController(),
+    dialogsViewModel            : DialogsBoxViewModel           = hiltViewModel(),
+    feedScreenState             : FeedScreenState               = rememberFeedScreenState(),
+    onChat                      : () -> Unit                    = { Log.w(tag, "onChat is not implemented") },
+    onMessage                   : (Int) -> Unit                 = { Log.w(tag, "onMessage is not implemented") },
+    onAlarm                     : () -> Unit                    = { Log.w(tag, "onAlarm is not implemented") },
+    onPage                      : (FeedItemPageEvent) -> Unit   = { feedItemPageEvent -> Log.w(tag, "onPage callback is not set page: $feedItemPageEvent.page isFirst: $feedItemPageEvent.isFirst isLast: $feedItemPageEvent.isLast") },
+    scrollEnabled               : Boolean                       = true,
+    swipeAble                   : Boolean                       = true,
+    videoPlayScrollVelocity     : Int                           = 100
 ) {
     NavHost(
         navController       = feedNavController,
@@ -75,12 +76,13 @@ fun FeedScreenWithProfile(
                 LocalPullToRefreshLayoutType provides customPullToRefresh,
                 LocalExpandableTextType provides CustomExpandableTextType
             ){
-                FeedScreenInMain(onAddReview         = onChat,
-                                 feedScreenState     = feedScreenState,
-                                 onAlarm             = onAlarm,
-                                 scrollEnabled       = scrollEnabled,
-                                 pageScrollable      = swipeAble,
-                                 contentWindowInsets = WindowInsets(0.dp))
+                FeedScreenInMain(onAddReview             = onChat,
+                                 feedScreenState         = feedScreenState,
+                                 onAlarm                 = onAlarm,
+                                 scrollEnabled           = scrollEnabled,
+                                 pageScrollable          = swipeAble,
+                                 contentWindowInsets     = WindowInsets(0.dp),
+                                 videoPlayScrollVelocity = videoPlayScrollVelocity)
             }
         }
         composable("profile/{id}"){

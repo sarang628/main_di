@@ -43,11 +43,12 @@ fun provideLocalFeedScreenType(showLog           : Boolean = false,
                               onMessage           = { ChatActivity.go(context, it) },
                               scrollEnabled       = zoomState?.isZooming != true,
                               swipeAble           = zoomState?.isZooming != true,
-                              onAlarm            = { rootNavController.goAlarm() },
+                              onAlarm             = { rootNavController.goAlarm() },
                               onPage              = {
                                   if (it.swipeable)
                                       mainScreenState.swipeDisableForMillis(coroutineScope = coroutineScope)
-                              }
+                              },
+                              videoPlayScrollVelocity = 5
         )
     }
 }
