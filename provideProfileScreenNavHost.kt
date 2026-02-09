@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.profile.LocalProfileImage
 import com.sarang.torang.compose.profile.ProfileScreenNavHost
+import com.sarang.torang.di.image.TorangAsyncImageData
 import com.sarang.torang.di.image.provideTorangAsyncImage
 
 internal fun provideProfileScreenNavHost(
@@ -15,11 +16,14 @@ internal fun provideProfileScreenNavHost(
 ): @Composable (NavBackStackEntry) -> Unit = { navBackStackEntry ->
     CompositionLocalProvider(
         LocalProfileImage provides {provideTorangAsyncImage().invoke(
-            it.modifier,
-            it.url,
-            it.errorIconSize,
-            it.progressSize,
-            it.contentScale)}
+            TorangAsyncImageData(
+                it.modifier,
+                it.url,
+                it.errorIconSize,
+                it.progressSize,
+                it.contentScale
+            )
+        )}
     ) {
         ProfileScreenNavHost(
             id = navBackStackEntry.arguments?.getString("id")?.toInt(),

@@ -30,6 +30,7 @@ import com.sarang.torang.di.feed_di.CustomBottomDetectingLazyColumnType
 import com.sarang.torang.di.feed_di.CustomFeedCompose
 import com.sarang.torang.di.feed_di.customPullToRefresh
 import com.sarang.torang.di.feed_di.toReview
+import com.sarang.torang.di.image.TorangAsyncImageData
 import com.sarang.torang.di.image.provideTorangAsyncImage
 
 /**
@@ -86,7 +87,15 @@ fun FeedScreenWithProfile(
             }
         }
         composable("profile/{id}"){
-            CompositionLocalProvider(LocalProfileImage provides { provideTorangAsyncImage().invoke(it.modifier, it.url, it.progressSize, it.errorIconSize, it.contentScale) }) {
+            CompositionLocalProvider(LocalProfileImage provides { provideTorangAsyncImage().invoke(
+                TorangAsyncImageData(
+                    modifier = it.modifier,
+                    model = it.url,
+                    progressSize = it.progressSize,
+                    errorIconSize = it.errorIconSize,
+                    contentScale = it.contentScale
+                )
+            ) }) {
                 ProvideProfileScreen(
                     rootNavController   = rootNavController,
                     navController       = feedNavController,
