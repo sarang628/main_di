@@ -32,12 +32,11 @@ fun provideFeedScreenByReviewId(rootNavController: RootNavController): @Composab
             CompositionLocalProvider(LocalFeedImageLoader provides CustomFeedImageLoader(),
                 LocalVideoPlayerType provides CustomVideoPlayerType(),
                 LocalFeedCompose provides { data : FeedTypeData ->
-                    FeedItem(
-                        uiState = data.feed.toReview(data.isLogin),
-                        feedItemClickEvents = generateCommonFeedItemClickEvent( feedData = data,
-                            dialogsViewModel = dialogsViewModel,
-                            navController = rememberNavController(),
-                            rootNavController = rootNavController ),
+                    FeedItem(uiState = data.feed.toReview(data.isLogin),
+                             events = generateCommonFeedItemClickEvent( feedData = data,
+                             dialogsViewModel = dialogsViewModel,
+                             navController = rememberNavController(),
+                             rootNavController = rootNavController ),
                     )
                 },
                 LocalExpandableTextType provides CustomExpandableTextType

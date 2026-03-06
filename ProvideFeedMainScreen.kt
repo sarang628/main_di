@@ -52,16 +52,17 @@ fun provideFeedMainScreen(
                 LocalFeedCompose provides { data : FeedTypeData ->
                     FeedItem(
                         uiState             = data.feed.toReview(data.isLogin),
-                        feedItemClickEvents = generateCommonFeedItemClickEvent(feedData             = data,
+                        events              = generateCommonFeedItemClickEvent(feedData             = data,
                                                                                dialogsViewModel     = dialogsViewModel,
                                                                                navController        = feedNavController,
                                                                                rootNavController    = navController,
                                                                                onError              = onError ),
+                        userScrollEnabled   = data.pageScrollable,
                         onPage              = {
                             if (it.swipeable)
                                 mainScreenState.swipeDisableForMillis(coroutineScope = coroutineScope)
-                        },
-                        pageScroll          = data.pageScrollable
+                        }
+
                     )
                 },
                 LocalBottomDetectingLazyColumnType provides CustomBottomDetectingLazyColumnType,

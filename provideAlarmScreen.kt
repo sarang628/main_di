@@ -13,7 +13,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.ui.Modifier
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.AlarmScreen
+import com.sarang.torang.compose.LoginScreen
 import com.sarang.torang.compose.type.AlarmScreenType
+import com.sarang.torang.di.login_di.ProvideLoginScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun provideAlarmScreen(rootNavController: RootNavController): AlarmScreenType = {
@@ -32,7 +34,7 @@ fun provideAlarmScreen(rootNavController: RootNavController): AlarmScreenType = 
     {
         Box(Modifier.padding(it)){
             AlarmScreen(
-                onEmailLogin = { rootNavController.emailLogin() },
+                loginScreen = { ProvideLoginScreen { rootNavController.emailLogin() } },
                 onContents = { rootNavController.review(it) },
                 onProfile = { rootNavController.profile(it) })
         }

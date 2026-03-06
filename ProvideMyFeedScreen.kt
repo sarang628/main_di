@@ -34,10 +34,10 @@ fun ProvideMyFeedScreen(
             LocalFeedCompose provides { data : FeedTypeData ->
                 FeedItem(
                     uiState = data.feed.toReview(data.isLogin),
-                    feedItemClickEvents = generateCommonFeedItemClickEvent( feedData = data,
-                                                                            dialogsViewModel = dialogsViewModel,
-                                                                            navController = rememberNavController(),
-                                                                            rootNavController = rootNavController ),
+                    events  = generateCommonFeedItemClickEvent( feedData = data,
+                                                                dialogsViewModel = dialogsViewModel,
+                                                                navController = rememberNavController(),
+                                                                rootNavController = rootNavController ),
                 )
             },
             LocalExpandableTextType provides CustomExpandableTextType
