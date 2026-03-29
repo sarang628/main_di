@@ -1,7 +1,6 @@
 package com.sarang.torang.di.main_di
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
@@ -29,6 +28,7 @@ import com.sarang.torang.RestaurantListBottomSheet_
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.MainScreen
 import com.sarang.torang.compose.MainScreenState
+import com.sarang.torang.compose.feed.data.FeedItemPageEvent
 import com.sarang.torang.compose.feed.state.FeedScreenState
 import com.sarang.torang.compose.feed.state.rememberFeedScreenState
 import com.sarang.torang.compose.rememberMainScreenState
@@ -45,7 +45,6 @@ import com.sarang.torang.compose.type.LocalFeedScreenType
 import com.sarang.torang.compose.type.LocalFindScreenType
 import com.sarang.torang.compose.type.LocalMyProfileScreenType
 import com.sarang.torang.compose.type.MyProfileScreenType
-import com.sarang.torang.data.basefeed.FeedItemPageEvent
 import com.sarang.torang.di.dialogsbox_di.ProvideDialogsBox
 import com.sarang.torang.di.feedgrid_di.ProvideTorangGrid
 import com.sarang.torang.di.finding_di.FindState
@@ -55,9 +54,9 @@ import com.sarang.torang.di.pinchzoom.PinchZoomState
 import com.sarang.torang.di.pinchzoom.imageLoader
 import com.sarang.torang.di.restaurant_list_bottom_sheet_di.CustomRestaurantItemImageLoader
 import com.sarang.torang.dialogsbox.compose.DialogsBoxViewModel
-import dagger.Lazy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+
 private const val tag : String = "__provideMainScreen"
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)

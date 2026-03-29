@@ -5,11 +5,11 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.sarang.torang.RootNavController
+import com.sarang.torang.compose.component.type.LocalExpandableTextType
+import com.sarang.torang.compose.component.type.LocalFeedImageLoader
+import com.sarang.torang.compose.component.type.LocalVideoPlayerType
 import com.sarang.torang.compose.feed.FeedItem
 import com.sarang.torang.compose.feed.FeedScreenByReviewId
-import com.sarang.torang.compose.feed.internal.components.type.LocalExpandableTextType
-import com.sarang.torang.compose.feed.internal.components.type.LocalFeedImageLoader
-import com.sarang.torang.compose.feed.internal.components.type.LocalVideoPlayerType
 import com.sarang.torang.compose.feed.type.FeedTypeData
 import com.sarang.torang.compose.feed.type.LocalFeedCompose
 import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
